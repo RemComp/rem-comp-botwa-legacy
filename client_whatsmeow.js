@@ -489,6 +489,7 @@ if(_userDb?.setUser?.switchNum && !message.rawFromSender) {
 
     return require('./client_whatsmeow')(remRaw, reply, messageRaw, message, MessageType, browserSS, canvass, canvasRenderService1, clientjs, isVirtualBot, virtualBotID, ytDlpWrap, cord, socket, groupMETA, ClientGenius)
 }
+if(_userDb?.setUser?.version == 'beta' && !__filename.includes('beta')) return require('./client_beta')(remRaw, reply, messageRaw, message, MessageType, browserSS, canvass, canvasRenderService1, clientjs, isVirtualBot, virtualBotID, ytDlpWrap, cord, socket, groupMETA, ClientGenius)
 
 if(_userDb == undefined && sender != undefined) {
     const user_id_new = await getNextSequenceValue('user_id')
