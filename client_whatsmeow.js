@@ -12062,7 +12062,7 @@ _${urlPathImageTempSetPdPp}_`
                 }
             }
             break
-        case prefix+'point':
+        /** case prefix+'point':
         case prefix+'p':
             // if (!isSideOwner) return reply(from, 'Err: 403!')
             if(args.length === 1) {
@@ -12143,7 +12143,7 @@ _${urlPathImageTempSetPdPp}_`
                     return reply(from, 'Invalid!', id)
                 }
             }
-            break
+            break **/
         // Kegunaan Afinitas Saudara
         case prefix+'pullmoney':
         case prefix+'pullm':
@@ -15069,7 +15069,7 @@ ${historyFight}`
                 //    await rem.sendText(numberReportError, err)
                }
                break
-        case prefix+'remeaster':
+        /** case prefix+'remeaster':
         case prefix+'easterevent':
         case prefix+'esinfo':
         case prefix+'easterinfo':
@@ -15264,7 +15264,7 @@ Kembali lagi setelah *5 menit* untuk berburu telur lainnya!`, id)
                 console.error(err);
                 reply(from, 'Terjadi kesalahan saat berburu telur Easter :(', id)
             }
-            break
+            break **/
         //
         // case prefix+'addsaudara':
         // case prefix+'addbro':
