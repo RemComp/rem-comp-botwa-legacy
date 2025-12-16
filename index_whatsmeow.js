@@ -71,6 +71,12 @@ nocache(process.cwd() + '/client_whatsmeow', module => {
     if(global.jadibot['CORE']?.sendText) global.jadibot['CORE'].sendText('6281358181668-1621640771@g.us', `'${module}' Updated!`)
 })
 
+require(process.cwd() + '/client_beta')
+nocache(process.cwd() + '/client_beta', module => {
+    console.log(`'${module}' Updated!`)
+    if(global.jadibot['CORE']?.sendText)global.jadibot['CORE'].sendText('6281358181668-1621640771@g.us',  `'${module}' Updated!`)
+})
+
 require(process.cwd() + '/lib/functions')
 nocache(process.cwd() + '/lib/functions', module => {
     console.log(`'${module}' Updated!`)
