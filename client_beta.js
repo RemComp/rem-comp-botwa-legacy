@@ -15285,7 +15285,7 @@ Kembali lagi setelah *5 menit* untuk berburu telur lainnya!`, id)
             case prefix+'christmas':
             case prefix+'xmas':
                 // return reply(from, 'Maaf! Fitur ini hanya tersedia untuk Event Natal saja!', id)
-                if (!isSideOwner) return reply(from, 'Err: 403!')
+                if (!isOwner) return reply(from, 'Err: 403!')
                 
                 // const getInfoChristmasPng = await import('./lib/database/christmasPng/infoChristmasEvent.png')
                 // const infoPath = path.resolve(getInfoChristmasPng)
@@ -15320,7 +15320,7 @@ Selamat bersenang-senang mencari semua Gift Box yang tersembunyi dan Selamat Nat
             case prefix+'xmaslb':
             case prefix+'xlb':
                 // return reply(from, 'Maaf! Fitur ini hanya tersedia untuk Event Natal saja!', id)
-                if (!isSideOwner) return reply(from, 'Err: 403!')
+                if (!isOwner) return reply(from, 'Err: 403!')
                 
                 try {
                     const limit = args[1] ? Math.min(parseInt(args[1]), 10) : 10
@@ -15351,7 +15351,7 @@ Selamat bersenang-senang mencari semua Gift Box yang tersembunyi dan Selamat Nat
             case prefix+'xmashop':
             case prefix+'xshop':
                 // return reply(from, 'Maaf! Fitur ini hanya tersedia untuk Event Natal saja!', id)
-                if (!isSideOwner) return reply(from, 'Err: 403!')
+                if (!isOwner) return reply(from, 'Err: 403!')
                 
                 try {
                     const shop = await getChristmasShopInventory()
@@ -15426,7 +15426,7 @@ Selamat bersenang-senang mencari semua Gift Box yang tersembunyi dan Selamat Nat
             case prefix+'xmastoken':
             case prefix+'xtoken':
                 // return reply(from, 'Maaf! Fitur ini hanya tersedia untuk Event Natal saja!', id)
-                if (!isSideOwner) return reply(from, 'Err: 403!')
+                if (!isOwner) return reply(from, 'Err: 403!')
                 if(args.length == 1) {
                     if(getToken(_userDb) === undefined) await setToken(sender)
                     const tokenChristmas = numberWithCommas(getToken(_userDb))
@@ -15458,7 +15458,7 @@ Selamat bersenang-senang mencari semua Gift Box yang tersembunyi dan Selamat Nat
                         return reply(from, 'Invalid', id)
                     }
                 } else if(args[1] == 'min') {
-                    if(!isSideOwner) return reply(from, 'Err: 403!', id)
+                    if(!isOwner) return reply(from, 'Err: 403!', id)
                     if(quotedMsg) {
                             let token2 = quotedMsg.sender
                             if(getToken(_userDb) === undefined) await setToken(token2)
@@ -15483,7 +15483,7 @@ Selamat bersenang-senang mencari semua Gift Box yang tersembunyi dan Selamat Nat
                         return reply(from, 'Invalid', id)
                     }
                 } else if(args[1] == 'reset') {
-                    if(!isSideOwner) return reply(from, 'Err: 403!', id)
+                    if(!isOwner) return reply(from, 'Err: 403!', id)
                     if(quotedMsg) {
                         let token2 = quotedMsg.sender
                         await _mongo_UserSchema.updateOne({ ild: token2 }, { $set: { "economy.evntChristmas.token": 0 } })
@@ -15510,7 +15510,7 @@ Selamat bersenang-senang mencari semua Gift Box yang tersembunyi dan Selamat Nat
             case prefix+'xmasfrag':
             case prefix+'xfrag':
                 // return reply(from, 'Maaf! Fitur ini hanya tersedia untuk Event Natal saja!', id)
-                if (!isSideOwner) return reply(from, 'Err: 403!')
+                if (!isOwner) return reply(from, 'Err: 403!')
                 if(args.length == 1) {
                     if(getFrag(_userDb) === undefined) await setFrag(sender)
                     const fragmentChristmas = numberWithCommas(getFrag(_userDb))
@@ -15518,7 +15518,7 @@ Selamat bersenang-senang mencari semua Gift Box yang tersembunyi dan Selamat Nat
                     const fragText = `🪙 Token Christmas: ${isSpyFrag ? fragmentChristmas : '#####'}`
                     await reply(from, fragText)
                 } else if(args[1] == 'add') {
-                    if(!isSideOwner) return reply(from, 'Err: 403!')
+                    if(!isOwner) return reply(from, 'Err: 403!')
                     if(quotedMsg) {
                         let frag = quotedMsg.sender
                         const amountFragAdd = Math.floor(args[2])
@@ -15542,7 +15542,7 @@ Selamat bersenang-senang mencari semua Gift Box yang tersembunyi dan Selamat Nat
                         return reply(from, 'Invalid', id)
                     }
                 } else if(args[1] == 'min') {
-                    if(!isSideOwner) return reply(from, 'Err: 403!', id)
+                    if(!isOwner) return reply(from, 'Err: 403!', id)
                     if(quotedMsg) {
                         let frag2 = quotedMsg.sender
                         if(getFrag(_userDb) === undefined) await setFrag(frag2)
@@ -15567,7 +15567,7 @@ Selamat bersenang-senang mencari semua Gift Box yang tersembunyi dan Selamat Nat
                         return reply(from, 'Invalid', id)
                     }
                 } else if(args[1] == 'reset') {
-                    if(!isSideOwner) return reply(from, 'Err: 403!', id)
+                    if(!isOwner) return reply(from, 'Err: 403!', id)
                     if(quotedMsg) {
                         let frag2 = quotedMsg.sender
                         await _mongo_UserSchema.updateOne({ ild: frag2 }, { $set: { "economy.evntChristmas.token": 0 } })
@@ -15595,7 +15595,7 @@ Selamat bersenang-senang mencari semua Gift Box yang tersembunyi dan Selamat Nat
             case prefix+'xgbox':
                 // return reply(from, 'Maaf! Fitur ini hanya tersedia untuk Event Natal saja!', id)
                 // gacha
-                if (!isSideOwner) return reply(from, 'Err: 403!')
+                if (!isOwner) return reply(from, 'Err: 403!')
                 
                 try {
                     if(args.length === 1) {
@@ -15727,7 +15727,7 @@ Kembali untuk gacha lagi! 🎉
             case prefix+'xgboxhunt':
             case prefix+'xh':
                 // return reply(from, 'Maaf! Fitur ini hanya tersedia untuk Event Natal saja!', id)
-                if (!isSideOwner) return reply(from, 'Err: 403!')
+                if (!isOwner) return reply(from, 'Err: 403!')
                 if (!isGroupMsg) return reply(from, 'Perintah ini hanya bisa di gunakan dalam group!', id)
                 
                 try {
@@ -15856,7 +15856,7 @@ Kembali lagi setelah *5 menit* untuk berburu Gift Box lainnya!
             case prefix+'exchangexmasfrag':
             case prefix+'exchangexfrag':
                 // return reply(from, 'Maaf! Fitur ini hanya tersedia untuk Event Natal saja!', id)
-                if (!isSideOwner) return reply(from, 'Err: 403!')
+                if (!isOwner) return reply(from, 'Err: 403!')
                 
                 try {
                     const tokenBalance = getToken(_userDb)
