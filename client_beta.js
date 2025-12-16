@@ -15376,6 +15376,7 @@ Selamat bersenang-senang mencari semua Gift Box yang tersembunyi dan Selamat Nat
                         const quantity = args[2] ? parseInt(args[2]) : 1
                         
                         const itemKeys = Object.keys(shop.items)
+                        console.log('a')
                         if(itemIndex < 0 || itemIndex >= itemKeys.length) {
                             return reply(from, `❌ Nomor item tidak valid! Gunakan *${prefix}xshop* untuk melihat daftar item.`, id)
                         }
@@ -15387,19 +15388,21 @@ Selamat bersenang-senang mencari semua Gift Box yang tersembunyi dan Selamat Nat
                         if(itemId.includes('nametag')) {
                             const currentNameTagList = getNameTagList(_userDb) || []
                             const shopNameTag = item.name.replace('✨ Custom NameTag: ', '')
-                            
+                            console.log('a')
                             if(currentNameTagList.includes(shopNameTag)) {
                                 return reply(from, `❌ Kamu sudah memiliki NameTag "*${shopNameTag}*"!\nTidak bisa membeli NameTag yang sama dua kali.`, id)
                             }
                         }
                         
                         const userToken = getToken(_userDb)
+                        console.log('a')
                         if(userToken < totalPrice) {
                             const shortOf = numberWithCommas(fixNumberE(totalPrice - userToken))
                             return reply(from, `❌ Token kamu tidak cukup!\nButuh: ${numberWithCommas(fixNumberE(totalPrice))}\nKekurangan: ${shortOf}`, id)
                         }
                         
                         const purchaseResult = await buyChristmasShopItem(itemId, quantity)
+                        console.log('a')
                         if(!purchaseResult.success) {
                             return reply(from, `❌ ${purchaseResult.message}`, id)
                         }
@@ -15423,6 +15426,7 @@ Selamat bersenang-senang mencari semua Gift Box yang tersembunyi dan Selamat Nat
                             const customNameTag = shop.items.nametag.name.replace('✨ Custom NameTag: ', '')
                             await addNameTag_tag(sender, customNameTag)
                         }
+                        console.log('a')
                         
                         await addChristmasSpentToken(sender, totalPrice)
                         
@@ -15652,6 +15656,8 @@ Currency: money / frag (default: money)
                     if(!['money', 'frag'].includes(currency)) {
                         return reply(from, `❌ Currency tidak valid! Gunakan: money atau frag`, id)
                     }
+
+                    console.log('a')
                     
                     let moneyPerBox, fragPerBox
                     
@@ -15687,7 +15693,7 @@ Currency: money / frag (default: money)
                     } else if(currency === 'frag') {
                         totalPrice = fragPerBox * quantity
                         currencyName = 'Fragment'
-                        
+                        console.log('a')
                         if(userFrag < totalPrice) {
                             const shortOf = numberWithCommas(fixNumberE(totalPrice - userFrag))
                             return reply(from, `❌ Fragment kamu tidak cukup!\nButuh: ${numberWithCommas(fixNumberE(totalPrice))}\nKekurangan: ${shortOf}`, id)
@@ -15781,6 +15787,7 @@ Kembali untuk gacha lagi! 🎉
                     const found = foundChance <= 30
 
                     if(found) {
+                        console.log('a')
                         const boxRand = Math.random() * 100
                         let giftBoxType, reward, token, frag, money, xpLevel, limit
                         const rewardNameTag = "`🎁 WINNER REMCOMP GIFT BOX 🎉`"
