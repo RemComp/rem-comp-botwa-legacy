@@ -15301,8 +15301,10 @@ Ingin melihat berapa token & frag yang kamu dapatkan ketika bermain event ini? G
 Temukan Gift Box JELEK atau RemComp Gift Box untuk hadiah super spesial!
 
 🛒 *Gift Box Gacha*
+Jika kamu ingin menguji keberuntunganmu, cobalah perintah *${prefix}xgbox*
 
 🛍 *Daily Shop*
+Daily Shop ini berubah setiap harinya dan diisi dengan hadiah-hadiah yang kamu bisa beli menggunakan *${prefix}token*. Perintah untuk melihat Daily Shop nya *${prefix}christmasshop*
 
 🏆 *Gift Box Leaderboard*
 Lihat siapa yang mempunyai token terbanyak dengan perintah *${prefix}christmaslb* atau bisa menggunakan shortcut *${prefix}xlb* untuk melihat leaderboard!
