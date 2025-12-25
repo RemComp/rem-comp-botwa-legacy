@@ -15430,15 +15430,6 @@ Selamat bersenang-senang mencari semua Gift Box yang tersembunyi dan Selamat Nat
                         const item = shop.items[itemId]
                         const totalPrice = item.price * quantity
                         
-                        if(itemId.includes('nametag')) {
-                            const currentNameTagList = getNameTagList(_userDb) || []
-                            const shopNameTag = item.name.replace('')
-                            console.log('a')
-                            if(currentNameTagList.includes(shopNameTag)) {
-                                return reply(from, `❌ Kamu sudah memiliki NameTag "*${shopNameTag}*"!\nTidak bisa membeli NameTag yang sama dua kali.`, id)
-                            }
-                        }
-                        
                         const userToken = await getToken(_userDb)       
                         console.log('a')
                         if(userToken < totalPrice) {
@@ -15466,10 +15457,6 @@ Selamat bersenang-senang mencari semua Gift Box yang tersembunyi dan Selamat Nat
                         } else if(itemId.includes('xp')) {
                             const xpAmount = parseInt(itemId.split('_')[1]) * quantity
                             await addLevelingXp(sender, xpAmount)
-                        } else if(itemId.includes('nametag')) {
-                            const shop = await getChristmasShopInventory()
-                            const customNameTag = shop.items.nametag.name.replace('✨ Custom NameTag: ', '')
-                            await addNameTag_tag(sender, customNameTag)
                         }
                         console.log('a')
                         
