@@ -15287,8 +15287,8 @@ Kembali lagi setelah *5 menit* untuk berburu telur lainnya!`, id)
             case prefix+'xmas':
                 // return reply(from, 'Maaf! Fitur ini hanya tersedia untuk Event Natal saja!', id)
                 if (!isOwner) return reply(from, 'Err: 403!')
-                if(getFrag(_userDb) == undefined) await setFrag(sender)
-                if(getToken(_userDb) == undefined) await setToken(_userDb)
+                if(getFrag(_userDb) === undefined) await setFrag(sender)
+                if(getToken(_userDb) === undefined) await setToken(sender)
                 
                 // const getInfoChristmasPng = await import('./lib/database/christmasPng/infoChristmasEvent.png')
                 // const infoPath = path.resolve(getInfoChristmasPng)
