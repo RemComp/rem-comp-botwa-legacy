@@ -567,7 +567,10 @@ const {
     MinFrag,
     getFrag,
     setFrag,
-
+    addSpentToken,
+    MinSpentToken,
+    getSpentToken,
+    setSpentToken,
     getUserItemSpy,
 
     getChristmasLeaderboard,
@@ -15321,6 +15324,20 @@ Kembali lagi setelah *5 menit* untuk berburu telur lainnya!`, id)
                 // const getInfoChristmasPng = await import('./lib/database/christmasPng/infoChristmasEvent.png')
                 // const infoPath = path.resolve(getInfoChristmasPng)
                 // const bufferInfoChristmasPng = fs.readFileSync(infoPath)
+
+                const checkToken = getToken(_userDb)
+                const checkFrag = getFrag(_userDb)
+                const checkSpentToken = getSpentToken(_userDb)
+
+                if (checkToken === undefined) {
+                    await setToken(sender)
+                } else if (checkFrag === undefined) {
+                    await setFrag(sender)
+                } else if (checkSpentToken === undefined) {
+                    await setSpentToken(sender)
+                }
+
+
 
                 const christmasEventInfo = `🎁 *CHRISTMAS EVENT 2025* 🎁\n
 Selamat datang di event spesial Christmas 2025!
