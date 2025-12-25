@@ -15343,7 +15343,7 @@ Selamat bersenang-senang mencari semua Gift Box yang tersembunyi dan Selamat Nat
                 if (!isOwner) return reply(from, 'Err: 403!')
                 
                 try {
-                    const limit = args[1] ? Math.min(parseInt(args[1]), 10) : 10
+                    const limit = args[1] ? Math.min(parseInt(args[1]), 100) : 100  // Increased to 100 to show all
                     const leaderboard = await getChristmasLeaderboard(limit)
                     
                     if(leaderboard.length === 0) {
