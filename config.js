@@ -2,7 +2,10 @@
 exports.ownerNumber = '6281358181668@s.whatsapp.net'
 
 /* Change number the Owner2 Bot | String*/
-exports.ownerNumber2 = '6282229778223@s.whatsapp.net'
+exports.ownerNumber2 = '6281358181668@s.whatsapp.net, 62856038120076@s.whatsapp.net, 6282229778223@s.whatsapp.net, 6288809279029@s.whatsapp.net'
+
+/* Change number the SideOwner Bot | String*/
+exports.sideOwnerNumber = '6281358181668@s.whatsapp.net, 62856038120076@s.whatsapp.net, 6288809279029@s.whatsapp.net, 6288991122630@s.whatsapp.net, 62856038120076@s.whatsapp.net, 6282229778223@s.whatsapp.net, 6285858254388@s.whatsapp.net, 85294853160@s.whatsapp.net'
 
 /* Is Public can access the bot? | true / false / 'bot' */
 exports.isPublic = true
