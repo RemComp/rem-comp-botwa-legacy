@@ -15432,7 +15432,7 @@ Selamat bersenang-senang mencari semua Gift Box yang tersembunyi dan Selamat Nat
                         
                         if(itemId.includes('nametag')) {
                             const currentNameTagList = getNameTagList(_userDb) || []
-                            const shopNameTag = item.name.replace('✨ Custom NameTag: ', '')
+                            const shopNameTag = item.name.replace('')
                             console.log('a')
                             if(currentNameTagList.includes(shopNameTag)) {
                                 return reply(from, `❌ Kamu sudah memiliki NameTag "*${shopNameTag}*"!\nTidak bisa membeli NameTag yang sama dua kali.`, id)
