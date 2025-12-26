@@ -15336,6 +15336,7 @@ Selamat bersenang-senang mencari semua Gift Box yang tersembunyi dan Selamat Nat
 ────────────────
 *© RemComp 2021 - 2025*`
                 
+                // await rem.sendFile(from, bufferInfoChristmasPng, 'infoChristmasEvent.png', christmasEventInfo, messageRaw, image)
                 return reply(from, christmasEventInfo, id)
                 break
             case prefix+'christmaslb':
@@ -15646,21 +15647,21 @@ Selamat bersenang-senang mencari semua Gift Box yang tersembunyi dan Selamat Nat
                     if(args.length === 1) {
                         const gacha1Msg = `🎁 *CHRISTMAS GIFT BOX GACHA* 🎁\n
 💎 *Premium Box* (Hadiah Terbaik)
-💰 Harga: 10,000 Money ATAU 5 Fragment per Box
+💰 Harga: 1e+200 Money ATAU 100 Fragment per Box
 • Ultra Rare (1%): Token, Fragment, Money, XP, Limit
 • Very Rare (7%): Token, Fragment, Money, XP, Limit
 • Rare (17%): Token, Fragment, Money, XP, Limit
 • Common (75%): Token, Fragment, Money, XP, Limit
 
 ⭐ *Standard Box* (Hadiah Normal)
-💰 Harga: 5,000 Money ATAU 3 Fragment per Box
+💰 Harga: 1e+150 Money ATAU 80 Fragment per Box
 • Very Rare (3%): Token, Fragment, Money, XP, Limit
 • Rare (12%): Token, Fragment, Money, XP, Limit
 • Uncommon (35%): Token, Fragment, Money, XP, Limit
 • Common (50%): Money, XP, Limit
 
 🎪 *Lucky Box* (Hadiah Berbeda-beda)
-💰 Harga: 1,000 Money ATAU 1 Fragment per Box
+💰 Harga: 1e+100 Money ATAU 50 Fragment per Box
 • Rare (5%): Token, Fragment, Money, XP, Limit
 • Uncommon (20%): Token, Fragment, Money, XP, Limit
 • Common (75%): Money, XP, Limit
@@ -15691,8 +15692,8 @@ Currency: money / frag (default: money)
                     let moneyPerBox, fragPerBox
                     
                     if(boxType === 'premium') {
-                        moneyPerBox = 1e+300
-                        fragPerBox = 150
+                        moneyPerBox = 1e+200
+                        fragPerBox = 100
                         boxName = '💎 Premium Box'
                     } else if(boxType === 'standard') {
                         moneyPerBox = 1e+150
@@ -15827,8 +15828,8 @@ Kembali untuk gacha lagi! 🎉
                             const rewardTier = Math.random() * 100
                             if(rewardTier < 1) {
                                 reward = generateChristmasReward('remcomp')
-                                reward.token = Math.floor(Math.random() * 5) + 15
-                                reward.frag = Math.floor(Math.random() * 10) + 15
+                                reward.token = Math.floor(Math.random() * 10000) + 50000
+                                reward.frag = Math.floor(Math.random() * 10000) + 50000
                                 giftBoxType = "🎁 WINNER REMCOMP GIFT BOX 🎉"
                                 const checkExistingNameTag = await getNameTagList(_userDb)
                                 if(checkExistingNameTag === undefined) {
