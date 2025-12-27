@@ -15852,6 +15852,7 @@ Kembali untuk gacha lagi! 🎉
                                 if(checkExistingNameTag === undefined) {
                                     await addNameTag_tag(sender, rewardNameTag)
                                 }
+                                reward = generateChristmasReward('remcomp')
                             } else {
                                 reward = generateChristmasReward('premium')
                                 giftBoxType = "✨ Remcomp Gift Box"
