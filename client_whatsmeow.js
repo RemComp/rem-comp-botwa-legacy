@@ -15315,7 +15315,7 @@ Kembali lagi setelah *5 menit* untuk berburu telur lainnya!`, id)
 Selamat datang di event spesial Christmas 2025!
 ────────────────
 🎁 *Gift Box Hunt*
-Cari Gift Box tersembunyi dengan perintah *${prefix}eventchristmasgiftboxhunt2025santaclaushappychristmas* di dalam grup ini! atau bisa menggunakan shortcut *${prefix}xh* menemukan telur
+Cari Gift Box tersembunyi dengan perintah *${prefix}eventchristmasgiftboxhunt2025santaclaushappychristmas* di dalam grup ini! atau bisa menggunakan shortcut *${prefix}xh* menemukan Giftbox
 Ingin melihat berapa token & frag yang kamu dapatkan ketika bermain event ini? Gunakan perintah *${prefix}token* | *${prefix}frag*
 Temukan Gift Box JELEK atau RemComp Gift Box untuk hadiah super spesial!
 
@@ -15650,8 +15650,6 @@ Selamat bersenang-senang mencari semua Gift Box yang tersembunyi dan Selamat Nat
             case prefix+'christmasgiftbox':
             case prefix+'xmasgiftbox':
             case prefix+'xgbox':
-                // return reply(from, 'Maaf! Fitur ini hanya tersedia untuk Event Natal saja!', id)
-                // gacha
                 // if (!isOwner) return reply(from, 'Err: 403!')
                 
                 try {
@@ -15678,8 +15676,7 @@ Selamat bersenang-senang mencari semua Gift Box yang tersembunyi dan Selamat Nat
 • Common (75%): Money, XP, Limit
 
 Ketik *${prefix}xgbox [tipe] [jumlah] [currency]* untuk gacha
-Contoh: *${prefix}xgbox premium 2 money* (gacha pakai money)
-Atau: *${prefix}xgbox premium 2 frag* (gacha pakai fragment)
+Contoh: *${prefix}xgbox premium 2 money*
 
 Tipe: premium / standard / lucky
 Currency: money / frag (default: money)
@@ -15692,66 +15689,44 @@ Currency: money / frag (default: money)
                     const quantityInput = args[2] ? parseInt(args[2]) : 1
                     
                     if(isNaN(quantityInput) || quantityInput <= 0) {
-                        return reply(from, `❌ Jumlah box tidak valid! Harus berupa angka positif.`, id)
+                        return reply(from, `❌ Jumlah box tidak valid!`, id)
                     }
                     const quantity = quantityInput
                     const currency = args[3]?.toLowerCase() || 'money'
                     
                     let totalPrice, boxName, currencyName
-                    
-                    if(!['money', 'frag'].includes(currency)) {
-                        return reply(from, `❌ Currency tidak valid! Gunakan: money atau frag`, id)
-                    }
-
-                    console.log('a')
-                    
                     let moneyPerBox, fragPerBox
                     
                     if(boxType === 'premium') {
-                        moneyPerBox = 1e+200
-                        fragPerBox = 500
-                        boxName = '💎 Premium Box'
+                        moneyPerBox = 1e+200; fragPerBox = 500; boxName = '💎 Premium Box'
                     } else if(boxType === 'standard') {
-                        moneyPerBox = 1e+150
-                        fragPerBox = 100
-                        boxName = '⭐ Standard Box'
+                        moneyPerBox = 1e+150; fragPerBox = 100; boxName = '⭐ Standard Box'
                     } else if(boxType === 'lucky') {
-                        moneyPerBox = 1e+100
-                        fragPerBox = 50
-                        boxName = '🎪 Lucky Box'
+                        moneyPerBox = 1e+100; fragPerBox = 50; boxName = '🎪 Lucky Box'
                     } else {
-                        return reply(from, `❌ Tipe box tidak dikenal! Gunakan: premium, standard, atau lucky`, id)
+                        return reply(from, `❌ Tipe box tidak dikenal!`, id)
                     }
                     
                     const userMoney = getMoney(_userDb)
                     const userFrag = getFrag(_userDb)
                     
                     if(currency === 'money') {
-                        console.log('a')
                         totalPrice = moneyPerBox * quantity
                         currencyName = 'Money'
-                        
                         if(userMoney < totalPrice) {
-                            const shortOf = numberWithCommas(fixNumberE(totalPrice - userMoney))
-                            return reply(from, `❌ Money kamu tidak cukup!\nButuh: ${numberWithCommas(fixNumberE(totalPrice))}\nKekurangan: ${shortOf}`, id)
+                            return reply(from, `❌ Money tidak cukup! Butuh: ${numberWithCommas(fixNumberE(totalPrice))}`, id)
                         }
-                        
                         await MinMoney(sender, totalPrice)
-                    } else if(currency === 'frag') {
-                        console.log('a')
+                    } else {
                         totalPrice = fragPerBox * quantity
                         currencyName = 'Fragment'
-                        console.log('a')
                         if(userFrag < totalPrice) {
-                            const shortOf = numberWithCommas(fixNumberE(totalPrice - userFrag))
-                            return reply(from, `❌ Fragment kamu tidak cukup!\nButuh: ${numberWithCommas(fixNumberE(totalPrice))}\nKekurangan: ${shortOf}`, id)
+                            return reply(from, `❌ Fragment tidak cukup!`, id)
                         }
-                        
                         await MinFrag(sender, totalPrice)
                     }
                     
                     let totalRewards = { token: 0, frag: 0, money: 0, xp: 0, limit: 0 }
-                    
                     for(let i = 0; i < quantity; i++) {
                         const reward = generateChristmasReward(boxType)
                         totalRewards.token += reward.token
@@ -15761,15 +15736,20 @@ Currency: money / frag (default: money)
                         totalRewards.limit += reward.limit
                     }
                     
-                    // rewards
                     if(totalRewards.token > 0) await addToken(sender, totalRewards.token)
                     if(totalRewards.frag > 0) await addFrag(sender, totalRewards.frag)
                     if(totalRewards.money > 0) await addMoney(sender, totalRewards.money)
                     if(totalRewards.xp > 0) await addLevelingXp(sender, totalRewards.xp)
-                    if(totalRewards.limit > 0) for(let i = 0; i < totalRewards.limit; i++) await limitAdd(sender)
+                    
+                    if(totalRewards.limit > 0) {
+                        await _mongo_UserSchema.updateOne(
+                            { iId: sender }, 
+                            { $inc: { "limit.limit": totalRewards.limit } } 
+                        )
+                    }
                     
                     const gachaMsg = `${boxName} 🎁\n
-✅ *GACHA BERHASIL!*
+✅ *GACHA BERHASIL!* (x${quantity})
 
 📊 *Total Rewards:*
 🪙 Token: +${totalRewards.token}
@@ -15777,16 +15757,15 @@ Currency: money / frag (default: money)
 💰 Money: +${numberWithCommas(fixNumberE(totalRewards.money))}
 📈 XP Level: +${totalRewards.xp}
 📊 Limit: +${totalRewards.limit}
+
 💸 Total Dihabiskan: ${numberWithCommas(fixNumberE(totalPrice))} ${currencyName}
 
-Kembali untuk gacha lagi! 🎉
-
-*© RemComp 2025* `
+*© RemComp 2025*`
                     
                     return reply(from, gachaMsg, id)
                 } catch (err) {
                     console.error(err)
-                    return reply(from, 'Terjadi kesalahan saat gacha :(', id)
+                    return reply(from, `Error: ${err.message}`, id)
                 }
                 break
             case prefix+'eventchristmasgiftboxhunt2025santaclaushappychristmas':
@@ -15796,7 +15775,7 @@ Kembali untuk gacha lagi! 🎉
                 if (!isGroupMsg) return reply(from, 'Perintah ini hanya bisa di gunakan dalam group!', id)
                 
                 try {
-                    const xhuntCooldown = 300000
+                    const xhuntCooldown = 120000
                     const lastXhuntTime = _userDb.lastAction?.envtChristmas?.xhunt || 0
 
                     if(Date.now() - lastXhuntTime < xhuntCooldown && !isOwner) {
@@ -15824,7 +15803,7 @@ Kembali untuk gacha lagi! 🎉
                     await _mongo_UserSchema.updateOne({ iId: sender }, { $set: { "lastAction.envtChristmas.xhunt": Date.now() } })
                     
                     const foundChance = Math.random() * 100
-                    if(foundChance <= 60) {
+                    if(foundChance <= 80) {
                         const boxRand = Math.random() * 100
                         let giftBoxType, rewardType
                         const rewardNameTag = "`🎁 WINNER REMCOMP GIFT BOX 🎉`"
