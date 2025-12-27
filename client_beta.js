@@ -15831,7 +15831,7 @@ Kembali untuk gacha lagi! 🎉
 
                     await _mongo_UserSchema.updateOne({ iId: sender }, { $set: { "lastAction.envtChristmas.xhunt": Date.now() } })
                     const foundChance = Math.random() * 100
-                    const found = foundChance <= 50
+                    const found = foundChance <= 90
 
                     if(found) {
                         console.log('a')
