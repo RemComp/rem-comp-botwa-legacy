@@ -15903,6 +15903,7 @@ Kembali lagi setelah *5 menit* untuk berburu Gift Box lainnya!
                         
                         return reply(from, textGiftBoxHunt, id)
                     } else {
+                        console.log('s')
                         // not found
                         return reply(from, `🎁 *Gift Box Hunt* 🎁\n\nKamu mencari dengan teliti di *${giftBoxLocations}* tapi tidak menemukan satupun Gift Box. 😔\n\nCoba lagi nanti dan cari lokasi lainnya!`, id)
 
