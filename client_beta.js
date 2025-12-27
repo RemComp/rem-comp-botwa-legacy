@@ -15831,7 +15831,7 @@ Kembali untuk gacha lagi! 🎉
 
                     await _mongo_UserSchema.updateOne({ iId: sender }, { $set: { "lastAction.envtChristmas.xhunt": Date.now() } })
                     const foundChance = Math.random() * 100
-                    const found = foundChance <= 50
+                    const found = foundChance <= 60
 
                     if(found) {
                         console.log('a')
@@ -15901,7 +15901,7 @@ Kembali lagi setelah *5 menit* untuk berburu Gift Box lainnya!
 
 *© RemComp 2025*`
                         
-                        return reply(from, textGiftBoxHunt, id)
+                        await rem.sendText(from, textGiftBoxHunt, id)
                     } else {
                         console.log('s')
                         // not found
