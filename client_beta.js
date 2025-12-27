@@ -15331,6 +15331,7 @@ Lihat siapa yang mempunyai token terbanyak dengan perintah *${prefix}christmaslb
 ⏰ *Periode Event*
 Event akan berlangsung selama 1 minggu, mulai dari hari ini!
 Selamat bersenang-senang mencari semua Gift Box yang tersembunyi dan Selamat Natal! 🎄
+*Redeem Code:* _christmas2025_
 
 *Info: Owner & SideOwner tidak akan ikut mempermainkan event ini.*
 ────────────────
