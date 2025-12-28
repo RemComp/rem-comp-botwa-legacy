@@ -15824,10 +15824,12 @@ Currency: money / frag (default: money)
                         await addLevelingXp(sender, xp)
                         await _mongo_UserSchema.updateOne({ iId: sender }, { $inc: { "limit.limit": limit } })
 
-                        if(boxRand < 0.5 && rewardType === 'remcomp') {
-                            const checkExistingNameTag = await getNameTagList(_userDb)
-                            if(checkExistingNameTag === undefined) await addNameTag_tag(sender, rewardNameTag)
-                        }
+                       if (boxRand < 0.5 && rewardType === 'remcomp') {
+                              const userNameTags = await getNameTagList(_userDb);
+                             if (!userNameTags.includes(rewardNameTag)) {
+                                 await addNameTag_tag(sender, rewardNameTag);
+                            }
+                        }                      
 
                         let dispMoney = money
                         try { dispMoney = numberWithCommas(fixNumberE(money)) } catch(e) {}
