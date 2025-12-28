@@ -15340,63 +15340,53 @@ Selamat bersenang-senang mencari semua Gift Box yang tersembunyi dan Selamat Nat
                 // await rem.sendFile(from, bufferInfoChristmasPng, 'infoChristmasEvent.png', christmasEventInfo, messageRaw, image)
                 return reply(from, christmasEventInfo, id)
                 break
-            case prefix+'christmaslb':
-            case prefix+'xmaslb':
-            case prefix+'xlb':
-                // return reply(from, 'Maaf! Fitur ini hanya tersedia untuk Event Natal saja!', id)
-                // if (!isOwner) return reply(from, 'Err: 403!')
+                case prefix+'xmaslb':
+                case prefix+'xlb':
 
-                let limitLeaderBoardChristmas = 10
-                const topSpentToken = (await _mongo_UserSchema.find({}, { iId: 1, "economy.evntChristmas.spentToken": 1, _id: 0 }).sort({ "economy.point": -1 }).limit(10))
+    let limitLeaderBoardChristmas = 10
+    const topSpentToken = await _mongo_UserSchema.find(
+        { "economy.evntChristmas.spentToken": { $gt: 0 } }, 
+        { iId: 1, "economy.evntChristmas.spentToken": 1, _id: 0 }
+    ).sort({ "economy.evntChristmas.spentToken": -1 }).limit(limitLeaderBoardChristmas + 5)
 
-                let leaderboardSpentText = `🏆 *[ CHRISTMAS EVENT LEADERBOARD ]* 🏆\n\n`
-                try {
-                    let nol = 0
-                    if (isMention) {
-                        for (let i = 0; i < limitLeaderBoardChristmas; i++) {
-                            nol += 1
-                            if (topSpentToken[i].iId == '62856038120076@s.whatsapp.net') {
-                                limitLeaderBoardChristmas += 1
-                                nol -= 1
-                                continue;
-                            }
-                            var namaSpent0 = await rem.onWhatsApp(topSpentToken[i].iId)
-                            if(!namaSpent0?.[0]?.exists) {
-                                leaderboardSpentText += `${nol}. +${topSpentToken[i].iId.replace('@s.whatsapp.net', '')}\n➤ TOKEN SPENT: *${topSpentToken[i].economy.envtChristmas.spentToken}*\n\n`
-                            } else {
-                                leaderboardSpentText += `${nol}. @${topSpentToken[i].iId.replace('@s.whatsapp.net', '')}\n➤ TOKEN SPENT: *${topSpentToken[i].economy.envtChristmas.spentToken}*\n\n`
-                            }
-                        }
+    let leaderboardSpentText = `🏆 *[ CHRISTMAS EVENT LEADERBOARD ]* 🏆\n\n`
 
-                        leaderboardSpentText += '\nBuang-buang tokenmu supaya kamu menjadi Top Spent Token!'
-                        await rem.sendTextWithMentions(from, leaderboardSpentText)
-                    } else {
-                        for (let i = 0; i < limitLeaderBoardChristmas; i++) {
-                            nol += 1
-                            if (topSpentToken[i].iId == '62856038120076@s.whatsapp.net') {
-                                limitLeaderBoardChristmas += 1
-                                nol -= 1
-                                continue;
-                            }
-                            var contactDb = await _mongo_ContactSchema.findOne({ iId: leaderboardSpentText[i].iId })
-                            var namaSpent0 = await rem.onWhatsApp(topSpentToken[i].iId)
-                            const getNamaSpentToken = await _mongo_UserSchema.findOne({ iId: topSpentToken[i].iId })
-                            var namaSpent01 = getNama(getNamaSpentToken)
-                            if(namaSpent01 == undefined) {
-                                var namaSpent = namaSpent01
-                            } else {
-                                var namaSpent = namaSpent01
-                            }
-                            leaderboardSpentText += `${nol}. *_${namaSpent}_*\nwa.me/${topSpentToken[i].iId.replace('@s.whatsapp.net', '')}\n➤ TOKEN SPENT: *${topSpentToken[i].economy.envtChristmas.spentToken}*\n\n`
-                        }
-                        await rem.sendText(from, leaderboardSpentText)
-                    }
-                } catch (err) {
-                     console.error(err)
-                     return reply(from, 'Perlu setidaknya *10* user yang memiliki spent token di database!', id)
-                 }
+    try {
+        let nol = 0
+        let displayed = 0
+        for (let i = 0; i < topSpentToken.length && displayed < limitLeaderBoardChristmas; i++) {
+            if (topSpentToken[i].iId == '62856038120076@s.whatsapp.net') continue
 
-                break
+            nol += 1
+            displayed += 1
+
+            var namaSpent0 = await rem.onWhatsApp(topSpentToken[i].iId)
+            let spentToken = topSpentToken[i].economy.evntChristmas.spentToken || 0
+            let userIdShort = topSpentToken[i].iId.replace('@s.whatsapp.net', '')
+
+            if (isMention) {
+                if(!namaSpent0?.[0]?.exists) {
+                    leaderboardSpentText += `${nol}. +${userIdShort}\n➤ TOKEN SPENT: *${spentToken}*\n\n`
+                } else {
+                    leaderboardSpentText += `${nol}. @${userIdShort}\n➤ TOKEN SPENT: *${spentToken}*\n\n`
+                }
+            } else {
+                const getNamaSpentToken = await _mongo_UserSchema.findOne({ iId: topSpentToken[i].iId })
+                let namaSpent = getNama(getNamaSpentToken) || userIdShort
+                leaderboardSpentText += `${nol}. *_${namaSpent}_*\nwa.me/${userIdShort}\n➤ TOKEN SPENT: *${spentToken}*\n\n`
+            }
+        }
+
+        if(displayed === 0) return reply(from, 'Belum ada user yang memiliki spent token di database!', id)
+
+        if(isMention) leaderboardSpentText += '\nBuang-buang tokenmu supaya kamu menjadi Top Spent Token!'
+        await rem.sendTextWithMentions(from, leaderboardSpentText)
+    } catch (err) {
+        console.error(err)
+        return reply(from, 'Terjadi error saat menampilkan leaderboard!', id)
+    }
+
+    break
             case prefix+'christmasshop':
             case prefix+'xmashop':
             case prefix+'xshop':
@@ -15824,10 +15814,12 @@ Currency: money / frag (default: money)
                         await addLevelingXp(sender, xp)
                         await _mongo_UserSchema.updateOne({ iId: sender }, { $inc: { "limit.limit": limit } })
 
-                        if(boxRand < 0.5 && rewardType === 'remcomp') {
-                            const checkExistingNameTag = await getNameTagList(_userDb)
-                            if(checkExistingNameTag === undefined) await addNameTag_tag(sender, rewardNameTag)
-                        }
+                       if (boxRand < 0.5 && rewardType === 'remcomp') {
+                              const userNameTags = await getNameTagList(_userDb);
+                              if (!userNameTags.includes(rewardNameTag)) {
+                                await addNameTag_tag(sender, rewardNameTag);
+                            }
+                        }                      
 
                         let dispMoney = money
                         try { dispMoney = numberWithCommas(fixNumberE(money)) } catch(e) {}
