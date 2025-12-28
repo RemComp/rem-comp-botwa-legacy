@@ -15786,7 +15786,8 @@ Currency: money / frag (default: money)
                     const giftBoxLocations = [
                         `pohon-natal`, `perapian`, `kamar-tidur`, `halaman-rumah`, `taman`, 
                         `remcomp`, `dapur`, `ruang-tamu`, `teras`, `garasi`, `sofa`, 
-                        `meja-makan`, `lemari`, `atap`, `danau`, `tetangga`, `salju`, `pohon` 
+                        `meja-makan`, `lemari`, `atap`, `danau`, `tetangga`, `salju`,
+                         `pohon`, `hutan`, `gunung`, `pantai`, `kota`, `desa`, `kamar-mandi`, `bukit` 
                     ]
 
                     if(args.length === 1) {
