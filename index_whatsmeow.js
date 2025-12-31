@@ -3,7 +3,6 @@ require('dotenv').config()
 
 const listIgnoreMessageType = ['reactionMessage', 'messageContextInfo', 'pinInChatMessage', 'protocolMessage', 'scheduledCallEditMessage', 'scheduledCallCreationMessage', 'keepInChatMessage', 'requestPhoneNumberMessage', 'stickerSyncRmrMessage', 'fastRatchetKeySenderKeyDistributionMessage', 'senderKeyDistributionMessage']
 const MessageType = { "document": "documentMessage", "video": "videoMessage", "image": "imageMessage", "audio": "audioMessage", "sticker": "stickerMessage", "buttonsMessage": "buttonsMessage", "extendedText": "extendedTextMessage", "contact": "contactMessage", "location": "locationMessage", "liveLocation": "liveLocationMessage", "product": "productMessage", "list": "listMessage", "listResponse": "listResponseMessage" }
-//const makeWASocket = require('baileys').default
 const readline = require('readline')
 const color = require('./lib/color')
 const figlet = require('figlet')
@@ -131,7 +130,12 @@ const start = async (token) => {
     const rem = { token: token, virtualBotId: token }
 
     let getSessionStatus = await axios.get(`${process.env.CLIENT_GOLANG_URL}/session/status`, { params: { token: token }, validateStatus: false })
+    if(getSessionStatus?.data?.code === 401) {
+        await axios.post(`${process.env.CLIENT_GOLANG_URL}/admin/users`, { name: "CORE", token: "CORE", webhook: 'http://localhost:7516/v3/webhook/message', events: 'Message,GroupInfo,GroupJoined,PairSuccess' }, { headers: { 'Content-Type': 'application/json' }, validateStatus: false })
+        getSessionStatus = await axios.get(`${process.env.CLIENT_GOLANG_URL}/session/status`, { params: { token: token }, validateStatus: false })
+    }
     console.log('getSessionStatus', getSessionStatus?.data)
+
     if(!getSessionStatus?.data?.data?.Connected) {
         await axios.post(`${process.env.CLIENT_GOLANG_URL}/session/connect`, { Subscribe: ['Message', 'GroupInfo', 'GroupJoined', 'PairSuccess'] }, { headers: { Token: token } })
         getSessionStatus = await axios.get(`${process.env.CLIENT_GOLANG_URL}/session/status`, { params: { token: token } })

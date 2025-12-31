@@ -8,7 +8,6 @@ require('dotenv').config()
 // const { default: BaileysBottle } = require('baileys-bottle')
 const listIgnoreMessageType = ['reactionMessage', 'messageContextInfo', 'pinInChatMessage', 'protocolMessage', 'scheduledCallEditMessage', 'scheduledCallCreationMessage', 'keepInChatMessage', 'requestPhoneNumberMessage', 'stickerSyncRmrMessage', 'fastRatchetKeySenderKeyDistributionMessage', 'senderKeyDistributionMessage']
 const MessageType = { "document": "documentMessage", "video": "videoMessage", "image": "imageMessage", "audio": "audioMessage", "sticker": "stickerMessage", "buttonsMessage": "buttonsMessage", "extendedText": "extendedTextMessage", "contact": "contactMessage", "location": "locationMessage", "liveLocation": "liveLocationMessage", "product": "productMessage" }
-//const makeWASocket = require('baileys').default
 const color = require('./lib/color')
 const cron = require('node-cron');
 const figlet = require('figlet')
