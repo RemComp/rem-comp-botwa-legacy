@@ -164,11 +164,11 @@ const _rumahGarasi = {
 let nyehTemp = []
 //let listCharaIdWhitelist = [203940, 182964, 194503, 246268, 194501, 250452, 224273, 203623, 177568, 159640, 206128, 250641, 253703, 191086, 148141, 197751, 248828, 188176, 242986, 198565, 87287, 122211, 168985, 198675, 244323, 173008, 257523]
 // let listCharaIdWhitelist = [36828, 192049, 105289, 198565, 188267, 163271, 215718, 70069, 128917, 208568, 223129, 186362, 189839, 184047, 152715, 236300, 214700, 192919, 181611, 201774, 212968, 204780, 128911, 128910, 160679, 6046, 173261, 229960, 243960, 188176, 122211, 201458, 168985, 225665]
-let listCharaIdWhitelist = [277870, 280375, 278615, 211945, 182080, 206128, 221477, 203940, 182964, 206128, 178722, 246268, 194501, 250452, 198572, 206279, 197751, 248828, 159640, 244771, 244323, 173008, 54899, 191086, 173261, 164471, 205633, 238029, 70069, 36828, 192049, 198565, 188267, 163271, 128503, 215718, 128917, 208568, 186362, 189839, 184047, 152715, 236300, 214700, 192919, 181611, 201774, 212968, 204780, 128911, 160679, 173261, 243960, 178275, 225665, 188430, 229960, 188176, 2224262, 39102, 209622, 174027, 188622, 245943, 247896, 206721, 207955, 175281, 87287, 194751, 244289, 142261, 122211, 224273, 203623, 201458, 168985, 198675, 191314, 224281, 217592, 250641, 141354, 195230, 257523, 194501, 222740, 222742, 222744, 222739, 222741, 222743, 244323, 244327, 160603, 161472, 161471, 161470, 161469, 185061, 214385, 166779, 242986, 177568, 223977, 199895, 199894,172812]
+let listCharaIdWhitelist = [269148, 277870, 280375, 278615, 211945, 182080, 206128, 221477, 203940, 182964, 206128, 178722, 246268, 194501, 250452, 198572, 206279, 197751, 248828, 159640, 244771, 244323, 173008, 54899, 191086, 173261, 164471, 205633, 238029, 70069, 36828, 192049, 198565, 188267, 163271, 128503, 215718, 128917, 208568, 186362, 189839, 184047, 152715, 236300, 214700, 192919, 181611, 201774, 212968, 204780, 128911, 160679, 173261, 243960, 178275, 225665, 188430, 229960, 188176, 2224262, 39102, 209622, 174027, 188622, 245943, 247896, 206721, 207955, 175281, 87287, 194751, 244289, 142261, 122211, 224273, 203623, 201458, 168985, 198675, 191314, 224281, 217592, 250641, 141354, 195230, 257523, 194501, 222740, 222742, 222744, 222739, 222741, 222743, 244323, 244327, 160603, 161472, 161471, 161470, 161469, 185061, 214385, 166779, 242986, 177568, 223977, 199895, 199894,172812]
 
 const superOwnerPajak = '6281358181668@s.whatsapp.net'
 const numberReportError = '62856038120076@s.whatsapp.net'
-const ownerNumber = '6281358181668@s.whatsapp.net, 62856038120076@s.whatsapp.net, 160472879886569@s.whatsapp.net, 6288809279029@s.whatsapp.net'
+const ownerNumber = '6281358181668@s.whatsapp.net, 62856038120076@s.whatsapp.net, 160472879886569@s.whatsapp.net, 6282229778223@s.whatsapp.net, 6288809279029@s.whatsapp.net'
 const ownerNumber2 = '6281358181668@s.whatsapp.net, 62856038120076@s.whatsapp.net, 6282229778223@s.whatsapp.net, 6288809279029@s.whatsapp.net'
 const sideOwnerNumber = '6281358181668@s.whatsapp.net, 62856038120076@s.whatsapp.net, 6288809279029@s.whatsapp.net, 6288991122630@s.whatsapp.net, 62856038120076@s.whatsapp.net, 6282229778223@s.whatsapp.net, 6285858254388@s.whatsapp.net, 85294853160@s.whatsapp.net'
 const hideGroups = [ '120363359122117558@g.us, 120363372660164190@g.us']
@@ -543,6 +543,25 @@ const {
     getPoint,
     setPoint,
     // CHRISTMAS EVENT
+    addToken,
+    MinToken,
+    getToken,
+    setToken,
+
+    addFrag,
+    MinFrag,
+    getFrag,
+    setFrag,
+    addSpentToken,
+    MinSpentToken,
+    getSpentToken,
+    setSpentToken,
+
+    getChristmasLeaderboard,
+    getChristmasShopInventory,
+    buyChristmasShopItem,
+    generateChristmasReward,
+    addChristmasSpentToken,
 
     //WARN
     addWarn,
@@ -1057,6 +1076,22 @@ if(_userDb?.item?.item?.[0] != undefined) {
 if(_userDb.item?.jobBoost?.time != 0 && Date.now() >= _userDb.item?.jobBoost?.time) {
     await _mongo_UserSchema.updateOne({ iId: sender }, { $set: { "item.jobBoost": { xp: 0, time: 0 } } })
     _userDb.item.jobBoost = { xp: 0, time: 0 }
+}
+
+// event christmas
+if(!_userDb.economy?.evntChristmas) {
+    await _mongo_UserSchema.updateOne({ iId: sender }, { $set: {
+        "economy.evntChristmas": {
+            token: 0,
+            frag: 0,
+            spentToken: 0
+        }
+    }})
+    _userDb.economy.evntChristmas = {
+        token: 0,
+        frag: 0,
+        spentToken: 0
+    }
 }
 
 if(!_userDb.rl?.afinitas) {
@@ -15249,6 +15284,610 @@ Kembali lagi setelah *5 menit* untuk berburu telur lainnya!`, id)
                 reply(from, 'Terjadi kesalahan saat berburu telur Easter :(', id)
             }
             break **/
+
+                    // EVENT CHRISTMAS
+            case prefix+'christmas':
+            case prefix+'xmas':
+                // return reply(from, 'Maaf! Fitur ini hanya tersedia untuk Event Natal saja!', id)
+                // if (!isOwner) return reply(from, 'Err: 403!')
+                
+                // const getInfoChristmasPng = await import('./lib/database/christmasPng/infoChristmasEvent.png')
+                // const infoPath = path.resolve(getInfoChristmasPng)
+                // const bufferInfoChristmasPng = fs.readFileSync(infoPath)
+
+                const christmasEventInfo = `🎁 *CHRISTMAS EVENT 2025* 🎁\n
+Selamat datang di event spesial Christmas 2025!
+────────────────
+🎁 *Gift Box Hunt*
+Cari Gift Box tersembunyi dengan perintah *${prefix}eventchristmasgiftboxhunt2025santaclaushappychristmas* di dalam grup ini! atau bisa menggunakan shortcut *${prefix}xh* menemukan Giftbox
+Ingin melihat berapa token & frag yang kamu dapatkan ketika bermain event ini? Gunakan perintah *${prefix}token* | *${prefix}frag*
+Temukan Gift Box JELEK atau RemComp Gift Box untuk hadiah super spesial!
+
+🛒 *Gift Box Gacha*
+Jika kamu ingin menguji keberuntunganmu, cobalah perintah *${prefix}xgbox*
+
+🛍 *Daily Shop*
+Daily Shop ini berubah setiap harinya dan diisi dengan hadiah-hadiah yang kamu bisa beli menggunakan *${prefix}xtoken*. Perintah untuk melihat Daily Shop nya *${prefix}christmasshop*
+
+🏆 *Gift Box Leaderboard*
+Lihat siapa yang mempunyai token terbanyak dengan perintah *${prefix}christmaslb* atau bisa menggunakan shortcut *${prefix}xlb* untuk melihat leaderboard!
+
+⏰ *Periode Event*
+Event akan berlangsung selama 1 minggu, mulai dari hari ini!
+Selamat bersenang-senang mencari semua Gift Box yang tersembunyi dan Selamat Natal! 🎄
+*Redeem Code:* _christmas2025_
+
+*Info: Owner & SideOwner tidak akan ikut mempermainkan event ini.*
+────────────────
+*© RemComp 2021 - 2025*`
+                
+                // await rem.sendFile(from, bufferInfoChristmasPng, 'infoChristmasEvent.png', christmasEventInfo, messageRaw, image)
+                return reply(from, christmasEventInfo, id)
+                break
+                case prefix+'xmaslb':
+                case prefix+'xlb':
+
+    let limitLeaderBoardChristmas = 10
+    const topSpentToken = await _mongo_UserSchema.find(
+        { "economy.evntChristmas.spentToken": { $gt: 0 } }, 
+        { iId: 1, "economy.evntChristmas.spentToken": 1, _id: 0 }
+    ).sort({ "economy.evntChristmas.spentToken": -1 }).limit(limitLeaderBoardChristmas + 5)
+
+    let leaderboardSpentText = `🏆 *[ CHRISTMAS EVENT LEADERBOARD ]* 🏆\n\n`
+
+    try {
+        let nol = 0
+        let displayed = 0
+        for (let i = 0; i < topSpentToken.length && displayed < limitLeaderBoardChristmas; i++) {
+            if (topSpentToken[i].iId == '62856038120076@s.whatsapp.net') continue
+
+            nol += 1
+            displayed += 1
+
+            var namaSpent0 = await rem.onWhatsApp(topSpentToken[i].iId)
+            let spentToken = topSpentToken[i].economy.evntChristmas.spentToken || 0
+            let userIdShort = topSpentToken[i].iId.replace('@s.whatsapp.net', '')
+
+            if (isMention) {
+                if(!namaSpent0?.[0]?.exists) {
+                    leaderboardSpentText += `${nol}. +${userIdShort}\n➤ TOKEN SPENT: *${spentToken}*\n\n`
+                } else {
+                    leaderboardSpentText += `${nol}. @${userIdShort}\n➤ TOKEN SPENT: *${spentToken}*\n\n`
+                }
+            } else {
+                const getNamaSpentToken = await _mongo_UserSchema.findOne({ iId: topSpentToken[i].iId })
+                let namaSpent = getNama(getNamaSpentToken) || userIdShort
+                leaderboardSpentText += `${nol}. *_${namaSpent}_*\nwa.me/${userIdShort}\n➤ TOKEN SPENT: *${spentToken}*\n\n`
+            }
+        }
+
+        if(displayed === 0) return reply(from, 'Belum ada user yang memiliki spent token di database!', id)
+
+        if(isMention) leaderboardSpentText += '\nBuang-buang tokenmu supaya kamu menjadi Top Spent Token!'
+        await rem.sendTextWithMentions(from, leaderboardSpentText)
+    } catch (err) {
+        console.error(err)
+        return reply(from, 'Terjadi error saat menampilkan leaderboard!', id)
+    }
+
+    break
+            case prefix+'christmasshop':
+            case prefix+'xmashop':
+            case prefix+'xshop':
+                // return reply(from, 'Maaf! Fitur ini hanya tersedia untuk Event Natal saja!', id)
+                // if (!isOwner) return reply(from, 'Err: 403!')
+                
+                try {
+                    const shop = await getChristmasShopInventory()
+                    
+                    if(args.length === 1) {
+                        // menu shop
+                        let shopDisplay = `🛍️ *CHRISTMAS DAILY SHOP* 🛍️\n\n`
+                        let itemNum = 1
+                        for (const [key, item] of Object.entries(shop.items)) {
+                            shopDisplay += `${itemNum}. *${item.name}*\n   Harga: ${numberWithCommas(item.price)} Token\n   Stok: ${item.qty}\n\n`
+                            itemNum++
+                        }
+                        shopDisplay += `\nKetik *${prefix}xshop [nomor] [jumlah]* untuk membeli\n`
+                        shopDisplay += `Contoh: *${prefix}xshop 1 2* (membeli item 1 sebanyak 2)\n\n`
+                        shopDisplay += `⏱️ Shop akan tereset dalam 24 jam!\n────────────────\n*© RemComp 2025*`
+                        return reply(from, shopDisplay, id)
+                    } else if(args.length >= 2) {
+                        const itemIndex = parseInt(args[1]) - 1
+                        const quantityInput = args[2] ? parseInt(args[2]) : 1
+                        
+                        if(isNaN(quantityInput) || quantityInput <= 0) {
+                            return reply(from, `❌ Jumlah item tidak valid! Harus berupa angka positif.`, id)
+                        }
+                        const quantity = quantityInput
+                        
+                        const itemKeys = Object.keys(shop.items)
+                        console.log('a')
+                        if(itemIndex < 0 || itemIndex >= itemKeys.length) {
+                            return reply(from, `❌ Nomor item tidak valid! Gunakan *${prefix}xshop* untuk melihat daftar item.`, id)
+                        }
+                        
+                        const itemId = itemKeys[itemIndex]
+                        const item = shop.items[itemId]
+                        
+                        if(!item) {
+                            return reply(from, `❌ Item tidak ditemukan di daftar shop! Silakan gunakan *${prefix}xshop* untuk melihat item yang tersedia.`, id)
+                        }
+                        
+                        const totalPrice = item.price * quantity
+                        
+                        const userToken = await getToken(_userDb)       
+                        console.log('a')
+                        if(userToken < totalPrice) {
+                            const shortOf = numberWithCommas(fixNumberE(totalPrice - userToken))
+                            return reply(from, `❌ Token kamu tidak cukup!\nButuh: ${numberWithCommas(fixNumberE(totalPrice))}\nKekurangan: ${shortOf}`, id)
+                        }
+                        
+                        const purchaseResult = await buyChristmasShopItem(itemId, quantity)
+                        console.log('a')
+                        if(!purchaseResult.success) {
+                            return reply(from, `❌ ${purchaseResult.message}`, id)
+                        }
+                        
+                        await MinToken(sender, totalPrice)
+                        
+                        if(itemId.includes('token')) {
+                            const tokenAmount = parseInt(itemId.split('_')[1]) * quantity
+                            await addToken(sender, tokenAmount)
+                        } else if(itemId.includes('frag')) {
+                            const fragAmount = parseInt(itemId.split('_')[1]) * quantity
+                            await addFrag(sender, fragAmount)
+                        } else if(itemId.includes('limit')) {
+                            const limitAmount = parseInt(itemId.split('_')[1]) * quantity
+                            await limitAdd(sender, limitAmount)
+                        } else if(itemId.includes('xp')) {
+                            const xpAmount = parseInt(itemId.split('_')[1]) * quantity
+                            await addLevelingXp(sender, xpAmount)
+                        }
+                        console.log('a')
+                        
+                        await addChristmasSpentToken(sender, totalPrice)
+                        
+                        const purchaseMsg = `✅ *PEMBELIAN BERHASIL* ✅\n\nKamu membeli:\n${item.name} x${quantity}\n\n💰 Harga: ${numberWithCommas(fixNumberE(totalPrice))}\n\nTerimakasih telah berbelanja di Christmas Shop!\n*© RemComp 2025*`
+                        return reply(from, purchaseMsg, id)
+                    }
+                } catch (err) {
+                    console.error(err)
+                    return reply(from, 'Terjadi kesalahan saat mengakses shop :(', id)
+                }
+                break
+            case prefix+'christmastoken':
+            case prefix+'xmastoken':
+            case prefix+'xtoken':
+                // return reply(from, 'Maaf! Fitur ini hanya tersedia untuk Event Natal saja!', id)
+                // if (!isOwner) return reply(from, 'Err: 403!')
+                
+                if(args.length == 1) {
+                    const tokenChristmas = numberWithCommas(getToken(_userDb))
+                    const tokenText = `🪙 Token Christmas: ${tokenChristmas}`
+                    await reply(from, tokenText)
+                } else if(args[1] == 'add') {
+                    if(!isSideOwner) return reply(from, 'Err: 403!')
+                    if(quotedMsg) {
+                        let token = quotedMsg.sender
+                        const amountTokenAdd = Math.floor(args[2])
+                        await addToken(token, amountTokenAdd)
+                        if(isMention) {
+                            rem.sendTextWithMentions(from, `Success Add Token Christmas untuk @${token.replace('@s.whatsapp.net', '')}!\n\nUpdated!\n🪙 Token Christmas: ${numberWithCommas(fixNumberE(_userDb.economy.evntChristmas.token + Number(amountTokenAdd)))} `)
+                        } else {
+                            rem.sendText(from, `Success Add Token Christmas wa.me/${token.replace('@s.whatsapp.net','')}!\n\nUpdated!\n🪙 Token Christmas: ${numberWithCommas(fixNumberE(_userDb.economy.evntChristmas.token + Number(amountTokenAdd)))}`)
+                        }
+                    } else if(args.length == 4) {
+                        if(!args[3].includes('@s.whatsapp.net')) return reply(from, 'Args[3] Harus berupa @s.whatsapp.net ID', id)
+                        let token = args[3]
+                        const amountTokenAdd = Math.floor(args[2])
+                        await addToken(token, amountTokenAdd)
+                        if(isMention) {
+                            rem.sendTextWithMentions(from, `Success Add Token Christmas untuk @${token.replace('@s.whatsapp.net', '')}!\n\nUpdated!\n🪙 Token Christmas: ${numberWithCommas(fixNumberE(_userDb.economy.evntChristmas.token + Number(amountTokenAdd)))} `)
+                        } else {
+                            rem.sendText(from, `Success Add Token Christmas wa.me/${token.replace('@s.whatsapp.net','')}!\n\nUpdated!\n🪙 Token Christmas: ${numberWithCommas(fixNumberE(_userDb.economy.evntChristmas.token + Number(amountTokenAdd)))}`)
+                        }
+                    } else {
+                        return reply(from, 'Invalid', id)
+                    }
+                } else if(args[1] == 'min') {
+                    if(!isOwner) return reply(from, 'Err: 403!', id)
+                    if(quotedMsg) {
+                            let token2 = quotedMsg.sender
+                            if(getToken(_userDb) === undefined) await setToken(token2)
+                            const amountTokenMin = Math.floor(args[2])
+                            await MinToken(token2, amountTokenMin)
+                            if(isMention) {
+                            rem.sendTextWithMentions(from, `Success Add Token Christmas untuk @${token2.replace('@s.whatsapp.net', '')}!\n\nUpdated!\n🪙 Token Christmas: ${numberWithCommas(fixNumberE(_userDb.economy.evntChristmas.token - Number(amountTokenMin)))} `)
+                            } else {
+                                rem.sendText(from, `Success Add Token Christmas wa.me/${token2.replace('@s.whatsapp.net','')}!\n\nUpdated!\n🪙 Token Christmas: ${numberWithCommas(fixNumberE(_userDb.economy.evntChristmas.token - Number(amountTokenMin)))}`)
+                            }
+                    } else if(args.length == 4) {
+                        if(!args[3].includes('@s.whatsapp.net')) return reply(from, 'Args[3] Harus berupa @s.whatsapp.net ID', id)
+                        let token2 = args[3]
+                        const amountTokenMin = Math.floor(args[2])
+                        await MinToken(token2, amountTokenMin)
+                        if(isMention) {
+                            rem.sendTextWithMentions(from, `Success Add Token Christmas untuk @${token2.replace('@s.whatsapp.net', '')}!\n\nUpdated!\n🪙 Token Christmas: ${numberWithCommas(fixNumberE(_userDb.economy.evntChristmas.token - Number(amountTokenMin)))} `)
+                        } else {
+                            rem.sendText(from, `Success Add Token Christmas wa.me/${token2.replace('@s.whatsapp.net','')}!\n\nUpdated!\n🪙 Token Christmas: ${numberWithCommas(fixNumberE(_userDb.economy.evntChristmas.token - Number(amountTokenMin)))}`)
+                        }
+                    } else {
+                        return reply(from, 'Invalid', id)
+                    }
+                } else if(args[1] == 'reset') {
+                    if(!isOwner) return reply(from, 'Err: 403!', id)
+                    if(quotedMsg) {
+                        let token2 = quotedMsg.sender
+                        await _mongo_UserSchema.updateOne({ iId: token2 }, { $set: { "economy.evntChristmas.token": 0 } })
+                        if(isMention) {
+                            rem.sendTextWithMentions(from, `Success Reset Token Christmas @${token2.replace('@s.whatsapp.net','')}!`)
+                        } else {
+                            rem.sendText(from, `Success Reset Token Christmas wa.me/${token2.replace('@s.whatsapp.net','')}!`)
+                        }
+                    } else if(args.length == 3) {
+                        if(!args[2].includes('@s.whatsapp.net')) return reply(from, 'Args[2] Harus berupa @s.whatsapp.net ID', id)
+                        let token2 = args[2]
+                        await _mongo_UserSchema.updateOne({ iId: token2 }, { $set: { "economy.evntChristmas.token": 0 } })
+                        if(isMention) {
+                            rem.sendTextWithMentions(from, `Success Reset Token Christmas @${token2.replace('@s.whatsapp.net','')}!`)
+                        } else {
+                            rem.sendText(from, `Success Reset Token Christmas wa.me/${token2.replace('@s.whatsapp.net','')}!`)
+                        }
+                    } else {
+                        return reply(from, 'Invalid', id)
+                    }
+                }
+                break
+            case prefix+'christmasfrag':
+            case prefix+'xmasfrag':
+            case prefix+'xfrag':
+                // return reply(from, 'Maaf! Fitur ini hanya tersedia untuk Event Natal saja!', id)
+                // if (!isOwner) return reply(from, 'Err: 403!')
+
+                if(args.length == 1) {
+                    const fragmentChristmas = numberWithCommas(getFrag(_userDb))
+                    const fragText = `🧩 Fragment Christmas: ${fragmentChristmas}`
+                    await reply(from, fragText)
+                } else if(args[1] == 'add') {
+                    if(!isOwner) return reply(from, 'Err: 403!')
+                    if(quotedMsg) {
+                        let frag = quotedMsg.sender
+                        const amountFragAdd = Math.floor(args[2])
+                        await addFrag(frag, amountFragAdd)
+                        if(isMention) {
+                            rem.sendTextWithMentions(from, `Success Add Fragment Christmas untuk @${frag.replace('@s.whatsapp.net', '')}!\n\nUpdated!\n🧩 Fragment Christmas: ${numberWithCommas(fixNumberE(_userDb.economy.evntChristmas.frag + Number(amountFragAdd)))} `)
+                        } else {
+                            rem.sendText(from, `Success Add Fragment Christmas wa.me/${frag.replace('@s.whatsapp.net','')}!\n\nUpdated!\n🧩 Fragment Christmas: ${numberWithCommas(fixNumberE(_userDb.economy.evntChristmas.frag + Number(amountFragAdd)))}`)
+                        }
+                    } else if(args.length == 4) {
+                        if(!args[3].includes('@s.whatsapp.net')) return reply(from, 'Args[3] Harus berupa @s.whatsapp.net ID', id)
+                        let frag = args[3]
+                        const amountFragAdd = Math.floor(args[2])
+                        await addFrag(frag, amountFragAdd)
+                        if(isMention) {
+                            rem.sendTextWithMentions(from, `Success Add Fragment Christmas untuk @${frag.replace('@s.whatsapp.net', '')}!\n\nUpdated!\n🧩 Fragment Christmas: ${numberWithCommas(fixNumberE(_userDb.economy.evntChristmas.frag + Number(amountFragAdd)))} `)
+                        } else {
+                            rem.sendText(from, `Success Add Fragment Christmas wa.me/${frag.replace('@s.whatsapp.net','')}!\n\nUpdated!\n🧩 Fragment Christmas: ${numberWithCommas(fixNumberE(_userDb.economy.evntChristmas.frag + Number(amountFragAdd)))}`)
+                        }
+                    } else {
+                        return reply(from, 'Invalid', id)
+                    }
+                } else if(args[1] == 'min') {
+                    if(!isOwner) return reply(from, 'Err: 403!', id)
+                    if(quotedMsg) {
+                        let frag2 = quotedMsg.sender
+                        const amountFragMin = Math.floor(args[2])
+                        await MinFrag(frag2, amountFragMin)
+                        if(isMention) {
+                            rem.sendTextWithMentions(from, `Success Reduce Fragment Christmas untuk @${frag2.replace('@s.whatsapp.net', '')}!\n\nUpdated!\n🧩 Fragment Christmas: ${numberWithCommas(fixNumberE(_userDb.economy.evntChristmas.frag - Number(amountFragMin)))} `)
+                        } else {
+                            rem.sendText(from, `Success Reduce Fragment Christmas wa.me/${frag2.replace('@s.whatsapp.net','')}!\n\nUpdated!\n🧩 Fragment Christmas: ${numberWithCommas(fixNumberE(_userDb.economy.evntChristmas.frag - Number(amountFragMin)))}`)
+                        }
+                    } else if(args.length == 4) {
+                        if(!args[3].includes('@s.whatsapp.net')) return reply(from, 'Args[3] Harus berupa @s.whatsapp.net ID', id)
+                        let frag2 = args[3]
+                        const amountFragMin = Math.floor(args[2])
+                        await MinFrag(frag2, amountFragMin)
+                        if(isMention) {
+                            rem.sendTextWithMentions(from, `Success Reduce Fragment Christmas untuk @${frag2.replace('@s.whatsapp.net', '')}!\n\nUpdated!\n🧩 Fragment Christmas: ${numberWithCommas(fixNumberE(_userDb.economy.evntChristmas.frag - Number(amountFragMin)))} `)
+                        } else {
+                            rem.sendText(from, `Success Reduce Fragment Christmas wa.me/${frag2.replace('@s.whatsapp.net','')}!\n\nUpdated!\n🧩 Fragment Christmas: ${numberWithCommas(fixNumberE(_userDb.economy.evntChristmas.frag - Number(amountFragMin)))}`)
+                        }
+                    } else {
+                        return reply(from, 'Invalid', id)
+                    }
+                } else if(args[1] == 'reset') {
+                    if(!isOwner) return reply(from, 'Err: 403!', id)
+                    if(quotedMsg) {
+                        let frag2 = quotedMsg.sender
+                        await _mongo_UserSchema.updateOne({ iId: frag2 }, { $set: { "economy.evntChristmas.frag": 0 } })
+                        if(isMention) {
+                            rem.sendTextWithMentions(from, `Success Reset Token Christmas @${frag2.replace('@s.whatsapp.net','')}!`)
+                        } else {
+                            rem.sendText(from, `Success Reset Token Christmas wa.me/${frag2.replace('@s.whatsapp.net','')}!`)
+                        }
+                    } else if(args.length == 3) {
+                        if(!args[2].includes('@s.whatsapp.net')) return reply(from, 'Args[2] Harus berupa @s.whatsapp.net ID', id)
+                        let frag2 = args[2]
+                        await _mongo_UserSchema.updateOne({ iId: frag2 }, { $set: { "economy.evntChristmas.frag": 0 } })
+                        if(isMention) {
+                            rem.sendTextWithMentions(from, `Success Reset Token Christmas @${frag2.replace('@s.whatsapp.net','')}!`)
+                        } else {
+                            rem.sendText(from, `Success Reset Token Christmas wa.me/${frag2.replace('@s.whatsapp.net','')}!`)
+                        }
+                    } else {
+                        return reply(from, 'Invalid', id)
+                    }
+                }
+                break
+            case prefix+'christmasgiftbox':
+            case prefix+'xmasgiftbox':
+            case prefix+'xgbox':
+                // if (!isOwner) return reply(from, 'Err: 403!')
+                
+                try {
+                    if(args.length === 1) {
+                        const gacha1Msg = `🎁 *CHRISTMAS GIFT BOX GACHA* 🎁\n
+💎 *Premium Box* (Hadiah Terbaik)
+💰 Harga: 1e+200 Money ATAU 500 Fragment per Box
+• Ultra Rare (1%): Token, Fragment, Money, XP, Limit
+• Very Rare (7%): Token, Fragment, Money, XP, Limit
+• Rare (17%): Token, Fragment, Money, XP, Limit
+• Common (75%): Token, Fragment, Money, XP, Limit
+
+⭐ *Standard Box* (Hadiah Normal)
+💰 Harga: 1e+150 Money ATAU 100 Fragment per Box
+• Very Rare (3%): Token, Fragment, Money, XP, Limit
+• Rare (12%): Token, Fragment, Money, XP, Limit
+• Uncommon (35%): Token, Fragment, Money, XP, Limit
+• Common (50%): Money, XP, Limit
+
+🎪 *Lucky Box* (Hadiah Berbeda-beda)
+💰 Harga: 1e+100 Money ATAU 50 Fragment per Box
+• Rare (5%): Token, Fragment, Money, XP, Limit
+• Uncommon (20%): Token, Fragment, Money, XP, Limit
+• Common (75%): Money, XP, Limit
+
+Ketik *${prefix}xgbox [tipe] [jumlah] [currency]* untuk gacha
+Contoh: *${prefix}xgbox premium 2 money*
+
+Tipe: premium / standard / lucky
+Currency: money / frag (default: money)
+
+*© RemComp 2025*`
+                        return reply(from, gacha1Msg, id)
+                    }
+                    
+                    const boxType = args[1]?.toLowerCase()
+                    const quantityInput = args[2] ? parseInt(args[2]) : 1
+                    
+                    if(isNaN(quantityInput) || quantityInput <= 0) {
+                        return reply(from, `❌ Jumlah box tidak valid!`, id)
+                    }
+                    const quantity = quantityInput
+                    const currency = args[3]?.toLowerCase() || 'money'
+                    
+                    let totalPrice, boxName, currencyName
+                    let moneyPerBox, fragPerBox
+                    
+                    if(boxType === 'premium') {
+                        moneyPerBox = 1e+200; fragPerBox = 500; boxName = '💎 Premium Box'
+                    } else if(boxType === 'standard') {
+                        moneyPerBox = 1e+150; fragPerBox = 100; boxName = '⭐ Standard Box'
+                    } else if(boxType === 'lucky') {
+                        moneyPerBox = 1e+100; fragPerBox = 50; boxName = '🎪 Lucky Box'
+                    } else {
+                        return reply(from, `❌ Tipe box tidak dikenal!`, id)
+                    }
+                    
+                    const userMoney = getMoney(_userDb)
+                    const userFrag = getFrag(_userDb)
+                    
+                    if(currency === 'money') {
+                        totalPrice = moneyPerBox * quantity
+                        currencyName = 'Money'
+                        if(userMoney < totalPrice) {
+                            return reply(from, `❌ Money tidak cukup! Butuh: ${numberWithCommas(fixNumberE(totalPrice))}`, id)
+                        }
+                        await MinMoney(sender, totalPrice)
+                    } else {
+                        totalPrice = fragPerBox * quantity
+                        currencyName = 'Fragment'
+                        if(userFrag < totalPrice) {
+                            return reply(from, `❌ Fragment tidak cukup!`, id)
+                        }
+                        await MinFrag(sender, totalPrice)
+                    }
+                    
+                    let totalRewards = { token: 0, frag: 0, money: 0, xp: 0, limit: 0 }
+                    for(let i = 0; i < quantity; i++) {
+                        const reward = generateChristmasReward(boxType)
+                        totalRewards.token += reward.token
+                        totalRewards.frag += reward.frag
+                        totalRewards.money += reward.money
+                        totalRewards.xp += reward.xp
+                        totalRewards.limit += reward.limit
+                    }
+                    
+                    if(totalRewards.token > 0) await addToken(sender, totalRewards.token)
+                    if(totalRewards.frag > 0) await addFrag(sender, totalRewards.frag)
+                    if(totalRewards.money > 0) await addMoney(sender, totalRewards.money)
+                    if(totalRewards.xp > 0) await addLevelingXp(sender, totalRewards.xp)
+                    
+                    if(totalRewards.limit > 0) {
+                        await _mongo_UserSchema.updateOne(
+                            { iId: sender }, 
+                            { $inc: { "limit.limit": totalRewards.limit } } 
+                        )
+                    }
+                    
+                    const gachaMsg = `${boxName} 🎁\n
+✅ *GACHA BERHASIL!* (x${quantity})
+
+📊 *Total Rewards:*
+🪙 Token: +${totalRewards.token}
+🧩 Fragment: +${totalRewards.frag}
+💰 Money: +${numberWithCommas(fixNumberE(totalRewards.money))}
+📈 XP Level: +${totalRewards.xp}
+📊 Limit: +${totalRewards.limit}
+
+💸 Total Dihabiskan: ${numberWithCommas(fixNumberE(totalPrice))} ${currencyName}
+
+*© RemComp 2025*`
+                    
+                    return reply(from, gachaMsg, id)
+                } catch (err) {
+                    console.error(err)
+                    return reply(from, `Error: ${err.message}`, id)
+                }
+                break
+            case prefix+'eventchristmasgiftboxhunt2025santaclaushappychristmas':
+            case prefix+'xmasgiftboxhunt':
+            case prefix+'xgboxhunt':
+            case prefix+'xh':
+                if (!isGroupMsg) return reply(from, 'Perintah ini hanya bisa di gunakan dalam group!', id)
+                
+                try {
+                    const xhuntCooldown = 120000
+                    const lastXhuntTime = _userDb.lastAction?.envtChristmas?.xhunt || 0
+
+                    if(Date.now() - lastXhuntTime < xhuntCooldown && !isOwner) {
+                        const timeLeft = Math.ceil((xhuntCooldown - (Date.now() - lastXhuntTime)) / 60000);
+                        return reply(from, `🎁 *Christmas Gift Box Hunt* 🎁\n\nKamu harus menunggu *${timeLeft} menit* lagi untuk berburu Gift Box!`, id)
+                    }
+
+                    const giftBoxLocations = [
+                        `pohon-natal`, `perapian`, `kamar-tidur`, `halaman-rumah`, `taman`, 
+                        `remcomp`, `dapur`, `ruang-tamu`, `teras`, `garasi`, `sofa`, `dapur-mbg`, 
+                        `meja-makan`, `lemari`, `atap`, `danau`, `tetangga`, `salju`,
+                        `pohon`, `hutan`, `gunung`, `pantai`, `kota`, `desa`, `kamar-mandi`, `bukit` 
+                    ]
+
+                    if(args.length === 1) {
+                        let locationsText = ''
+                        giftBoxLocations.forEach(loc => { locationsText += `⚬ ${loc}\n` })
+                        return reply(from, `🎁 *Christmas Gift Box Hunt* 🎁\n\n🎯 *Misi:* Cari GiftBox di lokasi dan dapatkan hadiah!\n\n📜 *Cara bermain:*\nKetik *${prefix}xgboxhunt [lokasi]*\n\n🗺️ *Lokasi:*\n${locationsText}`, id)
+                    }
+                     
+                    const location = args[1].toLowerCase()
+                    if(!giftBoxLocations.includes(location)) {
+                        return reply(from, `🎁 Lokasi *${location}* tidak tersedia.`, id)
+                    }
+
+                    await _mongo_UserSchema.updateOne({ iId: sender }, { $set: { "lastAction.envtChristmas.xhunt": Date.now() } })
+                    
+                    const foundChance = Math.random() * 100
+                    if(foundChance <= 80) {
+                        const boxRand = Math.random() * 100
+                        let giftBoxType, rewardType
+                        const rewardNameTag = "`🎁 WINNER REMCOMP GIFT BOX 🎉`"
+
+                        if(boxRand < 0.5) { giftBoxType = '✨ Remcomp Gift Box'; rewardType = 'remcomp' }
+                        else if(boxRand < 2) { giftBoxType = "💛 Golden Gift Box"; rewardType = 'golden' }
+                        else if(boxRand < 5) { giftBoxType = "💎 Diamond Gift Box"; rewardType = 'premium' }
+                        else if(boxRand < 15) { giftBoxType = "🔲 Silver Gift Box"; rewardType = 'standard' }
+                        else { giftBoxType = "🟫 Bronze Gift Box"; rewardType = 'lucky' }
+
+                        const reward = generateChristmasReward(rewardType)
+                        const { token, frag, money, xp, limit } = reward
+
+                        await addToken(sender, token)
+                        await addFrag(sender, frag)
+                        await addMoney(sender, money)
+                        await addLevelingXp(sender, xp)
+                        await _mongo_UserSchema.updateOne({ iId: sender }, { $inc: { "limit.limit": limit } })
+
+                       if (boxRand < 0.5 && rewardType === 'remcomp') {
+                              const userNameTags = await getNameTagList(_userDb);
+                              if (!userNameTags.includes(rewardNameTag)) {
+                                await addNameTag_tag(sender, rewardNameTag);
+                            }
+                        }                      
+
+                        let dispMoney = money
+                        try { dispMoney = numberWithCommas(fixNumberE(money)) } catch(e) {}
+
+                        const textGiftBoxHunt = `🎁 *${giftBoxType}* 🎁\n\nSelamat! Kamu menemukan Gift Box di *${location}*!\n\n💰 *Hadiah:*\n💵 Money: +${dispMoney}\n🪙 Token: +${token}\n🧩 Fragment: +${frag}\n📈 XP: +${xp}\n📊 Limit: +${limit}\n\nKembali lagi setelah *2 menit*!\n*© RemComp 2025*`
+                        
+                        return reply(from, textGiftBoxHunt, id)
+                    } else {
+                        return reply(from, `🎁 *Gift Box Hunt* 🎁\n\nKamu mencari di *${location}* tapi tidak menemukan apapun. 😔`, id)
+                    }
+                } catch (err) {
+                    console.error(err);
+                    reply(from, 'Terjadi kesalahan sistem!', id)
+                }
+                break
+            case prefix+'exchangechristmasfrag':
+            case prefix+'exchangexmasfrag':
+            case prefix+'exchangexfrag':
+            case prefix+'exfrag':
+                // return reply(from, 'Maaf! Fitur ini hanya tersedia untuk Event Natal saja!', id)
+                // if (!isOwner) return reply(from, 'Err: 403!')
+                
+                try {
+                    const tokenBalance = getToken(_userDb)
+                    
+                    if(args.length === 1) {
+                        const exchangeMsg = `🔄 *EXCHANGE TOKEN TO FRAGMENT* 🔄\n
+💱 *Exchange Rate:*
+
+10 Token → 1 Fragment
+
+📊 *Your Balance:*
+🪙 Token: ${numberWithCommas(tokenBalance)}
+🧩 Fragment: ${numberWithCommas(getFrag(_userDb))}
+
+Ketik *${prefix}exchangexfrag [jumlah]* untuk menukar
+Contoh: *${prefix}exchangexfrag 10* (tukar 10 token menjadi 1 fragment)
+Atau *${prefix}exchangexfrag all* (tukar semua token)
+
+*© RemComp 2025*`
+                        return reply(from, exchangeMsg, id)
+                    }
+                    
+                    let tokensToExchange
+                    if(args[1]?.toLowerCase() === 'all') {
+                        tokensToExchange = tokenBalance
+                    } else {
+                        tokensToExchange = parseInt(args[1])
+                        if(isNaN(tokensToExchange) || tokensToExchange <= 0) {
+                            return reply(from, `❌ Jumlah token tidak valid! Gunakan *${prefix}exchangexfrag* untuk info.`, id)
+                        }
+                    }
+                    
+                    if(tokenBalance < tokensToExchange) {
+                        return reply(from, `❌ Token kamu tidak cukup!\nBalance: ${numberWithCommas(tokenBalance)}\nButuh: ${numberWithCommas(tokensToExchange)}`, id)
+                    }
+                    
+                    if(tokensToExchange % 10 !== 0) {
+                        return reply(from, `❌ Token yang ditukar harus kelipatan 10!\nContoh: 10, 20, 30, dst.`, id)
+                    }
+                    
+                    const fragToGet = tokensToExchange / 10
+                    
+                    await MinToken(sender, tokensToExchange)
+                    await addFrag(sender, fragToGet)
+                    
+                    const exchangeMsg2 = `✅ *EXCHANGE BERHASIL* ✅\n
+💱 Tukar:
+
+🪙 Token: -${numberWithCommas(tokensToExchange)}
+🧩 Fragment: +${numberWithCommas(fragToGet)}
+
+📊 *Balance Baru:*
+🪙 Token: ${numberWithCommas(fixNumberE(tokenBalance - tokensToExchange))}
+🧩 Fragment: ${numberWithCommas(fixNumberE(getFrag(_userDb) + fragToGet))}
+
+*© RemComp 2025*`
+                    return reply(from, exchangeMsg2, id)
+                } catch (err) {
+                    console.error(err)
+                    return reply(from, 'Terjadi kesalahan saat exchange :(', id)
+                }
+                break
+
         //
         // case prefix+'addsaudara':
         // case prefix+'addbro':

@@ -164,7 +164,7 @@ const _rumahGarasi = {
 let nyehTemp = []
 //let listCharaIdWhitelist = [203940, 182964, 194503, 246268, 194501, 250452, 224273, 203623, 177568, 159640, 206128, 250641, 253703, 191086, 148141, 197751, 248828, 188176, 242986, 198565, 87287, 122211, 168985, 198675, 244323, 173008, 257523]
 // let listCharaIdWhitelist = [36828, 192049, 105289, 198565, 188267, 163271, 215718, 70069, 128917, 208568, 223129, 186362, 189839, 184047, 152715, 236300, 214700, 192919, 181611, 201774, 212968, 204780, 128911, 128910, 160679, 6046, 173261, 229960, 243960, 188176, 122211, 201458, 168985, 225665]
-let listCharaIdWhitelist = [277870, 280375, 278615, 211945, 182080, 206128, 221477, 203940, 182964, 206128, 178722, 246268, 194501, 250452, 198572, 206279, 197751, 248828, 159640, 244771, 244323, 173008, 54899, 191086, 173261, 164471, 205633, 238029, 70069, 36828, 192049, 198565, 188267, 163271, 128503, 215718, 128917, 208568, 186362, 189839, 184047, 152715, 236300, 214700, 192919, 181611, 201774, 212968, 204780, 128911, 160679, 173261, 243960, 178275, 225665, 188430, 229960, 188176, 2224262, 39102, 209622, 174027, 188622, 245943, 247896, 206721, 207955, 175281, 87287, 194751, 244289, 142261, 122211, 224273, 203623, 201458, 168985, 198675, 191314, 224281, 217592, 250641, 141354, 195230, 257523, 194501, 222740, 222742, 222744, 222739, 222741, 222743, 244323, 244327, 160603, 161472, 161471, 161470, 161469, 185061, 214385, 166779, 242986, 177568, 223977, 199895, 199894,172812]
+let listCharaIdWhitelist = [269148, 277870, 280375, 278615, 211945, 182080, 206128, 221477, 203940, 182964, 206128, 178722, 246268, 194501, 250452, 198572, 206279, 197751, 248828, 159640, 244771, 244323, 173008, 54899, 191086, 173261, 164471, 205633, 238029, 70069, 36828, 192049, 198565, 188267, 163271, 128503, 215718, 128917, 208568, 186362, 189839, 184047, 152715, 236300, 214700, 192919, 181611, 201774, 212968, 204780, 128911, 160679, 173261, 243960, 178275, 225665, 188430, 229960, 188176, 2224262, 39102, 209622, 174027, 188622, 245943, 247896, 206721, 207955, 175281, 87287, 194751, 244289, 142261, 122211, 224273, 203623, 201458, 168985, 198675, 191314, 224281, 217592, 250641, 141354, 195230, 257523, 194501, 222740, 222742, 222744, 222739, 222741, 222743, 244323, 244327, 160603, 161472, 161471, 161470, 161469, 185061, 214385, 166779, 242986, 177568, 223977, 199895, 199894,172812]
 
 const superOwnerPajak = '6281358181668@s.whatsapp.net'
 const numberReportError = '62856038120076@s.whatsapp.net'
@@ -553,8 +553,10 @@ const {
     MinFrag,
     getFrag,
     setFrag,
-
-    getUserItemSpy,
+    addSpentToken,
+    MinSpentToken,
+    getSpentToken,
+    setSpentToken,
 
     getChristmasLeaderboard,
     getChristmasShopInventory,
@@ -1074,6 +1076,22 @@ if(_userDb?.item?.item?.[0] != undefined) {
 if(_userDb.item?.jobBoost?.time != 0 && Date.now() >= _userDb.item?.jobBoost?.time) {
     await _mongo_UserSchema.updateOne({ iId: sender }, { $set: { "item.jobBoost": { xp: 0, time: 0 } } })
     _userDb.item.jobBoost = { xp: 0, time: 0 }
+}
+
+// event christmas
+if(!_userDb.economy?.evntChristmas) {
+    await _mongo_UserSchema.updateOne({ iId: sender }, { $set: {
+        "economy.evntChristmas": {
+            token: 0,
+            frag: 0,
+            spentToken: 0
+        }
+    }})
+    _userDb.economy.evntChristmas = {
+        token: 0,
+        frag: 0,
+        spentToken: 0
+    }
 }
 
 if(!_userDb.rl?.afinitas) {
@@ -2897,6 +2915,7 @@ if(config.isDebug) console.log(`${Date.now() - dateNowProccessIs}ms - Loaded DB 
         // if(isCmd && getLevelingId(sender) == undefined) await addLevelingId(sender)
         //if(isCmd && iscmdabai && limidcmd) return reply(from, 'Anda telah _dibanned_\n*Karena menggunakan command yang tidak terdaftar*\nUntuk unban Join group dan minta unban ke owner\n'+inviteLinkForum, id)
         if(config.isDebug) console.log(`${Date.now() - dateNowProccessIs}ms - Process Command ${prefix+command}`)
+        
         switch(command) {
             case prefix+'help':
             case prefix+'menu':
@@ -15280,7 +15299,7 @@ Kembali lagi setelah *5 menit* untuk berburu telur lainnya!`, id)
 Selamat datang di event spesial Christmas 2025!
 ────────────────
 🎁 *Gift Box Hunt*
-Cari Gift Box tersembunyi dengan perintah *${prefix}eventchristmasgiftboxhunt2025santaclaushappychristmas* di dalam grup ini! atau bisa menggunakan shortcut *${prefix}xh* menemukan telur
+Cari Gift Box tersembunyi dengan perintah *${prefix}eventchristmasgiftboxhunt2025santaclaushappychristmas* di dalam grup ini! atau bisa menggunakan shortcut *${prefix}xh* menemukan Giftbox
 Ingin melihat berapa token & frag yang kamu dapatkan ketika bermain event ini? Gunakan perintah *${prefix}token* | *${prefix}frag*
 Temukan Gift Box JELEK atau RemComp Gift Box untuk hadiah super spesial!
 
@@ -15296,11 +15315,13 @@ Lihat siapa yang mempunyai token terbanyak dengan perintah *${prefix}christmaslb
 ⏰ *Periode Event*
 Event akan berlangsung selama 1 minggu, mulai dari hari ini!
 Selamat bersenang-senang mencari semua Gift Box yang tersembunyi dan Selamat Natal! 🎄
+*Redeem Code:* _christmas2025_
 
 *Info: Owner & SideOwner tidak akan ikut mempermainkan event ini.*
 ────────────────
 *© RemComp 2021 - 2025*`
                 
+                // await rem.sendFile(from, bufferInfoChristmasPng, 'infoChristmasEvent.png', christmasEventInfo, messageRaw, image)
                 return reply(from, christmasEventInfo, id)
                 break
             case prefix+'christmaslb':
@@ -15308,31 +15329,57 @@ Selamat bersenang-senang mencari semua Gift Box yang tersembunyi dan Selamat Nat
             case prefix+'xlb':
                 // return reply(from, 'Maaf! Fitur ini hanya tersedia untuk Event Natal saja!', id)
                 if (!isOwner) return reply(from, 'Err: 403!')
-                
+
+                let limitLeaderBoardChristmas = 10
+                const topSpentToken = (await _mongo_UserSchema.find({}, { iId: 1, "economy.evntChristmas.spentToken": 1, _id: 0 }).sort({ "economy.point": -1 }).limit(10))
+
+                let leaderboardSpentText = `🏆 *[ CHRISTMAS EVENT LEADERBOARD ]* 🏆\n\n`
                 try {
-                    const limit = args[1] ? Math.min(parseInt(args[1]), 10) : 10
-                    const leaderboard = await getChristmasLeaderboard(limit)
-                    
-                    if(leaderboard.length === 0) {
-                        return reply(from, '🏆 Belum ada pemain yang berpartisipasi di Christmas Event ini!', id)
+                    let nol = 0
+                    if (isMention) {
+                        for (let i = 0; i < limitLeaderBoardChristmas; i++) {
+                            nol += 1
+                            if (topSpentToken[i].iId == '62856038120076@s.whatsapp.net') {
+                                limitLeaderBoardChristmas += 1
+                                nol -= 1
+                                continue;
+                            }
+                            var namaSpent0 = await rem.onWhatsApp(topSpentToken[i].iId)
+                            if(!namaSpent0?.[0]?.exists) {
+                                leaderboardSpentText += `${nol}. +${topSpentToken[i].iId.replace('@s.whatsapp.net', '')}\n➤ TOKEN SPENT: *${topSpentToken[i].economy.envtChristmas.spentToken}*\n\n`
+                            } else {
+                                leaderboardSpentText += `${nol}. @${topSpentToken[i].iId.replace('@s.whatsapp.net', '')}\n➤ TOKEN SPENT: *${topSpentToken[i].economy.envtChristmas.spentToken}*\n\n`
+                            }
+                        }
+
+                        leaderboardSpentText += '\nBuang-buang tokenmu supaya kamu menjadi Top Spent Token!'
+                        await rem.sendTextWithMentions(from, leaderboardSpentText)
+                    } else {
+                        for (let i = 0; i < limitLeaderBoardChristmas; i++) {
+                            nol += 1
+                            if (topSpentToken[i].iId == '62856038120076@s.whatsapp.net') {
+                                limitLeaderBoardChristmas += 1
+                                nol -= 1
+                                continue;
+                            }
+                            var contactDb = await _mongo_ContactSchema.findOne({ iId: leaderboardSpentText[i].iId })
+                            var namaSpent0 = await rem.onWhatsApp(topSpentToken[i].iId)
+                            const getNamaSpentToken = await _mongo_UserSchema.findOne({ iId: topSpentToken[i].iId })
+                            var namaSpent01 = getNama(getNamaSpentToken)
+                            if(namaSpent01 == undefined) {
+                                var namaSpent = namaSpent01
+                            } else {
+                                var namaSpent = namaSpent01
+                            }
+                            leaderboardSpentText += `${nol}. *_${namaSpent}_*\nwa.me/${topSpentToken[i].iId.replace('@s.whatsapp.net', '')}\n➤ TOKEN SPENT: *${topSpentToken[i].economy.envtChristmas.spentToken}*\n\n`
+                        }
+                        await rem.sendText(from, leaderboardSpentText)
                     }
-                    
-                    let lbDisplay = `🏆 *CHRISTMAS EVENT LEADERBOARD* 🏆\n\n`
-                    lbDisplay += `💰 Top ${leaderboard.length} Biggest Spender\n\n`
-                    
-                    leaderboard.forEach((user, index) => {
-                        const medal = index === 0 ? '🥇' : index === 1 ? '🥈' : index === 2 ? '🥉' : `${index + 1}.`
-                        const userId = user.iId.replace('@s.whatsapp.net', '')
-                        const spent = numberWithCommas(fixNumberE(user.economy?.evntChristmas?.spentToken || 0))
-                        lbDisplay += `${medal} wa.me/${userId}\n🪙 Token Spent: ${spent}\n\n`
-                    })
-                    
-                    lbDisplay += `*© RemComp 2025*`
-                    return reply(from, lbDisplay, id)
                 } catch (err) {
-                    console.error(err)
-                    return reply(from, 'Terjadi kesalahan saat mengambil leaderboard :(', id)
-                }
+                     console.error(err)
+                     return reply(from, 'Perlu setidaknya *10* user yang memiliki spent token di database!', id)
+                 }
+
                 break
             case prefix+'christmasshop':
             case prefix+'xmashop':
@@ -15357,7 +15404,12 @@ Selamat bersenang-senang mencari semua Gift Box yang tersembunyi dan Selamat Nat
                         return reply(from, shopDisplay, id)
                     } else if(args.length >= 2) {
                         const itemIndex = parseInt(args[1]) - 1
-                        const quantity = args[2] ? parseInt(args[2]) : 1
+                        const quantityInput = args[2] ? parseInt(args[2]) : 1
+                        
+                        if(isNaN(quantityInput) || quantityInput <= 0) {
+                            return reply(from, `❌ Jumlah item tidak valid! Harus berupa angka positif.`, id)
+                        }
+                        const quantity = quantityInput
                         
                         const itemKeys = Object.keys(shop.items)
                         console.log('a')
@@ -15367,18 +15419,14 @@ Selamat bersenang-senang mencari semua Gift Box yang tersembunyi dan Selamat Nat
                         
                         const itemId = itemKeys[itemIndex]
                         const item = shop.items[itemId]
-                        const totalPrice = item.price * quantity
                         
-                        if(itemId.includes('nametag')) {
-                            const currentNameTagList = getNameTagList(_userDb) || []
-                            const shopNameTag = item.name.replace('✨ Custom NameTag: ', '')
-                            console.log('a')
-                            if(currentNameTagList.includes(shopNameTag)) {
-                                return reply(from, `❌ Kamu sudah memiliki NameTag "*${shopNameTag}*"!\nTidak bisa membeli NameTag yang sama dua kali.`, id)
-                            }
+                        if(!item) {
+                            return reply(from, `❌ Item tidak ditemukan di daftar shop! Silakan gunakan *${prefix}xshop* untuk melihat item yang tersedia.`, id)
                         }
                         
-                        const userToken = getToken(_userDb)
+                        const totalPrice = item.price * quantity
+                        
+                        const userToken = await getToken(_userDb)       
                         console.log('a')
                         if(userToken < totalPrice) {
                             const shortOf = numberWithCommas(fixNumberE(totalPrice - userToken))
@@ -15405,10 +15453,6 @@ Selamat bersenang-senang mencari semua Gift Box yang tersembunyi dan Selamat Nat
                         } else if(itemId.includes('xp')) {
                             const xpAmount = parseInt(itemId.split('_')[1]) * quantity
                             await addLevelingXp(sender, xpAmount)
-                        } else if(itemId.includes('nametag')) {
-                            const shop = await getChristmasShopInventory()
-                            const customNameTag = shop.items.nametag.name.replace('✨ Custom NameTag: ', '')
-                            await addNameTag_tag(sender, customNameTag)
                         }
                         console.log('a')
                         
@@ -15427,11 +15471,10 @@ Selamat bersenang-senang mencari semua Gift Box yang tersembunyi dan Selamat Nat
             case prefix+'xtoken':
                 // return reply(from, 'Maaf! Fitur ini hanya tersedia untuk Event Natal saja!', id)
                 if (!isOwner) return reply(from, 'Err: 403!')
+                
                 if(args.length == 1) {
-                    if(getToken(_userDb) === undefined) await setToken(sender)
                     const tokenChristmas = numberWithCommas(getToken(_userDb))
-                    const isSpyToken = getUserItemSpy(_userDb)
-                    const tokenText = `🪙 Token Christmas: ${isSpyToken ? tokenChristmas : '#####'}`
+                    const tokenText = `🪙 Token Christmas: ${tokenChristmas}`
                     await reply(from, tokenText)
                 } else if(args[1] == 'add') {
                     if(!isSideOwner) return reply(from, 'Err: 403!')
@@ -15511,11 +15554,10 @@ Selamat bersenang-senang mencari semua Gift Box yang tersembunyi dan Selamat Nat
             case prefix+'xfrag':
                 // return reply(from, 'Maaf! Fitur ini hanya tersedia untuk Event Natal saja!', id)
                 if (!isOwner) return reply(from, 'Err: 403!')
+
                 if(args.length == 1) {
-                    if(getFrag(_userDb) === undefined) await setFrag(sender)
                     const fragmentChristmas = numberWithCommas(getFrag(_userDb))
-                    const isSpyFrag = getUserItemSpy(_userDb)
-                    const fragText = `� Fragment Christmas: ${isSpyFrag ? fragmentChristmas : '#####'}`
+                    const fragText = `🧩 Fragment Christmas: ${fragmentChristmas}`
                     await reply(from, fragText)
                 } else if(args[1] == 'add') {
                     if(!isOwner) return reply(from, 'Err: 403!')
@@ -15545,7 +15587,6 @@ Selamat bersenang-senang mencari semua Gift Box yang tersembunyi dan Selamat Nat
                     if(!isOwner) return reply(from, 'Err: 403!', id)
                     if(quotedMsg) {
                         let frag2 = quotedMsg.sender
-                        if(getFrag(_userDb) === undefined) await setFrag(frag2)
                         const amountFragMin = Math.floor(args[2])
                         await MinFrag(frag2, amountFragMin)
                         if(isMention) {
@@ -15593,36 +15634,33 @@ Selamat bersenang-senang mencari semua Gift Box yang tersembunyi dan Selamat Nat
             case prefix+'christmasgiftbox':
             case prefix+'xmasgiftbox':
             case prefix+'xgbox':
-                // return reply(from, 'Maaf! Fitur ini hanya tersedia untuk Event Natal saja!', id)
-                // gacha
                 if (!isOwner) return reply(from, 'Err: 403!')
                 
                 try {
                     if(args.length === 1) {
                         const gacha1Msg = `🎁 *CHRISTMAS GIFT BOX GACHA* 🎁\n
 💎 *Premium Box* (Hadiah Terbaik)
-💰 Harga: 10,000 Money ATAU 5 Fragment per Box
+💰 Harga: 1e+200 Money ATAU 500 Fragment per Box
 • Ultra Rare (1%): Token, Fragment, Money, XP, Limit
 • Very Rare (7%): Token, Fragment, Money, XP, Limit
 • Rare (17%): Token, Fragment, Money, XP, Limit
 • Common (75%): Token, Fragment, Money, XP, Limit
 
 ⭐ *Standard Box* (Hadiah Normal)
-💰 Harga: 5,000 Money ATAU 3 Fragment per Box
+💰 Harga: 1e+150 Money ATAU 100 Fragment per Box
 • Very Rare (3%): Token, Fragment, Money, XP, Limit
 • Rare (12%): Token, Fragment, Money, XP, Limit
 • Uncommon (35%): Token, Fragment, Money, XP, Limit
 • Common (50%): Money, XP, Limit
 
 🎪 *Lucky Box* (Hadiah Berbeda-beda)
-💰 Harga: 1,000 Money ATAU 1 Fragment per Box
+💰 Harga: 1e+100 Money ATAU 50 Fragment per Box
 • Rare (5%): Token, Fragment, Money, XP, Limit
 • Uncommon (20%): Token, Fragment, Money, XP, Limit
 • Common (75%): Money, XP, Limit
 
 Ketik *${prefix}xgbox [tipe] [jumlah] [currency]* untuk gacha
-Contoh: *${prefix}xgbox premium 2 money* (gacha pakai money)
-Atau: *${prefix}xgbox premium 2 frag* (gacha pakai fragment)
+Contoh: *${prefix}xgbox premium 2 money*
 
 Tipe: premium / standard / lucky
 Currency: money / frag (default: money)
@@ -15632,33 +15670,25 @@ Currency: money / frag (default: money)
                     }
                     
                     const boxType = args[1]?.toLowerCase()
-                    const quantity = args[2] ? parseInt(args[2]) : 1
+                    const quantityInput = args[2] ? parseInt(args[2]) : 1
+                    
+                    if(isNaN(quantityInput) || quantityInput <= 0) {
+                        return reply(from, `❌ Jumlah box tidak valid!`, id)
+                    }
+                    const quantity = quantityInput
                     const currency = args[3]?.toLowerCase() || 'money'
                     
                     let totalPrice, boxName, currencyName
-                    
-                    if(!['money', 'frag'].includes(currency)) {
-                        return reply(from, `❌ Currency tidak valid! Gunakan: money atau frag`, id)
-                    }
-
-                    console.log('a')
-                    
                     let moneyPerBox, fragPerBox
                     
                     if(boxType === 'premium') {
-                        moneyPerBox = 10000
-                        fragPerBox = 5
-                        boxName = '💎 Premium Box'
+                        moneyPerBox = 1e+200; fragPerBox = 500; boxName = '💎 Premium Box'
                     } else if(boxType === 'standard') {
-                        moneyPerBox = 5000
-                        fragPerBox = 3
-                        boxName = '⭐ Standard Box'
+                        moneyPerBox = 1e+150; fragPerBox = 100; boxName = '⭐ Standard Box'
                     } else if(boxType === 'lucky') {
-                        moneyPerBox = 1000
-                        fragPerBox = 1
-                        boxName = '🎪 Lucky Box'
+                        moneyPerBox = 1e+100; fragPerBox = 50; boxName = '🎪 Lucky Box'
                     } else {
-                        return reply(from, `❌ Tipe box tidak dikenal! Gunakan: premium, standard, atau lucky`, id)
+                        return reply(from, `❌ Tipe box tidak dikenal!`, id)
                     }
                     
                     const userMoney = getMoney(_userDb)
@@ -15667,27 +15697,20 @@ Currency: money / frag (default: money)
                     if(currency === 'money') {
                         totalPrice = moneyPerBox * quantity
                         currencyName = 'Money'
-                        
                         if(userMoney < totalPrice) {
-                            const shortOf = numberWithCommas(fixNumberE(totalPrice - userMoney))
-                            return reply(from, `❌ Money kamu tidak cukup!\nButuh: ${numberWithCommas(fixNumberE(totalPrice))}\nKekurangan: ${shortOf}`, id)
+                            return reply(from, `❌ Money tidak cukup! Butuh: ${numberWithCommas(fixNumberE(totalPrice))}`, id)
                         }
-                        
                         await MinMoney(sender, totalPrice)
-                    } else if(currency === 'frag') {
+                    } else {
                         totalPrice = fragPerBox * quantity
                         currencyName = 'Fragment'
-                        console.log('a')
                         if(userFrag < totalPrice) {
-                            const shortOf = numberWithCommas(fixNumberE(totalPrice - userFrag))
-                            return reply(from, `❌ Fragment kamu tidak cukup!\nButuh: ${numberWithCommas(fixNumberE(totalPrice))}\nKekurangan: ${shortOf}`, id)
+                            return reply(from, `❌ Fragment tidak cukup!`, id)
                         }
-                        
                         await MinFrag(sender, totalPrice)
                     }
                     
                     let totalRewards = { token: 0, frag: 0, money: 0, xp: 0, limit: 0 }
-                    
                     for(let i = 0; i < quantity; i++) {
                         const reward = generateChristmasReward(boxType)
                         totalRewards.token += reward.token
@@ -15697,15 +15720,20 @@ Currency: money / frag (default: money)
                         totalRewards.limit += reward.limit
                     }
                     
-                    // rewards
                     if(totalRewards.token > 0) await addToken(sender, totalRewards.token)
                     if(totalRewards.frag > 0) await addFrag(sender, totalRewards.frag)
                     if(totalRewards.money > 0) await addMoney(sender, totalRewards.money)
                     if(totalRewards.xp > 0) await addLevelingXp(sender, totalRewards.xp)
-                    if(totalRewards.limit > 0) for(let i = 0; i < totalRewards.limit; i++) await limitAdd(sender)
+                    
+                    if(totalRewards.limit > 0) {
+                        await _mongo_UserSchema.updateOne(
+                            { iId: sender }, 
+                            { $inc: { "limit.limit": totalRewards.limit } } 
+                        )
+                    }
                     
                     const gachaMsg = `${boxName} 🎁\n
-✅ *GACHA BERHASIL!*
+✅ *GACHA BERHASIL!* (x${quantity})
 
 📊 *Total Rewards:*
 🪙 Token: +${totalRewards.token}
@@ -15713,28 +15741,25 @@ Currency: money / frag (default: money)
 💰 Money: +${numberWithCommas(fixNumberE(totalRewards.money))}
 📈 XP Level: +${totalRewards.xp}
 📊 Limit: +${totalRewards.limit}
+
 💸 Total Dihabiskan: ${numberWithCommas(fixNumberE(totalPrice))} ${currencyName}
 
-Kembali untuk gacha lagi! 🎉
-
-*© RemComp 2025* `
+*© RemComp 2025*`
                     
                     return reply(from, gachaMsg, id)
                 } catch (err) {
                     console.error(err)
-                    return reply(from, 'Terjadi kesalahan saat gacha :(', id)
+                    return reply(from, `Error: ${err.message}`, id)
                 }
                 break
             case prefix+'eventchristmasgiftboxhunt2025santaclaushappychristmas':
             case prefix+'xmasgiftboxhunt':
             case prefix+'xgboxhunt':
             case prefix+'xh':
-                // return reply(from, 'Maaf! Fitur ini hanya tersedia untuk Event Natal saja!', id)
-                if (!isOwner) return reply(from, 'Err: 403!')
                 if (!isGroupMsg) return reply(from, 'Perintah ini hanya bisa di gunakan dalam group!', id)
                 
                 try {
-                    const xhuntCooldown = 300000
+                    const xhuntCooldown = 120000
                     const lastXhuntTime = _userDb.lastAction?.envtChristmas?.xhunt || 0
 
                     if(Date.now() - lastXhuntTime < xhuntCooldown && !isOwner) {
@@ -15744,121 +15769,68 @@ Kembali untuk gacha lagi! 🎉
 
                     const giftBoxLocations = [
                         `pohon-natal`, `perapian`, `kamar-tidur`, `halaman-rumah`, `taman`, 
-                        `remcomp`, `dapur`, `ruang-tamu`, `teras`, `garasi`, `sofa`, 
-                        `meja-makan`, `lemari`, `atap`, `danau`, `tetangga`, `salju`, `pohon` 
+                        `remcomp`, `dapur`, `ruang-tamu`, `teras`, `garasi`, `sofa` `dapur-mbg`, 
+                        `meja-makan`, `lemari`, `atap`, `danau`, `tetangga`, `salju`,
+                         `pohon`, `hutan`, `gunung`, `pantai`, `kota`, `desa`, `kamar-mandi`, `bukit` 
                     ]
 
                     if(args.length === 1) {
                         let locationsText = ''
-                        giftBoxLocations.forEach(loc => {
-                            locationsText += `⚬ ${loc}\n`
-                        })
-
-                        return reply(from, `🎁 *Christmas Gift Box Hunt* 🎁\n
-🎯 *Misi:* Cari GiftBox yang di sembunyikan oleh Pak Santa di berbagai lokasi dan dapatkan hadiah!
-
-📜 *Cara bermain:*\nKetik *${prefix}xgboxhunt [lokasi]* untuk mencari gift box\n
-🗺️ *Lokasi yang tersedia:*\n${locationsText}\n*Note:* _Setiap lokasi mungkin memiliki gift box biasa atau gift box emas yang berharga!_`, id)
+                        giftBoxLocations.forEach(loc => { locationsText += `⚬ ${loc}\n` })
+                        return reply(from, `🎁 *Christmas Gift Box Hunt* 🎁\n\n🎯 *Misi:* Cari GiftBox di lokasi dan dapatkan hadiah!\n\n📜 *Cara bermain:*\nKetik *${prefix}xgboxhunt [lokasi]*\n\n🗺️ *Lokasi:*\n${locationsText}`, id)
                     }
                      
                     const location = args[1].toLowerCase()
                     if(!giftBoxLocations.includes(location)) {
-                        return reply(from, `🎁 *Christmas Gift Box Hunt* 🎁\n\nLokasi *${giftBoxLocations}* tidak tersedia. Gunakan *${prefix}xgboxhunt* untuk melihat daftar lokasi yang tersedia.`, id)
+                        return reply(from, `🎁 Lokasi *${location}* tidak tersedia.`, id)
                     }
 
                     await _mongo_UserSchema.updateOne({ iId: sender }, { $set: { "lastAction.envtChristmas.xhunt": Date.now() } })
+                    
                     const foundChance = Math.random() * 100
-                    const found = foundChance <= 30
-
-                    if(found) {
-                        console.log('a')
+                    if(foundChance <= 60) {
                         const boxRand = Math.random() * 100
-                        let giftBoxType, reward, token, frag, money, xpLevel, limit
+                        let giftBoxType, rewardType
                         const rewardNameTag = "`🎁 WINNER REMCOMP GIFT BOX 🎉`"
 
-                        if(boxRand < 0.1) {
-                            // RemComp Box - 0.1%
-                            giftBoxType = 'remcomp'
-                            const rewardTier = Math.random() * 100
-                            if(rewardTier < 1) {
-                                reward = generateChristmasReward('remcomp')
-                                reward.token = Math.floor(Math.random() * 5) + 15
-                                reward.frag = Math.floor(Math.random() * 10) + 15
-                                giftBoxType = "🎁 WINNER REMCOMP GIFT BOX 🎉"
-                                const checkExistingNameTag = await getNameTagList(_userDb)
-                                if(checkExistingNameTag === undefined) {
-                                    await addNameTag_tag(sender, rewardNameTag)
-                                }
-                            } else {
-                                reward = generateChristmasReward('premium')
-                                giftBoxType = "✨ Remcomp Gift Box"
-                            }
-                        } else if(boxRand < 1.1) {
-                            // Golden Box - 1%
-                            giftBoxType = "💛 Golden Gift Box"
-                            reward = generateChristmasReward('golden')
-                        } else if(boxRand < 3.1) {
-                            // Diamond Box - 2%
-                            giftBoxType = "💎 Diamond Gift Box"
-                            reward = generateChristmasReward('premium')
-                        } else if(boxRand < 8.1) {
-                            // Silver Box - 5%
-                            giftBoxType = "🔲 Silver Gift Box"
-                            reward = generateChristmasReward('standard')
-                        } else {
-                            // Bronze Box (Common) - 92%
-                            giftBoxType = "🟫 Bronze Gift Box"
-                            reward = generateChristmasReward('lucky')
-                        }
-                        
-                        token = reward.token
-                        frag = reward.frag
-                        money = reward.money
-                        xpLevel = reward.xp
-                        limit = reward.limit
+                        if(boxRand < 0.5) { giftBoxType = '✨ Remcomp Gift Box'; rewardType = 'remcomp' }
+                        else if(boxRand < 2) { giftBoxType = "💛 Golden Gift Box"; rewardType = 'golden' }
+                        else if(boxRand < 5) { giftBoxType = "💎 Diamond Gift Box"; rewardType = 'premium' }
+                        else if(boxRand < 15) { giftBoxType = "🔲 Silver Gift Box"; rewardType = 'standard' }
+                        else { giftBoxType = "🟫 Bronze Gift Box"; rewardType = 'lucky' }
 
-                        
+                        const reward = generateChristmasReward(rewardType)
+                        const { token, frag, money, xp, limit } = reward
+
                         await addToken(sender, token)
                         await addFrag(sender, frag)
                         await addMoney(sender, money)
-                        await addLevelingXp(sender, xpLevel)
-                        for(let i = 0; i < limit; i++) await limitAdd(sender)
+                        await addLevelingXp(sender, xp)
+                        await _mongo_UserSchema.updateOne({ iId: sender }, { $inc: { "limit.limit": limit } })
 
-                        const textGiftBoxHunt = `🎁 *${giftBoxType}* 🎁\n
-Selamat! Kamu menemukan Gift Box di lokasi *${location}*!
+                        if(boxRand < 0.5 && rewardType === 'remcomp') {
+                            const checkExistingNameTag = await getNameTagList(_userDb)
+                            if(checkExistingNameTag === undefined) await addNameTag_tag(sender, rewardNameTag)
+                        }
 
-💰 Hadiah:
-💰 Money: +${numberWithCommas(fixNumberE(money))}
-🪙 Token: +${token}
-🧩 Fragment: +${frag}
-📈 XP Level: +${xpLevel}
-📊 Limit: +${limit}
+                        let dispMoney = money
+                        try { dispMoney = numberWithCommas(fixNumberE(money)) } catch(e) {}
 
-Kembali lagi setelah *5 menit* untuk berburu Gift Box lainnya!
-
-*© RemComp 2025*`
+                        const textGiftBoxHunt = `🎁 *${giftBoxType}* 🎁\n\nSelamat! Kamu menemukan Gift Box di *${location}*!\n\n💰 *Hadiah:*\n💵 Money: +${dispMoney}\n🪙 Token: +${token}\n🧩 Fragment: +${frag}\n📈 XP: +${xp}\n📊 Limit: +${limit}\n\nKembali lagi setelah *5 menit*!\n*© RemComp 2025*`
                         
                         return reply(from, textGiftBoxHunt, id)
                     } else {
-                        // not found
-                        return reply(from, `🎁 *Gift Box Hunt* 🎁\n\nKamu mencari dengan teliti di *${giftBoxLocations}* tapi tidak menemukan satupun Gift Box. 😔\n\nCoba lagi nanti dan cari lokasi lainnya!`, id)
-
-                        // const getNotFoundPngChristmas = await import('./lib/database/christmasPng/christmasNotFoundEvent.png')
-                        // const pngPathNotFound = path.resolve(getNotFoundPngChristmas)
-                        // const bufferNotFoundPngChristmas = fs.readFileSync(pngPathNotFound)
-
-                        // const textNotFoundGiftBoxHunt = `🎁 *Gift Box Hunt* 🎁\n\nKamu mencari dengan teliti di *${giftBoxLocations}* tapi tidak menemukan satupun Gift Box. 😔\n\nCoba lagi nanti dan cari lokasi lainnya!`
-                
-                        // return sendFile(from, bufferNotFoundPngChristmas, 'christmasNotFoundEvent.png', textNotFoundGiftBoxHunt, messageRaw, image)
+                        return reply(from, `🎁 *Gift Box Hunt* 🎁\n\nKamu mencari di *${location}* tapi tidak menemukan apapun. 😔`, id)
                     }
                 } catch (err) {
                     console.error(err);
-                    reply(from, 'Terjadi kesalahan saat mencari *Gift Box* :(', id)
+                    reply(from, 'Terjadi kesalahan sistem!', id)
                 }
                 break
             case prefix+'exchangechristmasfrag':
             case prefix+'exchangexmasfrag':
             case prefix+'exchangexfrag':
+            case prefix+'exfrag':
                 // return reply(from, 'Maaf! Fitur ini hanya tersedia untuk Event Natal saja!', id)
                 if (!isOwner) return reply(from, 'Err: 403!')
                 
