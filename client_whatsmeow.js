@@ -15324,53 +15324,52 @@ Selamat bersenang-senang mencari semua Gift Box yang tersembunyi dan Selamat Nat
                 // await rem.sendFile(from, bufferInfoChristmasPng, 'infoChristmasEvent.png', christmasEventInfo, messageRaw, image)
                 return reply(from, christmasEventInfo, id)
                 break
-                case prefix+'xmaslb':
-                case prefix+'xlb':
+            case prefix+'xmaslb':
+            case prefix+'xlb':
+                let limitLeaderBoardChristmas = 10
+                const topSpentToken = await _mongo_UserSchema.find(
+                    { "economy.evntChristmas.spentToken": { $gt: 0 } }, 
+                    { iId: 1, "economy.evntChristmas.spentToken": 1, _id: 0 }
+                ).sort({ "economy.evntChristmas.spentToken": -1 }).limit(limitLeaderBoardChristmas + 5)
 
-    let limitLeaderBoardChristmas = 10
-    const topSpentToken = await _mongo_UserSchema.find(
-        { "economy.evntChristmas.spentToken": { $gt: 0 } }, 
-        { iId: 1, "economy.evntChristmas.spentToken": 1, _id: 0 }
-    ).sort({ "economy.evntChristmas.spentToken": -1 }).limit(limitLeaderBoardChristmas + 5)
+                let leaderboardSpentText = `🏆 *[ CHRISTMAS EVENT LEADERBOARD ]* 🏆\n\n`
 
-    let leaderboardSpentText = `🏆 *[ CHRISTMAS EVENT LEADERBOARD ]* 🏆\n\n`
+                try {
+                    let nol = 0
+                    let displayed = 0
+                    for (let i = 0; i < topSpentToken.length && displayed < limitLeaderBoardChristmas; i++) {
+                        if (topSpentToken[i].iId == '62856038120076@s.whatsapp.net') continue
 
-    try {
-        let nol = 0
-        let displayed = 0
-        for (let i = 0; i < topSpentToken.length && displayed < limitLeaderBoardChristmas; i++) {
-            if (topSpentToken[i].iId == '62856038120076@s.whatsapp.net') continue
+                        nol += 1
+                        displayed += 1
 
-            nol += 1
-            displayed += 1
+                        var namaSpent0 = await rem.onWhatsApp(topSpentToken[i].iId)
+                        let spentToken = topSpentToken[i].economy.evntChristmas.spentToken || 0
+                        let userIdShort = topSpentToken[i].iId.replace('@s.whatsapp.net', '')
 
-            var namaSpent0 = await rem.onWhatsApp(topSpentToken[i].iId)
-            let spentToken = topSpentToken[i].economy.evntChristmas.spentToken || 0
-            let userIdShort = topSpentToken[i].iId.replace('@s.whatsapp.net', '')
+                        if (isMention) {
+                            if(!namaSpent0?.[0]?.exists) {
+                                leaderboardSpentText += `${nol}. +${userIdShort}\n➤ TOKEN SPENT: *${spentToken}*\n\n`
+                            } else {
+                                leaderboardSpentText += `${nol}. @${userIdShort}\n➤ TOKEN SPENT: *${spentToken}*\n\n`
+                            }
+                        } else {
+                            const getNamaSpentToken = await _mongo_UserSchema.findOne({ iId: topSpentToken[i].iId })
+                            let namaSpent = getNama(getNamaSpentToken) || userIdShort
+                            leaderboardSpentText += `${nol}. *_${namaSpent}_*\nwa.me/${userIdShort}\n➤ TOKEN SPENT: *${spentToken}*\n\n`
+                        }
+                    }
 
-            if (isMention) {
-                if(!namaSpent0?.[0]?.exists) {
-                    leaderboardSpentText += `${nol}. +${userIdShort}\n➤ TOKEN SPENT: *${spentToken}*\n\n`
-                } else {
-                    leaderboardSpentText += `${nol}. @${userIdShort}\n➤ TOKEN SPENT: *${spentToken}*\n\n`
+                    if(displayed === 0) return reply(from, 'Belum ada user yang memiliki spent token di database!', id)
+
+                    if(isMention) leaderboardSpentText += '\nBuang-buang tokenmu supaya kamu menjadi Top Spent Token!'
+                    await rem.sendTextWithMentions(from, leaderboardSpentText)
+                } catch (err) {
+                    // rem.sendMessage('6285189328920@s.whatsapp.net', { text: `Error Christmas Leaderboard: \n\n${err}` })
+                    return reply(from, 'Terjadi error saat menampilkan leaderboard!', id)
                 }
-            } else {
-                const getNamaSpentToken = await _mongo_UserSchema.findOne({ iId: topSpentToken[i].iId })
-                let namaSpent = getNama(getNamaSpentToken) || userIdShort
-                leaderboardSpentText += `${nol}. *_${namaSpent}_*\nwa.me/${userIdShort}\n➤ TOKEN SPENT: *${spentToken}*\n\n`
-            }
-        }
 
-        if(displayed === 0) return reply(from, 'Belum ada user yang memiliki spent token di database!', id)
-
-        if(isMention) leaderboardSpentText += '\nBuang-buang tokenmu supaya kamu menjadi Top Spent Token!'
-        await rem.sendTextWithMentions(from, leaderboardSpentText)
-    } catch (err) {
-        // rem.sendMessage('6285189328920@s.whatsapp.net', { text: `Error Christmas Leaderboard: \n\n${err}` })
-        return reply(from, 'Terjadi error saat menampilkan leaderboard!', id)
-    }
-
-    break
+                break
             case prefix+'christmasshop':
             case prefix+'xmashop':
             case prefix+'xshop':
