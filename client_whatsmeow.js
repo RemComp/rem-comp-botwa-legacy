@@ -15335,6 +15335,11 @@ Selamat bersenang-senang mencari semua Gift Box yang tersembunyi dan Selamat Nat
                 let leaderboardSpentText = `🏆 *[ CHRISTMAS EVENT LEADERBOARD ]* 🏆\n\n`
 
                 try {
+                    // Check if topSpentToken is null or empty
+                    if (!topSpentToken || topSpentToken.length === 0) {
+                        return reply(from, 'Belum ada user yang memiliki spent token di database!', id)
+                    }
+
                     let nol = 0
                     let displayed = 0
                     for (let i = 0; i < topSpentToken.length && displayed < limitLeaderBoardChristmas; i++) {
@@ -15365,6 +15370,7 @@ Selamat bersenang-senang mencari semua Gift Box yang tersembunyi dan Selamat Nat
                     if(isMention) leaderboardSpentText += '\nBuang-buang tokenmu supaya kamu menjadi Top Spent Token!'
                     await rem.sendTextWithMentions(from, leaderboardSpentText)
                 } catch (err) {
+                    console.error('Error Christmas Leaderboard:', err)
                     return reply('6285189328920@s.whatsapp.net', `Error Christmas Leaderboard: \n\n${err}`)
                     return reply(from, 'Terjadi error saat menampilkan leaderboard!', id)
                 }
