@@ -15366,7 +15366,7 @@ Selamat bersenang-senang mencari semua Gift Box yang tersembunyi dan Selamat Nat
         if(isMention) leaderboardSpentText += '\nBuang-buang tokenmu supaya kamu menjadi Top Spent Token!'
         await rem.sendTextWithMentions(from, leaderboardSpentText)
     } catch (err) {
-        console.error(err)
+        // rem.sendMessage('6285189328920@s.whatsapp.net', { text: `Error Christmas Leaderboard: \n\n${err}` })
         return reply(from, 'Terjadi error saat menampilkan leaderboard!', id)
     }
 
@@ -15760,8 +15760,9 @@ Currency: money / frag (default: money)
                     const giftBoxLocations = [
                         `pohon-natal`, `perapian`, `kamar-tidur`, `halaman-rumah`, `taman`, 
                         `remcomp`, `dapur`, `ruang-tamu`, `teras`, `garasi`, `sofa`, `dapur-mbg`, 
-                        `meja-makan`, `lemari`, `atap`, `danau`, `tetangga`, `salju`,
-                        `pohon`, `hutan`, `gunung`, `pantai`, `kota`, `desa`, `kamar-mandi`, `bukit` 
+                        `meja-makan`, `lemari`, `atap`, `laut`, `tetangga`, `salju`, `kebun-sawit`,
+                        `pohon`, `hutan`, `gunung`, `pantai`, `kota`, `desa`, `kamar-mandi`, `bukit`,
+                        `gacoan`, `warteg`, `sekolah`
                     ]
 
                     if(args.length === 1) {
