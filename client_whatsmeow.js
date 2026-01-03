@@ -15330,6 +15330,7 @@ Selamat bersenang-senang mencari semua Gift Box yang tersembunyi dan Selamat Nat
                 const spentTokenChristmas = numberWithCommas(getSpentToken(_userDb))
                 const spentTokenText = `🪙 Spent Token Christmas: ${spentTokenChristmas}`
                 await reply(from, spentTokenText)
+                break
             case prefix+'xmaslb':
             case prefix+'xlb':
                 try {
