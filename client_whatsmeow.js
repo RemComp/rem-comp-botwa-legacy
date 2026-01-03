@@ -15326,15 +15326,13 @@ Selamat bersenang-senang mencari semua Gift Box yang tersembunyi dan Selamat Nat
                 break
             case prefix+'xmaslb':
             case prefix+'xlb':
-                let limitLeaderBoardChristmas = 11
+                let limitLeaderBoardChristmas = 10
                 const topSpentToken = await _mongo_UserSchema.find(
                     { "economy.evntChristmas.spentToken": { $gt: 0 } }, 
                     { iId: 1, "economy.evntChristmas.spentToken": 1, _id: 0 }
-                ).sort({ "economy.evntChristmas.spentToken": -1 }).limit(limitLeaderBoardChristmas)
+                ).sort({ "economy.evntChristmas.spentToken": -1 }).limit(11)
 
                 let leaderboardSpentText = `🏆 *[ CHRISTMAS EVENT LEADERBOARD ]* 🏆\n\n`
-
-                console.log('a')
 
                 try {
                     // Check if topSpentToken is null or empty
@@ -15345,16 +15343,14 @@ Selamat bersenang-senang mencari semua Gift Box yang tersembunyi dan Selamat Nat
                     let nol = 0
                     let displayed = 0
                     for (let i = 0; i < topSpentToken.length && displayed < limitLeaderBoardChristmas; i++) {
-                        if (topSpentToken[i].iId == '62856038120076@s.whatsapp.net') continue
+                        if (topSpentToken[i]?.iId == '62856038120076@s.whatsapp.net') continue
 
                         nol += 1
                         displayed += 1
 
                         var namaSpent0 = await rem.onWhatsApp(topSpentToken[i].iId)
-                        let spentToken = topSpentToken[i].economy.evntChristmas.spentToken || 0
+                        let spentToken = topSpentToken[i]?.economy?.evntChristmas?.spentToken || 0
                         let userIdShort = topSpentToken[i].iId.replace('@s.whatsapp.net', '')
-
-                        console.log('b')
 
                         if (isMention) {
                             if(!namaSpent0?.[0]?.exists) {
@@ -15362,14 +15358,11 @@ Selamat bersenang-senang mencari semua Gift Box yang tersembunyi dan Selamat Nat
                             } else {
                                 leaderboardSpentText += `${nol}. @${userIdShort}\n➤ TOKEN SPENT: *${spentToken}*\n\n`
                             }
-
-                        console.log('c')
                         } else {
                             const getNamaSpentToken = await _mongo_UserSchema.findOne({ iId: topSpentToken[i].iId })
                             let namaSpent = getNama(getNamaSpentToken) || userIdShort
                             leaderboardSpentText += `${nol}. *_${namaSpent}_*\nwa.me/${userIdShort}\n➤ TOKEN SPENT: *${spentToken}*\n\n`
                         }
-                        console.log('d')
                     }
 
                     if(displayed === 0) return reply(from, 'Belum ada user yang memiliki spent token di database!', id)
