@@ -15328,7 +15328,7 @@ Selamat bersenang-senang mencari semua Gift Box yang tersembunyi dan Selamat Nat
                 break
             case prefix+'sp':
                 const spentTokenChristmas = numberWithCommas(getSpentToken(_userDb))
-                const spentTokenText = `🪙 Token Christmas: ${spentTokenChristmas}`
+                const spentTokenText = `🪙 Spent Token Christmas: ${spentTokenChristmas}`
                 await reply(from, spentTokenText)
             case prefix+'xmaslb':
             case prefix+'xlb':
