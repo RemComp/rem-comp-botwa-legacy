@@ -18635,15 +18635,19 @@ ${about}`
             //if (!isGroupMsg) return reply(from, 'Perintah ini hanya bisa di gunakan dalam group!', id)
             //if (isLimit(_userDb)) return reply(from, `Maaf ${pushname}, Kuota Limit Kamu Sudah Habis, Ketik ${prefix}limit Untuk Mengecek Kuota Limit Kamu`, id)
             
-            await limitAdd(serial)
-            const googleQuery = body.slice(8)
-            if(googleQuery == undefined || googleQuery == ' ') return reply(from, `*Hasil Pencarian : ${googleQuery}* tidak ditemukan`, id)
-            const responseGoogle = await googleSr.search({ query: googleQuery, filterResults: [googleSr.ResultTypes.SearchResult], safeMode: true });
-            let vars = `_*Hasil Pencarian : ${googleQuery}*_\n`
-            for (let i = 0; i < responseGoogle.length; i++) {
-                vars +=  `\n━━━━━━━━━━━━━━━━━\n\n*Judul* : ${responseGoogle[i].title}\n\n*Deskripsi* : ${responseGoogle[i].description}\n\n*Link* : ${responseGoogle[i].link}\n\n`
+            try {
+                await limitAdd(serial)
+                const googleQuery = body.slice(8).trim()
+                if(!googleQuery) return reply(from, `Mohon masukkan query pencarian`, id)
+                const responseGoogle = await googleSr.search({ query: googleQuery, filterResults: [googleSr.ResultTypes.SearchResult], safeMode: true });
+                let vars = `_*Hasil Pencarian : ${googleQuery}*_\n`
+                for (let i = 0; i < responseGoogle.length; i++) {
+                    vars +=  `\n━━━━━━━━━━━━━━━━━\n\n*Judul* : ${responseGoogle[i].title}\n\n*Deskripsi* : ${responseGoogle[i].description}\n\n*Link* : ${responseGoogle[i].link}\n\n`
+                }
+                reply(from, vars, id);
+            } catch (e) {
+                reply(from, `Terjadi error saat melakukan pencarian: ${e.message}`, id)
             }
-            reply(from, vars, id);
             break
         case prefix+'translate':
         case prefix+'tl':
