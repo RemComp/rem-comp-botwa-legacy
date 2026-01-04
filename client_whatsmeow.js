@@ -15288,7 +15288,7 @@ Kembali lagi setelah *5 menit* untuk berburu telur lainnya!`, id)
             break **/
 
                     // EVENT CHRISTMAS
-            case prefix+'christmas':
+            /** case prefix+'christmas':
             case prefix+'xmas':
                 // return reply(from, 'Maaf! Fitur ini hanya tersedia untuk Event Natal saja!', id)
                 // if (!isOwner) return reply(from, 'Err: 403!')
@@ -15900,7 +15900,7 @@ Atau *${prefix}exchangexfrag all* (tukar semua token)
                     console.error(err)
                     return reply(from, 'Terjadi kesalahan saat exchange :(', id)
                 }
-                break
+                break **/
 
         //
         // case prefix+'addsaudara':
