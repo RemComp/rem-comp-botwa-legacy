@@ -15036,9 +15036,7 @@ ${historyFight}`
         case prefix+'slot':
             if(from != '6281358181668-1621640771@g.us' && from != '120363159869866611@g.us') return reply(from, 'Fitur ini sedang dalam Beta Test!')
             if (!isGroupMsg) return reply(from, 'Perintah ini hanya bisa di gunakan dalam group!', id)
-            // if(args[1] > 5) return reply(from, 'Kamu sudah menggunakan cmd ini sebanyak 5x! Tunggu beberapa saat hingga fitur ini dapat digunakan kembali')
             if (args.length == 1) return reply(from, 'Mohon masukkan jumlah uang\n\nContoh: '+prefix+'slot 5000', id)
-            // if(inArray_includes(args[1].toLowerCase(), isHuruf)) return reply(from, 'Jumlah harus ber Nomer', id)
             if(args[1] < 5000) return reply(from, 'Minimal uang untuk judi adalah 5000', id)
             if(args[1].includes('K')) return reply(from, `Mohon ganti 'K' menjadi 000`, id)
             if(_userDb.limit.slotLimit > Date.now()) {
@@ -15050,25 +15048,77 @@ ${historyFight}`
             try {
                 const CheckMoneyBefore = getMoney(_userDb)
                 if (args[1] > CheckMoneyBefore) return reply(from, 'Uang kamu Tidak cukup', id)
-                let slots = ['🍎','🍊','🍋','🍏','🫐','🍇','🍎','🍊','🍋']
-                const nyeh1 = `${slots[Math.floor(Math.random() * slots.length)]} | ${slots[Math.floor(Math.random() * slots.length)]} | ${slots[Math.floor(Math.random() * slots.length)]}`
-                const nyeh2 = `${slots[Math.floor(Math.random() * slots.length)]} | ${slots[Math.floor(Math.random() * slots.length)]} | ${slots[Math.floor(Math.random() * slots.length)]}`
-                const nyeh3 = `${slots[Math.floor(Math.random() * slots.length)]} | ${slots[Math.floor(Math.random() * slots.length)]} | ${slots[Math.floor(Math.random() * slots.length)]}`
-                await reply(from, `${nyeh1}\n${nyeh2}\n${nyeh3}`, id)
-                const UangHasilJudiFresh = Math.floor(args[1])
-                const UangHasilJudiFreshMin = Math.floor(Math.random() * 10) - args[1]
-                const UangHasilJudi = Math.floor(args[1] * 10)
-                const UangHasilJudiMin = Math.floor(args[1] * -10)
-                if(Number.isNaN(UangHasilJudiFreshMin)) return reply(from, 'Mohon masukkan jumlah uang\n\nContoh: '+prefix+'slot 5000', id)
-                if(nyeh1 == '🍎 | 🍎 | 🍎' || nyeh1 == '🍊 | 🍊 | 🍊' || nyeh1 == '🍋 | 🍋 | 🍋' ||  nyeh1 == '🍏 | 🍏 | 🍏' || nyeh1 == '🫐 | 🫐 | 🫐' || nyeh1 == '🍇 | 🍇 | 🍇' || nyeh2 == '🍎 | 🍎 | 🍎' || nyeh2 == '🍊 | 🍊 | 🍊' || nyeh2 == '🍋 | 🍋 | 🍋' ||  nyeh2 == '🍏 | 🍏 | 🍏' || nyeh2 == '🫐 | 🫐 | 🫐' || nyeh2 == '🍇 | 🍇 | 🍇' || nyeh3 == '🍎 | 🍎 | 🍎' || nyeh3 == '🍊 | 🍊 | 🍊' || nyeh3 == '🍋 | 🍋 | 🍋' ||  nyeh3 == '🍏 | 🍏 | 🍏' || nyeh3 == '🫐 | 🫐 | 🫐' || nyeh3 == '🍇 | 🍇 | 🍇') {
-                    //await addMoney('6281358181668@s.whatsapp.net', UangHasilJudiMin)
-                    await addMoney(sender, UangHasilJudi, _userDb)
-                    await addMoney_haram(sender, UangHasilJudi)
-                    reply(from, 'Selamat, kamu mendapat hadiah sebesar $'+numberWithCommas(fixNumberE(UangHasilJudi))+' 🎉🎊\n\nUang:\nBefore: $'+numberWithCommas(fixNumberE(CheckMoneyBefore))+'\nAfter: $'+numberWithCommas(fixNumberE(getMoney(_userDb) + UangHasilJudi)), id)
+                
+                // Extended slot symbols for more variety
+                const slotSymbols = ['🍎','🍊','🍋','🍏','🫐','🍇','🍓','🥝','🍑','🍒','💎','⭐','🔔','🎰','👑']
+                
+                const generateSpinResult = () => {
+                    return `${slotSymbols[Math.floor(Math.random() * slotSymbols.length)]} | ${slotSymbols[Math.floor(Math.random() * slotSymbols.length)]} | ${slotSymbols[Math.floor(Math.random() * slotSymbols.length)]}`
+                }
+                
+                const nyeh1 = generateSpinResult()
+                const nyeh2 = generateSpinResult()
+                const nyeh3 = generateSpinResult()
+                
+                await reply(from, `╔════════════════╗\n║ ${nyeh1} ║\n║ ${nyeh2} ║\n║ ${nyeh3} ║\n╚════════════════╝`, id)
+                
+                // 3% win chance - very rare!
+                const winChance = Math.random() < 0.03
+                const betAmount = Math.floor(args[1])
+                
+                if(winChance) {
+                    // Varied win rewards based on symbol matches
+                    const getWinReward = () => {
+                        // Check jackpot (all three rows match perfectly)
+                        const firstRow = nyeh1.split(' | ')
+                        const secondRow = nyeh2.split(' | ')
+                        const thirdRow = nyeh3.split(' | ')
+                        
+                        if((firstRow[0] === secondRow[0] && secondRow[0] === thirdRow[0]) &&
+                           (firstRow[1] === secondRow[1] && secondRow[1] === thirdRow[1]) &&
+                           (firstRow[2] === secondRow[2] && secondRow[2] === thirdRow[2])) {
+                            // JACKPOT! 100x multiplier
+                            return { amount: betAmount * 100, type: '🏆 JACKPOT 🏆', multiplier: 100 }
+                        } else if((firstRow[0] === firstRow[1] && firstRow[1] === firstRow[2]) ||
+                                  (secondRow[0] === secondRow[1] && secondRow[1] === secondRow[2]) ||
+                                  (thirdRow[0] === thirdRow[1] && thirdRow[1] === thirdRow[2])) {
+                            // Three in a row match - 50x multiplier
+                            return { amount: betAmount * 50, type: '🎉 THREE IN A ROW 🎉', multiplier: 50 }
+                        } else if((firstRow[0] === secondRow[1] && secondRow[1] === thirdRow[2]) ||
+                                  (firstRow[2] === secondRow[1] && secondRow[1] === thirdRow[0])) {
+                            // Diagonal match - 25x multiplier
+                            return { amount: betAmount * 25, type: '✨ DIAGONAL WIN ✨', multiplier: 25 }
+                        } else {
+                            // Any other match - 10x multiplier
+                            return { amount: betAmount * 10, type: '⭐ YOU WIN! ⭐', multiplier: 10 }
+                        }
+                    }
+                    
+                    const reward = getWinReward()
+                    
+                    await addMoney(sender, reward.amount, _userDb)
+                    await addMoney_haram(sender, reward.amount)
+                    
+                    const winMessage = `${reward.type}\n\n🎊 SELAMAT! Kamu menang dengan multiplier ${reward.multiplier}x!\n\n💰 Hadiah: $${numberWithCommas(fixNumberE(reward.amount))}\n\n💵 Uang:\nSebelum: $${numberWithCommas(fixNumberE(CheckMoneyBefore))}\nSesudah: $${numberWithCommas(fixNumberE(CheckMoneyBefore + reward.amount))}`
+                    reply(from, winMessage, id)
                 } else {
-                    //await addMoney('6281358181668@s.whatsapp.net', UangHasilJudiFresh)
-                    await addMoney(sender, UangHasilJudiFreshMin, _userDb)
-                    reply(from, 'Maaf kamu tidak mendapatkan hadiah\nJumlah Uang Hilang: $'+numberWithCommas(fixNumberE(UangHasilJudiFreshMin)), id)
+                    // Loss - lose the bet amount
+                    const losAmount = betAmount
+                    await addMoney(sender, -losAmount, _userDb)
+                    
+                    const loseMessages = [
+                        'Sayang sekali, kamu tidak beruntung kali ini 😔',
+                        // 'Jangan menyerah! Coba lagi lain waktu 💪',
+                        'Better luck next time! 🍀',
+                        // 'Nasib tidak berpihak padamu hari ini 😢',
+                        // 'Slot tidak menunjukkan kemampuan... coba lagi! 🎰'
+                    ]
+                    
+                    const randomMsg = loseMessages[Math.floor(Math.random() * loseMessages.length)]
+                    
+                    const loseMessage = `❌ TIDAK MENANG ❌\n\n${randomMsg}\n\n💸 Uang Hilang: $${numberWithCommas(fixNumberE(losAmount))}\n\n💵 Uang:\nSebelum: $${numberWithCommas(fixNumberE(CheckMoneyBefore))}\nSesudah: $${numberWithCommas(fixNumberE(CheckMoneyBefore - losAmount))}`
+                    reply(from, loseMessage, id)
+                    
                     await sleep(3000)
                     await _mongo_UserSchema.updateOne(
                         { iId: _userDb.iId },
@@ -15082,12 +15132,10 @@ ${historyFight}`
                           },
                         }
                       )
-                      
                 }
                } catch (err) {
                    console.error(err)
                    await reply(from, err, id)
-                //    await rem.sendText(numberReportError, err)
                }
                break
         /** case prefix+'remeaster':
