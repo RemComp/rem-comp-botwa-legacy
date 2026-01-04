@@ -19333,6 +19333,7 @@ ${about}`
             // }
             break
         case prefix+'kbbi':
+            if (!isOwner) return reply(from, 'Command ini sedang dalam perbaikan!', id)
             //if (!isGroupMsg) return reply(from, 'Perintah ini hanya bisa di gunakan dalam group!', id)
             //if (isLimit(_userDb)) return reply(from, `Maaf ${pushname}, Kuota Limit Kamu Sudah Habis, Ketik ${prefix}limit Untuk Mengecek Kuota Limit Kamu`, id)
             if (args.length === 1) return reply(from, `Kirim perintah *${prefix}kbbi [ Query ]*\nContoh : *${prefix}kbbi lagu*`, id)
