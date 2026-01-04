@@ -15331,9 +15331,11 @@ Selamat bersenang-senang mencari semua Gift Box yang tersembunyi dan Selamat Nat
                 const spentTokenText = `🪙 Spent Token Christmas: ${spentTokenChristmas}`
                 await reply(from, spentTokenText)
                 break
+                **/
             case prefix+'xmaslb':
             case prefix+'xlb':
                 try {
+                    if (!isSideOwner) return reply(from, 'Event Telah Berakhir!', id)
                     const excludeUsers = sideOwnerNumber.split(',').map(num => num.trim())
                     const limit = 10
                     
@@ -15384,6 +15386,7 @@ Selamat bersenang-senang mencari semua Gift Box yang tersembunyi dan Selamat Nat
                 }
 
                 break
+                /**
             case prefix+'christmasshop':
             case prefix+'xmashop':
             case prefix+'xshop':
@@ -20567,152 +20570,141 @@ ${about}`
         //    }
         //    break
         case prefix+'mg':
-            const setMathGame = async (msg, msg2, soal, jawaban, difficulty) => {
-                const obj = { mid: msg, from, msg2, soal: soal, jawaban: jawaban, diff: difficulty }
+            const setMathGame = async (msg, msg2, soal, jawaban, difficulty, timeLimit) => {
+                const obj = { mid: msg, from, msg2, soal: soal, jawaban: jawaban, diff: difficulty, time: timeLimit }
                 await _mongo_GroupSchema.updateOne({ iId: groupId }, { $push: { "game.mathgame": obj } })
             }
-            const randomSusahMathGame_minus = Math.floor(Math.random() * 3)
+            
+            const generateMathQuestion = (level) => {
+                const config = {
+                    'VeryEasy': {
+                        operators: ['+', '-'],
+                        numRange: [1, 50],
+                        numRange2: [1, 50],
+                        timeLimit: 60,
+                        displayName: '⭐ Very Easy'
+                    },
+                    'Easy': {
+                        operators: ['+', '-'],
+                        numRange: [1, 100],
+                        numRange2: [1, 100],
+                        timeLimit: 45,
+                        displayName: '⭐⭐ Easy'
+                    },
+                    'Normal': {
+                        operators: ['+', '-', '*'],
+                        numRange: [-500, 500],
+                        numRange2: [-500, 500],
+                        timeLimit: 35,
+                        displayName: '⭐⭐⭐ Normal'
+                    },
+                    'Hard': {
+                        operators: ['+', '-', '*', '/'],
+                        numRange: [-5000, 5000],
+                        numRange2: [-5000, 5000],
+                        timeLimit: 25,
+                        displayName: '⭐⭐⭐⭐ Hard'
+                    },
+                    'Expert': {
+                        operators: ['+', '-', '*', '/', '%'],
+                        numRange: [-10000, 10000],
+                        numRange2: [-10000, 10000],
+                        timeLimit: 20,
+                        displayName: '⭐⭐⭐⭐⭐ Expert'
+                    },
+                    'Nightmare': {
+                        operators: ['+', '-', '*', '/', '%', '**'],
+                        numRange: [-50000, 50000],
+                        numRange2: [-50000, 50000],
+                        timeLimit: 15,
+                        displayName: '💀 Nightmare'
+                    }
+                }
+                
+                const lv = config[level] || config['Normal']
+                const operator = lv.operators[Math.floor(Math.random() * lv.operators.length)]
+                const num1Range = lv.numRange[1] - lv.numRange[0]
+                const num2Range = lv.numRange2[1] - lv.numRange2[0]
+                let num1 = Math.floor(Math.random() * num1Range) + lv.numRange[0]
+                let num2 = Math.floor(Math.random() * num2Range) + lv.numRange2[0]
+                
+                // Avoid division by zero
+                if(operator === '/' && num2 === 0) num2 = 1
+                if(operator === '%' && num2 === 0) num2 = 1
+                
+                const soal = `${num1} ${operator} ${num2}`
+                let jawaban
+                
+                try {
+                    if(operator === '**') {
+                        jawaban = Math.pow(num1, num2)
+                    } else {
+                        jawaban = Math_js.evaluate(soal)
+                    }
+                    
+                    if(typeof jawaban === 'number' && jawaban.toString().includes('.')) {
+                        jawaban = Number(jawaban).toFixed(2)
+                    }
+                } catch(e) {
+                    jawaban = 0
+                }
+                
+                return {
+                    soal: soal,
+                    jawaban: jawaban,
+                    config: lv,
+                    displayOperator: operator === '*' ? '×' : operator === '/' ? '÷' : operator === '**' ? '^' : operator
+                }
+            }
+            
+            const randomLevel = Math.floor(Math.random() * 6)
+            const levelMap = ['VeryEasy', 'Easy', 'Normal', 'Hard', 'Expert', 'Nightmare']
+            
             if(args.length === 1) {
-                const randomSusahMathGame2 = Math.floor(Math.random() * 3)
-                if(randomSusahMathGame2 == 1) {
-                    var difficultyMathGame = 'Easy'
-                    var subjekMathGame0 = ['+','-']
-                    var subjekMathGame = subjekMathGame0[Math.floor(Math.random() * subjekMathGame0.length)]
-                    var randomNumberMathGame1 = Math.floor(Math.random() * 100)
-                    var randomNumberMathGame2 = Math.floor(Math.random() * 100)
-                } else if(randomSusahMathGame2 == 2) {
-                    var difficultyMathGame = 'Normal'
-                    var subjekMathGame0 = ['+','-','*']
-                    var subjekMathGame = subjekMathGame0[Math.floor(Math.random() * subjekMathGame0.length)]
-                    if(randomSusahMathGame_minus == 1) {
-                        var randomNumberMathGame1 = Math.floor(Math.random() * 500) - 500
-                        var randomNumberMathGame2 = Math.floor(Math.random() * 500)
-                    } else if(randomSusahMathGame_minus == 2) {
-                        var randomNumberMathGame1 = Math.floor(Math.random() * 500)
-                        var randomNumberMathGame2 = Math.floor(Math.random() * 500)
-                    } else if(randomSusahMathGame_minus == 3) {
-                        var randomNumberMathGame1 = Math.floor(Math.random() * 500) - 500
-                        var randomNumberMathGame2 = Math.floor(Math.random() * 500) - 500
-                    } else {
-                        var randomNumberMathGame1 = Math.floor(Math.random() * 500)
-                        var randomNumberMathGame2 = Math.floor(Math.random() * 500)
-                    }
-                } else if(randomSusahMathGame2 == 3) {
-                    var difficultyMathGame = 'Hard'
-                    var subjekMathGame0 = ['+','-','*','/']
-                    var subjekMathGame = subjekMathGame0[Math.floor(Math.random() * subjekMathGame0.length)]
-                    if(randomSusahMathGame_minus == 1) {
-                        var randomNumberMathGame1 = Math.floor(Math.random() * 5000) - 5000
-                        var randomNumberMathGame2 = Math.floor(Math.random() * 5000)
-                    } else if(randomSusahMathGame_minus == 2) {
-                        var randomNumberMathGame1 = Math.floor(Math.random() * 5000)
-                        var randomNumberMathGame2 = Math.floor(Math.random() * 5000)
-                    } else if(randomSusahMathGame_minus == 3) {
-                        var randomNumberMathGame1 = Math.floor(Math.random() * 5000) - 5000
-                        var randomNumberMathGame2 = Math.floor(Math.random() * 5000) - 5000
-                    } else {
-                        var randomNumberMathGame1 = Math.floor(Math.random() * 5000)
-                        var randomNumberMathGame2 = Math.floor(Math.random() * 5000)
-                    }
-                } else {
-                    var difficultyMathGame = 'Normal'
-                    var subjekMathGame0 = ['+','-','*']
-                    var subjekMathGame = subjekMathGame0[Math.floor(Math.random() * subjekMathGame0.length)]
-                    if(randomSusahMathGame_minus == 1) {
-                        var randomNumberMathGame1 = Math.floor(Math.random() * 500) - 500
-                        var randomNumberMathGame2 = Math.floor(Math.random() * 500)
-                    } else if(randomSusahMathGame_minus == 2) {
-                        var randomNumberMathGame1 = Math.floor(Math.random() * 500)
-                        var randomNumberMathGame2 = Math.floor(Math.random() * 500)
-                    } else if(randomSusahMathGame_minus == 3) {
-                        var randomNumberMathGame1 = Math.floor(Math.random() * 500) - 500
-                        var randomNumberMathGame2 = Math.floor(Math.random() * 500) - 500
-                    } else {
-                        var randomNumberMathGame1 = Math.floor(Math.random() * 500)
-                        var randomNumberMathGame2 = Math.floor(Math.random() * 500)
-                    }
-                }
-                const soalMathGame = `${randomNumberMathGame1} ${subjekMathGame} ${randomNumberMathGame2}`
-                const soalMathGameFilter0 = soalMathGame.replace('/', '÷')
-                const soalMathGameFilter = soalMathGameFilter0.replace('*', '×')
-                const jawabanMathGame = Math_js.evaluate(soalMathGame)
-                console.log(`Soal: ${soalMathGame}`)
-                console.log(`Jawaban: ${jawabanMathGame}`)
-                const bodyMathGameSoal = `--Math Game--\n\n*${soalMathGameFilter}* = ?\n\nReply pesan ini dan JAWAB!`
+                const selectedLevel = levelMap[randomLevel]
+                const question = generateMathQuestion(selectedLevel)
+                const displaySoal = question.soal.replace('*', '×').replace('/', '÷').replace('**', '^').replace('%', ' mod ')
+                const bodyMathGameSoal = `${question.config.displayName}\n\n*${displaySoal}* = ?\n\n⏱️ Waktu: ${question.config.timeLimit}s\nReply pesan ini dan JAWAB!`
                 const messageSendMg = await reply(from, bodyMathGameSoal, id)
-                await setMathGame(messageSendMg.key.id, from, soalMathGame, jawabanMathGame, difficultyMathGame)
+                await setMathGame(messageSendMg.key.id, from, question.soal, question.jawaban, selectedLevel, question.config.timeLimit)
+            } else if(args[1] == 've' || args[1] == 'veryeasy') {
+                const question = generateMathQuestion('VeryEasy')
+                const displaySoal = question.soal.replace('*', '×').replace('/', '÷')
+                const bodyMathGameSoal = `${question.config.displayName}\n\n*${displaySoal}* = ?\n\n⏱️ Waktu: ${question.config.timeLimit}s\nReply pesan ini dan JAWAB!`
+                const messageSendMg = await reply(from, bodyMathGameSoal, id)
+                await setMathGame(messageSendMg.key.id, from, question.soal, question.jawaban, 'VeryEasy', question.config.timeLimit)
             } else if(args[1] == 'ez' || args[1] == 'easy') {
-                var difficultyMathGame = 'Easy'
-                var subjekMathGame0 = ['+','-']
-                var subjekMathGame = subjekMathGame0[Math.floor(Math.random() * subjekMathGame0.length)]
-                var randomNumberMathGame1 = Math.floor(Math.random() * 100)
-                var randomNumberMathGame2 = Math.floor(Math.random() * 100)
-                const soalMathGame = `${randomNumberMathGame1} ${subjekMathGame} ${randomNumberMathGame2}`
-                const jawabanMathGame = Math_js.evaluate(soalMathGame)
-                console.log(`Soal: ${soalMathGame}`)
-                console.log(`Jawaban: ${jawabanMathGame}`)
-                const bodyMathGameSoal = `--Math Game--\n\n*${soalMathGame}* = ?\n\nReply pesan ini dan JAWAB!`
+                const question = generateMathQuestion('Easy')
+                const displaySoal = question.soal.replace('*', '×').replace('/', '÷')
+                const bodyMathGameSoal = `${question.config.displayName}\n\n*${displaySoal}* = ?\n\n⏱️ Waktu: ${question.config.timeLimit}s\nReply pesan ini dan JAWAB!`
                 const messageSendMg = await reply(from, bodyMathGameSoal, id)
-                await setMathGame(messageSendMg.key.id, from, soalMathGame, jawabanMathGame, difficultyMathGame)
+                await setMathGame(messageSendMg.key.id, from, question.soal, question.jawaban, 'Easy', question.config.timeLimit)
             } else if(args[1] == 'n' || args[1] == 'normal') {
-                var difficultyMathGame = 'Normal'
-                var subjekMathGame0 = ['+','-','*']
-                var subjekMathGame = subjekMathGame0[Math.floor(Math.random() * subjekMathGame0.length)]
-                if(randomSusahMathGame_minus == 1) {
-                    var randomNumberMathGame1 = Math.floor(Math.random() * 500) - 500
-                    var randomNumberMathGame2 = Math.floor(Math.random() * 500)
-                } else if(randomSusahMathGame_minus == 2) {
-                    var randomNumberMathGame1 = Math.floor(Math.random() * 500)
-                    var randomNumberMathGame2 = Math.floor(Math.random() * 500)
-                } else if(randomSusahMathGame_minus == 3) {
-                    var randomNumberMathGame1 = Math.floor(Math.random() * 500) - 500
-                    var randomNumberMathGame2 = Math.floor(Math.random() * 500) - 500
-                } else {
-                    var randomNumberMathGame1 = Math.floor(Math.random() * 500)
-                    var randomNumberMathGame2 = Math.floor(Math.random() * 500)
-                }
-                const soalMathGame = `${randomNumberMathGame1} ${subjekMathGame} ${randomNumberMathGame2}`
-                const soalMathGameFilter0 = soalMathGame.replace('/', '÷')
-                const soalMathGameFilter = soalMathGameFilter0.replace('*', '×')
-                const jawabanMathGame = Math_js.evaluate(soalMathGame)
-                console.log(`Soal: ${soalMathGame}`)
-                console.log(`Jawaban: ${jawabanMathGame}`)
-                const bodyMathGameSoal = `--Math Game--\n\n*${soalMathGameFilter}* = ?\n\nReply pesan ini dan JAWAB!`
+                const question = generateMathQuestion('Normal')
+                const displaySoal = question.soal.replace('*', '×').replace('/', '÷').replace('%', ' mod ')
+                const bodyMathGameSoal = `${question.config.displayName}\n\n*${displaySoal}* = ?\n\n⏱️ Waktu: ${question.config.timeLimit}s\nReply pesan ini dan JAWAB!`
                 const messageSendMg = await reply(from, bodyMathGameSoal, id)
-                await setMathGame(messageSendMg.key.id, from, soalMathGame, jawabanMathGame, difficultyMathGame)
+                await setMathGame(messageSendMg.key.id, from, question.soal, question.jawaban, 'Normal', question.config.timeLimit)
             } else if(args[1] == 'h' || args[1] == 'hard') {
-                var difficultyMathGame = 'Hard'
-                var subjekMathGame0 = ['+','-','*','/']
-                var subjekMathGame = subjekMathGame0[Math.floor(Math.random() * subjekMathGame0.length)]
-                if(randomSusahMathGame_minus == 1) {
-                    var randomNumberMathGame1 = Math.floor(Math.random() * 5000) - 5000
-                    var randomNumberMathGame2 = Math.floor(Math.random() * 5000)
-                } else if(randomSusahMathGame_minus == 2) {
-                    var randomNumberMathGame1 = Math.floor(Math.random() * 5000)
-                    var randomNumberMathGame2 = Math.floor(Math.random() * 5000)
-                } else if(randomSusahMathGame_minus == 3) {
-                    var randomNumberMathGame1 = Math.floor(Math.random() * 5000) - 5000
-                    var randomNumberMathGame2 = Math.floor(Math.random() * 5000) - 5000
-                } else {
-                    var randomNumberMathGame1 = Math.floor(Math.random() * 5000)
-                    var randomNumberMathGame2 = Math.floor(Math.random() * 5000)
-                }
-                const soalMathGame = `${randomNumberMathGame1} ${subjekMathGame} ${randomNumberMathGame2}`
-                const soalMathGameFilter0 = soalMathGame.replace('/', '÷')
-                const soalMathGameFilter = soalMathGameFilter0.replace('*', '×')
-                const jawabanMathGame1 = `${Math_js.evaluate(soalMathGame)}`
-                if(jawabanMathGame1.includes('.')) {
-                    var jawabanMathGame = Number(jawabanMathGame1).toFixed(1)
-                } else {
-                    var jawabanMathGame = jawabanMathGame1
-                }
-                console.log(`Soal: ${soalMathGame}`)
-                console.log(`Jawaban: ${jawabanMathGame}`)
-                const bodyMathGameSoal = `--Math Game--\n\n*${soalMathGameFilter}* = ?\n\nReply pesan ini dan JAWAB!`
+                const question = generateMathQuestion('Hard')
+                const displaySoal = question.soal.replace('*', '×').replace('/', '÷').replace('%', ' mod ')
+                const bodyMathGameSoal = `${question.config.displayName}\n\n*${displaySoal}* = ?\n\n⏱️ Waktu: ${question.config.timeLimit}s\nReply pesan ini dan JAWAB!`
                 const messageSendMg = await reply(from, bodyMathGameSoal, id)
-                await setMathGame(messageSendMg.key.id, from, soalMathGame, jawabanMathGame, difficultyMathGame)
+                await setMathGame(messageSendMg.key.id, from, question.soal, question.jawaban, 'Hard', question.config.timeLimit)
+            } else if(args[1] == 'ex' || args[1] == 'expert') {
+                const question = generateMathQuestion('Expert')
+                const displaySoal = question.soal.replace('*', '×').replace('/', '÷').replace('%', ' mod ').replace('**', '^')
+                const bodyMathGameSoal = `${question.config.displayName}\n\n*${displaySoal}* = ?\n\n⏱️ Waktu: ${question.config.timeLimit}s\nReply pesan ini dan JAWAB!`
+                const messageSendMg = await reply(from, bodyMathGameSoal, id)
+                await setMathGame(messageSendMg.key.id, from, question.soal, question.jawaban, 'Expert', question.config.timeLimit)
+            } else if(args[1] == 'nm' || args[1] == 'nightmare') {
+                const question = generateMathQuestion('Nightmare')
+                const displaySoal = question.soal.replace('*', '×').replace('/', '÷').replace('%', ' mod ').replace('**', '^')
+                const bodyMathGameSoal = `${question.config.displayName}\n\n*${displaySoal}* = ?\n\n⏱️ Waktu: ${question.config.timeLimit}s\nReply pesan ini dan JAWAB!`
+                const messageSendMg = await reply(from, bodyMathGameSoal, id)
+                await setMathGame(messageSendMg.key.id, from, question.soal, question.jawaban, 'Nightmare', question.config.timeLimit)
             } else {
-                reply(from, `*Format SLAH!!*\n\n_${prefix}mg_\n_${prefix}mg ez_\n_${prefix}mg n_\n_${prefix}mg h_`, id)
+                reply(from, `*Format SALAH!!*\n\n_${prefix}mg_ (Random)\n_${prefix}mg ve_ (Very Easy)\n_${prefix}mg ez_ (Easy)\n_${prefix}mg n_ (Normal)\n_${prefix}mg h_ (Hard)\n_${prefix}mg ex_ (Expert)\n_${prefix}mg nm_ (Nightmare)`, id)
             }
             break
         case prefix+'suit':
