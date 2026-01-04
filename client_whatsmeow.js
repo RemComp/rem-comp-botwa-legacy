@@ -19673,7 +19673,7 @@ ${about}`
             fs.unlinkSync(pathFileText)
             fs.unlinkSync(tmpFiletext)
             break
-        case prefix+'gpt':
+        /** case prefix+'gpt':
         case prefix+'chatgpt':
             // if(!isOwner) return reply(from, 'Fitur ini sedang dalam pengembangan!')
             if (args.length === 1) return reply(from, `Kirim perintah ${prefix}gpt <teks>\nContoh: *${prefix}gpt Apa itu E = mc²*`, id)
@@ -19847,7 +19847,7 @@ ${about}`
                 await reply(from, `*_[ Bard AI ]_*\n\n${responseBard?.content || responseBard?.result}`)
             }
             await rem.sendPresenceUpdate('available', from)
-            break
+            break **/
         case prefix+'ai':
             // if(!isOwner) return reply(from, 'Fitur ini sedang dalam perbaikan!')
             if(isGroupMsg) return reply(from, `Maaf, fitur ini hanya bisa digunakan di private chat!\nFitur AI untuk group, silahkan gunakan *${prefix}gpt*`)
