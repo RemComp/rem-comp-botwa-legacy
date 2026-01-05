@@ -15895,6 +15895,20 @@ Atau *${prefix}exchangexfrag all* (tukar semua token)
                     return reply(from, 'Terjadi kesalahan saat exchange :(', id)
                 }
                 break
+
+        // Ramadhan Event
+            case prefix+'ramadhan':
+                if (!isOwner) return reply(from, 'Error: 404')
+
+                const textRamadhan = `⟨⟨── 🕌 RAMADHAN 2026 ✨ ──⟩⟩\n
+Selamat Datang di Event Ramadhan 2026!
+────────────────
+balbalblalbal
+────────────────
+*© RemComp 2021 - 2026*`
+
+                return reply(from, textRamadhan, id)
+                break
         
         //
         // case prefix+'addsaudara':
