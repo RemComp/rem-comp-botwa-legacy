@@ -16047,6 +16047,11 @@ Atau *${prefix}exchangexfrag all* (tukar semua token)
         //         rem.sendTextWithMentions(requester, `❌ @${sender.replace('@s.whatsapp.net', '')} telah menolak permintaan penghapusan persaudaraan kamu.`, [sender])
         //     }
         //     break
+
+        // Ramadhan Event
+
+
+
         case prefix+'togel':
             const getTogelCmd = await _mongo_CommandSchema.findOne({ cId: 'togel' })
             if(args[1] == undefined) {
