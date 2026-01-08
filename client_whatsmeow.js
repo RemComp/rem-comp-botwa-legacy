@@ -168,9 +168,9 @@ let listCharaIdWhitelist = [269148, 277870, 280375, 278615, 211945, 182080, 2061
 
 const superOwnerPajak = '6281358181668@s.whatsapp.net'
 const numberReportError = '62856038120076@s.whatsapp.net'
-const ownerNumber = '6281358181668@s.whatsapp.net, 62856038120076@s.whatsapp.net, 160472879886569@s.whatsapp.net, 6282229778223@s.whatsapp.net, 6288809279029@s.whatsapp.net'
-const ownerNumber2 = '6281358181668@s.whatsapp.net, 62856038120076@s.whatsapp.net, 6282229778223@s.whatsapp.net, 6288809279029@s.whatsapp.net'
-const sideOwnerNumber = '6281358181668@s.whatsapp.net, 62856038120076@s.whatsapp.net, 6288809279029@s.whatsapp.net, 6288991122630@s.whatsapp.net, 62856038120076@s.whatsapp.net, 6282229778223@s.whatsapp.net, 6285858254388@s.whatsapp.net, 85294853160@s.whatsapp.net'
+const ownerNumber = '6281358181668@s.whatsapp.net, 62856038120076@s.whatsapp.net, 160472879886569@s.whatsapp.net, 6282229778223@s.whatsapp.net'
+const ownerNumber2 = '6281358181668@s.whatsapp.net, 62856038120076@s.whatsapp.net, 6282229778223@s.whatsapp.net'
+const sideOwnerNumber = '6281358181668@s.whatsapp.net, 62856038120076@s.whatsapp.net, 6288991122630@s.whatsapp.net, 62856038120076@s.whatsapp.net, 6282229778223@s.whatsapp.net, 6285858254388@s.whatsapp.net, 85294853160@s.whatsapp.net'
 const hideGroups = [ '120363359122117558@g.us, 120363372660164190@g.us']
 
 const newDbMap = (uid, sender) => {
