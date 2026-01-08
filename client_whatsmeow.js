@@ -1022,6 +1022,7 @@ if(isMentionedLid) {
         const contactMatch = _contactDb.find(c => c.lid === all || c.lid === (all + '@s.whatsapp.net'))
         return contactMatch ? contactMatch.iId : all
     })
+    mentionedJidList = message.mentionedJidList
 }
 
 // Initialize
