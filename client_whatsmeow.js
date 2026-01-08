@@ -12260,54 +12260,59 @@ _${urlPathImageTempSetPdPp}_`
             if (!isGroupMsg) return await reply(from, 'Command ini hanya bisa digunakan di dalam grup!', id)
             //if(!isOwner) reply(from, 'Money akan tersedia setelah S10 dimulai', id)
             let limitDisplayTopSt = 10
-            const uangnyabang = await _mongo_UserSchema.find({}, { iId: 1, "economy.money": 1, _id: 0 }).sort({ "economy.money": -1 }).limit(11)
+            const uangnyabang = await _mongo_UserSchema.find({}, { iId: 1, "economy.money": 1, _id: 0 }).sort({ "economy.money": -1 }).limit(11).lean()
             // uangnyabang.sort((a, b) => (a.economy.money < b.economy.money) ? 1 : -1)
             let urutanmoney = '-----[ *SULTAN* ]----\n\n'
             try {
+                if (!uangnyabang || uangnyabang.length === 0) {
+                    return reply(from, 'Perlu setidaknya *10* user yang memiliki level di database!', id)
+                }
                 let nomnya = 0
                 if(isMention) {
-                    for (let i = 0; i < limitDisplayTopSt; i++) {
+                    for (let i = 0; i < limitDisplayTopSt && i < uangnyabang.length; i++) {
+                        if(!uangnyabang[i]) continue
                         nomnya += 1
-                        if(uangnyabang[i].iId == '62856038120076@s.whatsapp.net' || uangnyabang[i].iId == superOwnerPajak) {
+                        if(uangnyabang[i]?.iId == '62856038120076@s.whatsapp.net' || uangnyabang[i]?.iId == superOwnerPajak) {
                             limitDisplayTopSt += 1
                             nomnya -= 1
                             continue;
                         }
-                        var contactDb = await _mongo_ContactSchema.findOne({ iId: uangnyabang[i].iId })
-                        const getNameSultan = uangnyabang[i]
-                        var namasultan01 = getNama(getNameSultan)
-                        if(namasultan01 == undefined) {
-                            var namasultan = uangnyabang[i].iId.replace('@s.whatsapp.net', '')
-                        } else {
-                            var namasultan = namasultan01
-                        }
-                        var namasultan0 = await rem.onWhatsApp(uangnyabang[i].iId)
-                        if(!namasultan0?.[0]?.exists) {
-                            urutanmoney += `${nomnya}. +${uangnyabang[i].iId.replace('@s.whatsapp.net', '')} (*_${namasultan}_*)\n➤ UANG: *${numberWithCommas(fixNumberE(uangnyabang[i].economy.money.toFixed(0)))}*\n\n`
-                        } else {
-                            urutanmoney += `${nomnya}. @${uangnyabang[i].iId.replace('@s.whatsapp.net', '')} (*_${namasultan}_*)\n➤ UANG: *${numberWithCommas(fixNumberE(uangnyabang[i].economy.money.toFixed(0)))}*\n\n`
+                        try {
+                            const getNameSultan = uangnyabang[i]
+                            var namasultan = getNama(getNameSultan) || uangnyabang[i]?.iId?.replace('@s.whatsapp.net', '') || 'Unknown'
+                            var namasultan0 = await rem.onWhatsApp(uangnyabang[i]?.iId)
+                            const userIdShort = uangnyabang[i]?.iId?.replace('@s.whatsapp.net', '') || 'Unknown'
+                            const userMoney = uangnyabang[i]?.economy?.money ? numberWithCommas(fixNumberE(uangnyabang[i].economy.money.toFixed(0))) : '0'
+                            
+                            if(!namasultan0?.[0]?.exists) {
+                                urutanmoney += `${nomnya}. +${userIdShort} (*_${namasultan}_*)\n➤ UANG: *${userMoney}*\n\n`
+                            } else {
+                                urutanmoney += `${nomnya}. @${userIdShort} (*_${namasultan}_*)\n➤ UANG: *${userMoney}*\n\n`
+                            }
+                        } catch (e) {
+                            console.error('Error processing sultan user:', e)
                         }
                     }
                     await rem.sendTextWithMentions(from, urutanmoney)
                 } else {
-                    for (let i = 0; i < limitDisplayTopSt; i++) {
+                    for (let i = 0; i < limitDisplayTopSt && i < uangnyabang.length; i++) {
+                        if(!uangnyabang[i]) continue
                         nomnya += 1
-                        if(uangnyabang[i].iId == '62856038120076@s.whatsapp.net' || uangnyabang[i].iId == superOwnerPajak) {
+                        if(uangnyabang[i]?.iId == '62856038120076@s.whatsapp.net' || uangnyabang[i]?.iId == superOwnerPajak) {
                             limitDisplayTopSt += 1
                             nomnya -= 1
                             continue;
                         }
-                        var contactDb = await _mongo_ContactSchema.findOne({ iId: uangnyabang[i].iId })
-                        var namasultan0 = await rem.contacts(uangnyabang[i].iId, contactDb)
-                        const getNameSultan = uangnyabang[i]
-                        var namasultan01 = getNama(getNameSultan)
-                        console.log(namasultan01)
-                        if(namasultan01 == undefined) {
-                            var namasultan = namasultan0
-                        } else {
-                            var namasultan = namasultan01
+                        try {
+                            const getNameSultan = uangnyabang[i]
+                            var namasultan = getNama(getNameSultan) || uangnyabang[i]?.iId?.replace('@s.whatsapp.net', '') || 'Unknown'
+                            const userIdShort = uangnyabang[i]?.iId?.replace('@s.whatsapp.net', '') || 'Unknown'
+                            const userMoney = uangnyabang[i]?.economy?.money ? numberWithCommas(fixNumberE(uangnyabang[i].economy.money.toFixed(0))) : '0'
+                            
+                            urutanmoney += `${nomnya}. *_${namasultan}_*\nwa.me/${userIdShort}\n➤ UANG: *${userMoney}*\n\n`
+                        } catch (e) {
+                            console.error('Error processing sultan user:', e)
                         }
-                        urutanmoney += `${nomnya}. *_${namasultan}_*\nwa.me/${uangnyabang[i].iId.replace('@s.whatsapp.net', '')}\n➤ UANG: *${numberWithCommas(fixNumberE(uangnyabang[i].economy.money.toFixed(0)))}*\n\n`
                     }
                     rem.sendText(from, urutanmoney)
                 }
@@ -15401,14 +15406,14 @@ Selamat bersenang-senang mencari semua Gift Box yang tersembunyi dan Selamat Nat
             case prefix+'xlb':
                 try {
                     if (!isSideOwner) return reply(from, 'Event Telah Berakhir!', id)
-                    const excludeUsers = sideOwnerNumber.split(',').map(num => num.trim())
+                    
+                    const excludeUsers = sideOwnerNumber && typeof sideOwnerNumber === 'string' ? sideOwnerNumber.split(',').map(num => num.trim()) : []
                     const limit = 10
                     
+                    const queryObj = excludeUsers.length > 0 ? { "economy.evntChristmas.spentToken": { $gt: 0 }, iId: { $nin: excludeUsers } } : { "economy.evntChristmas.spentToken": { $gt: 0 } }
+                    
                     const allSpentTokenUsers = await _mongo_UserSchema.find(
-                        { 
-                            "economy.evntChristmas.spentToken": { $gt: 0 },
-                            iId: { $nin: excludeUsers }
-                        }, 
+                        queryObj, 
                         { iId: 1, "economy.evntChristmas.spentToken": 1, _id: 0 }
                     ).sort({ "economy.evntChristmas.spentToken": -1 }).limit(limit)
 
