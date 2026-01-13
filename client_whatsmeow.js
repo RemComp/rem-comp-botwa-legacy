@@ -23921,7 +23921,7 @@ Pengirim Saran : wa.me/${allArgs[1].replace('@s.whatsapp.net', '')}
                 bodySendRplyres = [allArgs[1], isMediaRplyres.toString('base64'), 'image.png', sendTextRplyRes, '', { mentions: [sender] }]
             }
 
-            await sendRequestRandomJadibot(methodRplyres, bodySendRplyres)
+            await sendRequestRandomJadibotNew(methodRplyres, bodySendRplyres)
             reply(from, 'Success!')
             break
         case prefix+'set_bot':
@@ -25168,213 +25168,213 @@ Contoh : *_${prefix}rbuy 1 12_*
             reply(from, 'Success')
             
             break
-        case prefix+'jadibot':
-            // if(!isOwner) return reply(from, 'Maintenance...')
-            // if(!isOwner) return reply(from, 'Fitur ini sedang dalam perbaikan!')
-            const editMessageJadibot = await rem.sendText(from, '_Syncing data..._')
-            await getAllJadibotFromAPI()
-            rem.sendEditMessage(from, editMessageJadibot.key, '_Syncing data: Success | 200_')
+//         case prefix+'jadibot':
+//             // if(!isOwner) return reply(from, 'Maintenance...')
+//             // if(!isOwner) return reply(from, 'Fitur ini sedang dalam perbaikan!')
+//             const editMessageJadibot = await rem.sendText(from, '_Syncing data..._')
+//             await getAllJadibotFromAPI()
+//             rem.sendEditMessage(from, editMessageJadibot.key, '_Syncing data: Success | 200_')
 
-            // if((!isOwner && !isSideOwner) && global.jadibot1.length >= 4 && global.jadibot2.length >= 4 && global.jadibot3.length >= 4 && global.jadibot4.length >= 4 && global.jadibot5.length >= 4 && global.jadibot6.length >= 4 && global.jadibot7.length >= 4 && global.jadibot8.length >= 4 && global.jadibot9.length >= 4) return reply(from, 'Maaf, Maximum pemakaian jadibot telah tercapai, Mohon coba lagi lain kali')
-            if((!isOwner && !isSideOwner) && global.jadibot1.length >= 5 && global.jadibot2.length >= 5 && global.jadibot3.length >= 5 && global.jadibot4.length >= 5 && global.jadibot5.length >= 5) return reply(from, 'Maaf, Maximum pemakaian jadibot telah tercapai, Mohon coba lagi lain kali')
-            if (isGroupMsg) return reply(from, 'Perintah ini hanya bisa di gunakan di Private Chat!', id)
-            if(message.selectedButtonId == undefined || !message?.selectedButtonId?.includes('grantedAccess1')) return rem.sendButtons(from, `*!! WARNING !!*\nWhatsApp melarang keras Bot Tidak Resmi, Jika ketahuan akan menyebabkan nomor *kebanned*.\n*Mohon gunakan WhatsApp dengan Nomor Virtual/Nomor Cadangan Anda*\n\nJika ingin melanjutkan, Tekan tombol Lanjutkan dibawah\nJika tidak, abaikan pesan ini`, [{id: `${prefix}jadibot grantedAccess1`, text: 'Lanjutkan'}], '', '@dwirizqi.h')
-            if(!message?.selectedButtonId?.includes('grantedAccess2')) return rem.sendButtons(from, `*「 Pilih Metode Jadibot 」*
+//             // if((!isOwner && !isSideOwner) && global.jadibot1.length >= 4 && global.jadibot2.length >= 4 && global.jadibot3.length >= 4 && global.jadibot4.length >= 4 && global.jadibot5.length >= 4 && global.jadibot6.length >= 4 && global.jadibot7.length >= 4 && global.jadibot8.length >= 4 && global.jadibot9.length >= 4) return reply(from, 'Maaf, Maximum pemakaian jadibot telah tercapai, Mohon coba lagi lain kali')
+//             if((!isOwner && !isSideOwner) && global.jadibot1.length >= 5 && global.jadibot2.length >= 5 && global.jadibot3.length >= 5 && global.jadibot4.length >= 5 && global.jadibot5.length >= 5) return reply(from, 'Maaf, Maximum pemakaian jadibot telah tercapai, Mohon coba lagi lain kali')
+//             if (isGroupMsg) return reply(from, 'Perintah ini hanya bisa di gunakan di Private Chat!', id)
+//             if(message.selectedButtonId == undefined || !message?.selectedButtonId?.includes('grantedAccess1')) return rem.sendButtons(from, `*!! WARNING !!*\nWhatsApp melarang keras Bot Tidak Resmi, Jika ketahuan akan menyebabkan nomor *kebanned*.\n*Mohon gunakan WhatsApp dengan Nomor Virtual/Nomor Cadangan Anda*\n\nJika ingin melanjutkan, Tekan tombol Lanjutkan dibawah\nJika tidak, abaikan pesan ini`, [{id: `${prefix}jadibot grantedAccess1`, text: 'Lanjutkan'}], '', '@dwirizqi.h')
+//             if(!message?.selectedButtonId?.includes('grantedAccess2')) return rem.sendButtons(from, `*「 Pilih Metode Jadibot 」*
 
-1. *Metode Scan QR Code _(Whatsapp Web)_*
-    Bot akan mengirimkan *QR code*, dan scan di Nomer yang mau di Jadibot
-    Memerlukan 2 Device/Hp
+// 1. *Metode Scan QR Code _(Whatsapp Web)_*
+//     Bot akan mengirimkan *QR code*, dan scan di Nomer yang mau di Jadibot
+//     Memerlukan 2 Device/Hp
 
-2. *Metode CODE*
-    Bot akan mengirimkan *CODE*, dan masukkan di Nomer yang mau di Jadibot
-    Memerlukan 1 Device/Hp`, [{ id: `${prefix}jadibot grantedAccess1 grantedAccess2 qr`, text: 'Scan QR' }, { id: `${prefix}jadibot grantedAccess1 grantedAccess2 code`, text: 'CODE' }])
-            // if(message?.selectedButtonId?.includes('code') && !isOwner) return reply(from, 'Sedang dalam pengembangan!')
-            if(!message?.selectedButtonId?.includes('grantedAccess3') && message?.selectedButtonId?.includes('qr') && !message?.selectedButtonId?.includes('code')) return rem.sendButtonsImage(from, `*Pastikan untuk mengaktifkan fitur _Multi Device_*\n[ _Cara lihat diatas_ ]\n\n*Note :* _Jika tidak ada tombol seperti gambar diatas, langsung tekan tombol *Lanjutkan* di bawah_`, './media/img/wamd.jpg', [{id: `${prefix}jadibot grantedAccess1 grantedAccess2 qr grantedAccess3`, text: 'Lanjutkan'}], '', '@dwirizqi.h')
-            if(message?.selectedButtonId?.includes('code') && message.collectMessage == undefined) {
-                await addCollectorMessage(sender, from, `${prefix}jadibot grantedAccess1 grantedAccess2 code`, Date.now() + toMs('1m'), true, JSON.stringify(messageRaw))
-                return rem.sendText(from, 'Kirimkan ke sini\nNomer telepon *yang akan di Jadibot*')
-            }
+// 2. *Metode CODE*
+//     Bot akan mengirimkan *CODE*, dan masukkan di Nomer yang mau di Jadibot
+//     Memerlukan 1 Device/Hp`, [{ id: `${prefix}jadibot grantedAccess1 grantedAccess2 qr`, text: 'Scan QR' }, { id: `${prefix}jadibot grantedAccess1 grantedAccess2 code`, text: 'CODE' }])
+//             // if(message?.selectedButtonId?.includes('code') && !isOwner) return reply(from, 'Sedang dalam pengembangan!')
+//             if(!message?.selectedButtonId?.includes('grantedAccess3') && message?.selectedButtonId?.includes('qr') && !message?.selectedButtonId?.includes('code')) return rem.sendButtonsImage(from, `*Pastikan untuk mengaktifkan fitur _Multi Device_*\n[ _Cara lihat diatas_ ]\n\n*Note :* _Jika tidak ada tombol seperti gambar diatas, langsung tekan tombol *Lanjutkan* di bawah_`, './media/img/wamd.jpg', [{id: `${prefix}jadibot grantedAccess1 grantedAccess2 qr grantedAccess3`, text: 'Lanjutkan'}], '', '@dwirizqi.h')
+//             if(message?.selectedButtonId?.includes('code') && message.collectMessage == undefined) {
+//                 await addCollectorMessage(sender, from, `${prefix}jadibot grantedAccess1 grantedAccess2 code`, Date.now() + toMs('1m'), true, JSON.stringify(messageRaw))
+//                 return rem.sendText(from, 'Kirimkan ke sini\nNomer telepon *yang akan di Jadibot*')
+//             }
 
-            if(message?.selectedButtonId?.includes('qr') && !message?.selectedButtonId?.includes('code')) rem.sendText(from, 'Scan Kode QR Dibawah, cara lihat dibawah\n\nKembali ke beranda WhastApp\n*1. Titik Tiga*\n[ _Pojok kanan atas_ ]\n*2. Perangkat Tertaut*\n*3. Tautkan Perangkat*\n\n*Note :* _Jika hanya mempunyai hp 1, Buka link dibawah kode QR dengan perangkat lainnya_')
-            if(message?.selectedButtonId?.includes('code') && !message?.selectedButtonId?.includes('web')) await rem.sendFile(from, './media/img/wamdcode.png', 'wamdcode.png', 'Masukkan Kode Dibawah, cara lihat digambar\n\nKembali ke beranda WhastApp\n*1. Titik Tiga*\n[ _Pojok kanan atas_ ]\n*2. Perangkat Tertaut*\n*3. Tautkan Perangkat*\n*4. Tautkan dengan nomor telepon saja [ _Bawah sendiri_ ]*\n5. *Ketikkan kode yang kirim oleh bot*', '', image)
+//             if(message?.selectedButtonId?.includes('qr') && !message?.selectedButtonId?.includes('code')) rem.sendText(from, 'Scan Kode QR Dibawah, cara lihat dibawah\n\nKembali ke beranda WhastApp\n*1. Titik Tiga*\n[ _Pojok kanan atas_ ]\n*2. Perangkat Tertaut*\n*3. Tautkan Perangkat*\n\n*Note :* _Jika hanya mempunyai hp 1, Buka link dibawah kode QR dengan perangkat lainnya_')
+//             if(message?.selectedButtonId?.includes('code') && !message?.selectedButtonId?.includes('web')) await rem.sendFile(from, './media/img/wamdcode.png', 'wamdcode.png', 'Masukkan Kode Dibawah, cara lihat digambar\n\nKembali ke beranda WhastApp\n*1. Titik Tiga*\n[ _Pojok kanan atas_ ]\n*2. Perangkat Tertaut*\n*3. Tautkan Perangkat*\n*4. Tautkan dengan nomor telepon saja [ _Bawah sendiri_ ]*\n5. *Ketikkan kode yang kirim oleh bot*', '', image)
 
-            const idVirtualBot = GenerateSerialNumber('000000000000')
-            console.log(idVirtualBot)
-            await fs.mkdirSync(`./SESSION/${idVirtualBot}`)
+//             const idVirtualBot = GenerateSerialNumber('000000000000')
+//             console.log(idVirtualBot)
+//             await fs.mkdirSync(`./SESSION/${idVirtualBot}`)
 
-            // let availableJadibotSpace = global.jadibot1.length <= 11 && global.jadibot2.length <= 11 ? Math.floor(Math.random() * 3) + 1 : global.jadibot1.length <= 11 ? 1 : global.jadibot2.length <= 11 ? 2 : 3
-            let availableJadibotSpace = undefined
-            if(global.jadibot1.length <= 4) {
-                availableJadibotSpace = 1
-            } else if(global.jadibot2.length <= 4) {
-                availableJadibotSpace = 2
-            } else if(global.jadibot3.length <= 4) {
-                availableJadibotSpace = 3
-            } else if(global.jadibot4.length <= 4) {
-                availableJadibotSpace = 4
-            } else if(global.jadibot5.length <= 4) {
-                availableJadibotSpace = 5
-            }
-            // } else if(global.jadibot6.length <= 4) {
-            //     availableJadibotSpace = 6
-            // } else if(global.jadibot7.length <= 4) {
-            //     availableJadibotSpace = 7
-            // } else if(global.jadibot8.length <= 4) {
-            //     availableJadibotSpace = 8
-            // } else if(global.jadibot9.length <= 4) {
-            //     availableJadibotSpace = 9
-            // }
+//             // let availableJadibotSpace = global.jadibot1.length <= 11 && global.jadibot2.length <= 11 ? Math.floor(Math.random() * 3) + 1 : global.jadibot1.length <= 11 ? 1 : global.jadibot2.length <= 11 ? 2 : 3
+//             let availableJadibotSpace = undefined
+//             if(global.jadibot1.length <= 4) {
+//                 availableJadibotSpace = 1
+//             } else if(global.jadibot2.length <= 4) {
+//                 availableJadibotSpace = 2
+//             } else if(global.jadibot3.length <= 4) {
+//                 availableJadibotSpace = 3
+//             } else if(global.jadibot4.length <= 4) {
+//                 availableJadibotSpace = 4
+//             } else if(global.jadibot5.length <= 4) {
+//                 availableJadibotSpace = 5
+//             }
+//             // } else if(global.jadibot6.length <= 4) {
+//             //     availableJadibotSpace = 6
+//             // } else if(global.jadibot7.length <= 4) {
+//             //     availableJadibotSpace = 7
+//             // } else if(global.jadibot8.length <= 4) {
+//             //     availableJadibotSpace = 8
+//             // } else if(global.jadibot9.length <= 4) {
+//             //     availableJadibotSpace = 9
+//             // }
 
-            if(availableJadibotSpace == undefined && (isOwner || isSideOwner)) availableJadibotSpace = 1
-            if(availableJadibotSpace == undefined) return reply(from, `Maaf, Maximum pemakaian jadibot telah tercapai, Mohon coba lagi lain kali\n\nMax 5 Jadibot Per Server | ${prefix}listjadibot`)
-            // if(availableJadibotSpace == 0 || availableJadibotSpace == 6) availableJadibotSpace = 5
+//             if(availableJadibotSpace == undefined && (isOwner || isSideOwner)) availableJadibotSpace = 1
+//             if(availableJadibotSpace == undefined) return reply(from, `Maaf, Maximum pemakaian jadibot telah tercapai, Mohon coba lagi lain kali\n\nMax 5 Jadibot Per Server | ${prefix}listjadibot`)
+//             // if(availableJadibotSpace == 0 || availableJadibotSpace == 6) availableJadibotSpace = 5
 
-            const isV2Db = false
-            let retrySendQR = 0
-            let botNumber = ''
-            const isCodeJadibot = message?.selectedButtonId?.includes('code')
-            const numberJadibot = (isCodeJadibot ? message.collectMessage.startsWith('08') ? message.collectMessage.replace('08', '628') : message.collectMessage : undefined)?.replace(/\+|@s.whatsapp.net|@|-| /gi, '')?.replace(/\s/g, '')?.trim()
-            if(isCodeJadibot && isNaN(numberJadibot)) return rem.sendText(from, 'Format nomor yang dikirimkan salah!\nContoh: 62813456789')
+//             const isV2Db = false
+//             let retrySendQR = 0
+//             let botNumber = ''
+//             const isCodeJadibot = message?.selectedButtonId?.includes('code')
+//             const numberJadibot = (isCodeJadibot ? message.collectMessage.startsWith('08') ? message.collectMessage.replace('08', '628') : message.collectMessage : undefined)?.replace(/\+|@s.whatsapp.net|@|-| /gi, '')?.replace(/\s/g, '')?.trim()
+//             if(isCodeJadibot && isNaN(numberJadibot)) return rem.sendText(from, 'Format nomor yang dikirimkan salah!\nContoh: 62813456789')
 
-            let storeBottle = undefined
-            let authStore = undefined
-            // if(isV2Db) {
-            //     if(!fs.existsSync(`./SESSION/${idVirtualBot}`)) fs.mkdirSync(`./SESSION/${idVirtualBot}`)
-            //     storeBottle = await BaileysBottle.init({ type: 'better-sqlite3', database: `./SESSION/${idVirtualBot}/Auth.db` })
-            //     authStore = await storeBottle.createStore(idVirtualBot)
-            // }
+//             let storeBottle = undefined
+//             let authStore = undefined
+//             // if(isV2Db) {
+//             //     if(!fs.existsSync(`./SESSION/${idVirtualBot}`)) fs.mkdirSync(`./SESSION/${idVirtualBot}`)
+//             //     storeBottle = await BaileysBottle.init({ type: 'better-sqlite3', database: `./SESSION/${idVirtualBot}/Auth.db` })
+//             //     authStore = await storeBottle.createStore(idVirtualBot)
+//             // }
 
-            const { state, saveCreds, saveState } = !isV2Db ? await useMultiFileAuthState(`./SESSION/${idVirtualBot}`) : await authStore.auth.useAuthHandle();
-            let version = undefined
-            try {
-                const fetchVersion = await fetchLatestBaileysVersion()
-                if(fetchVersion.error) throw fetchVersion.error
-                version = fetchVersion.version
-            } catch {
-                try {
-                    let fetchFromServerUpdate = await axios.get('https://update.whapi.id/server_update/v2/file/baileys-version.json', { timeout: 5000 })
-                    if(fetchFromServerUpdate.data?.version) {
-                        version = fetchFromServerUpdate.data.version
-                    } else {
-                        console.warn('Baileys Version not found in server update, using default version')
-                        throw new Error('Version not found in server update')
-                    }
-                } catch {
-                    try {
-                        const fetchWwebVersion = await fetchLatestWaWebVersion()
-                        if(fetchWwebVersion.error) throw fetchWwebVersion.error
-                        version = fetchWwebVersion.version
-                    } catch (error) {
-                        version = (process.env.WHATSAPP_CONN_VERSION_0 && process.env.WHATSAPP_CONN_VERSION_1 && process.env.WHATSAPP_CONN_VERSION_2) ? [Number(process.env.WHATSAPP_CONN_VERSION_0), Number(process.env.WHATSAPP_CONN_VERSION_1), Number(process.env.WHATSAPP_CONN_VERSION_2)] : [ 2, 3000, 1025196812 ]
-                        console.error('Failed to fetch WA Web version:', error)
-                    }
-                }
-            }
-            async function mainStartVirtualBot (isAuthState) {
-                try {
-                    let vBot = await makeWASocket({ 
-                        browser: ['Linux', 'Chrome', '1'],
-                        version, 
-                        printQRInTerminal: false, 
-                        auth: state, 
-                        syncFullHistory: false, 
-                        downloadHistory: false, 
-                        logger: pino({level: "silent"})
-                    })
-                    if(isAuthState) rem.sendText(from, 'Restarted, Connecting to client.js...')
+//             const { state, saveCreds, saveState } = !isV2Db ? await useMultiFileAuthState(`./SESSION/${idVirtualBot}`) : await authStore.auth.useAuthHandle();
+//             let version = undefined
+//             try {
+//                 const fetchVersion = await fetchLatestBaileysVersion()
+//                 if(fetchVersion.error) throw fetchVersion.error
+//                 version = fetchVersion.version
+//             } catch {
+//                 try {
+//                     let fetchFromServerUpdate = await axios.get('https://update.whapi.id/server_update/v2/file/baileys-version.json', { timeout: 5000 })
+//                     if(fetchFromServerUpdate.data?.version) {
+//                         version = fetchFromServerUpdate.data.version
+//                     } else {
+//                         console.warn('Baileys Version not found in server update, using default version')
+//                         throw new Error('Version not found in server update')
+//                     }
+//                 } catch {
+//                     try {
+//                         const fetchWwebVersion = await fetchLatestWaWebVersion()
+//                         if(fetchWwebVersion.error) throw fetchWwebVersion.error
+//                         version = fetchWwebVersion.version
+//                     } catch (error) {
+//                         version = (process.env.WHATSAPP_CONN_VERSION_0 && process.env.WHATSAPP_CONN_VERSION_1 && process.env.WHATSAPP_CONN_VERSION_2) ? [Number(process.env.WHATSAPP_CONN_VERSION_0), Number(process.env.WHATSAPP_CONN_VERSION_1), Number(process.env.WHATSAPP_CONN_VERSION_2)] : [ 2, 3000, 1025196812 ]
+//                         console.error('Failed to fetch WA Web version:', error)
+//                     }
+//                 }
+//             }
+//             async function mainStartVirtualBot (isAuthState) {
+//                 try {
+//                     let vBot = await makeWASocket({ 
+//                         browser: ['Linux', 'Chrome', '1'],
+//                         version, 
+//                         printQRInTerminal: false, 
+//                         auth: state, 
+//                         syncFullHistory: false, 
+//                         downloadHistory: false, 
+//                         logger: pino({level: "silent"})
+//                     })
+//                     if(isAuthState) rem.sendText(from, 'Restarted, Connecting to client.js...')
     
-                    vBot.ev.on('creds.update', !isV2Db ? saveCreds : saveState)
+//                     vBot.ev.on('creds.update', !isV2Db ? saveCreds : saveState)
 
-                    vBot.ev.on('connection.update', async (update) => {
-                        const { connection, lastDisconnect } = update
-                        if(connection == 'close') {
-                            const shouldReconnect = lastDisconnect.error?.output?.statusCode !== DisconnectReason.loggedOut
-                            if (connection === 'close') {
-                                if(lastDisconnect.error?.output?.statusCode !== DisconnectReason.loggedOut) {
-                                    if(retrySendQR >= 3) return vBot = undefined
-                                    if(!isAuthState) await global[`jadibot${availableJadibotSpace}`].push({ id: sender, virtualBotId: idVirtualBot, access: vBot.user, isStop: false, retryCount: 0 })
-                                    if(!isAuthState) {
-                                        await _mongo_JadibotSchema.create({ iId: idVirtualBot, data: {} })
-                                    }
-                                    if(!isAuthState) rem.sendText(from, 'Scanned, Restarting...')
-                                    if(!isAuthState) await mainStartVirtualBot(true)
-                                    vBot = undefined
-                                } else {
-                                    console.log(`[ ${idVirtualBot} ] + connection closed`, lastDisconnect.error, ', reconnecting ', shouldReconnect)
-                                    rem.sendText(from, 'Error!')
-                                    rem.sendText(from, 'Pastikan telah mengaktifkan fitur Multi Device')
-                                    if(authStore) await authStore._ds.destroy()
-                                    if(fs.existsSync(`./SESSION/${idVirtualBot}`)) fs.rmSync(`./SESSION/${idVirtualBot}`, { recursive: true, force: true })
-                                }
-                            }
-                        } else if(connection === 'open') {
-                            botNumber = vBot?.user?.id
-                            console.log(`[ ${idVirtualBot} ] opened connection`)
-                        }
+//                     vBot.ev.on('connection.update', async (update) => {
+//                         const { connection, lastDisconnect } = update
+//                         if(connection == 'close') {
+//                             const shouldReconnect = lastDisconnect.error?.output?.statusCode !== DisconnectReason.loggedOut
+//                             if (connection === 'close') {
+//                                 if(lastDisconnect.error?.output?.statusCode !== DisconnectReason.loggedOut) {
+//                                     if(retrySendQR >= 3) return vBot = undefined
+//                                     if(!isAuthState) await global[`jadibot${availableJadibotSpace}`].push({ id: sender, virtualBotId: idVirtualBot, access: vBot.user, isStop: false, retryCount: 0 })
+//                                     if(!isAuthState) {
+//                                         await _mongo_JadibotSchema.create({ iId: idVirtualBot, data: {} })
+//                                     }
+//                                     if(!isAuthState) rem.sendText(from, 'Scanned, Restarting...')
+//                                     if(!isAuthState) await mainStartVirtualBot(true)
+//                                     vBot = undefined
+//                                 } else {
+//                                     console.log(`[ ${idVirtualBot} ] + connection closed`, lastDisconnect.error, ', reconnecting ', shouldReconnect)
+//                                     rem.sendText(from, 'Error!')
+//                                     rem.sendText(from, 'Pastikan telah mengaktifkan fitur Multi Device')
+//                                     if(authStore) await authStore._ds.destroy()
+//                                     if(fs.existsSync(`./SESSION/${idVirtualBot}`)) fs.rmSync(`./SESSION/${idVirtualBot}`, { recursive: true, force: true })
+//                                 }
+//                             }
+//                         } else if(connection === 'open') {
+//                             botNumber = vBot?.user?.id
+//                             console.log(`[ ${idVirtualBot} ] opened connection`)
+//                         }
 
-                        if(update.qr != undefined) {
-                            if(!isCodeJadibot) {
-                                if(retrySendQR >= 3) {
-                                    await vBot.end()
-                                    if(authStore) await authStore._ds.destroy()
-                                    if(fs.existsSync(`./SESSION/${idVirtualBot}`)) fs.rmSync(`./SESSION/${idVirtualBot}`, { recursive: true, force: true })
-                                    return rem.sendText(from, 'Gagal!, QR tidak di scan\n\nHarap Scan QR terbaru yang dikirim oleh bot, dan scan QR dengan cepat!')
-                                }
-                                console.log(idVirtualBot)
-                                await QRCode.toFile(`./lib/cache/img/${idVirtualBot}.png`, update.qr, { version: 17, errorCorrectionLevel: 'H' })
+//                         if(update.qr != undefined) {
+//                             if(!isCodeJadibot) {
+//                                 if(retrySendQR >= 3) {
+//                                     await vBot.end()
+//                                     if(authStore) await authStore._ds.destroy()
+//                                     if(fs.existsSync(`./SESSION/${idVirtualBot}`)) fs.rmSync(`./SESSION/${idVirtualBot}`, { recursive: true, force: true })
+//                                     return rem.sendText(from, 'Gagal!, QR tidak di scan\n\nHarap Scan QR terbaru yang dikirim oleh bot, dan scan QR dengan cepat!')
+//                                 }
+//                                 console.log(idVirtualBot)
+//                                 await QRCode.toFile(`./lib/cache/img/${idVirtualBot}.png`, update.qr, { version: 17, errorCorrectionLevel: 'H' })
     
-                                await rem.sendFile(from, `./lib/cache/img/${idVirtualBot}.png`, 'session.png', `https://db1.remcp.com/img/${idVirtualBot}.png`, '', image)
-                                addDelTime(`./lib/cache/img/${idVirtualBot}.png`, '1h')
-                                retrySendQR += 1
-                            }
+//                                 await rem.sendFile(from, `./lib/cache/img/${idVirtualBot}.png`, 'session.png', `https://db1.remcp.com/img/${idVirtualBot}.png`, '', image)
+//                                 addDelTime(`./lib/cache/img/${idVirtualBot}.png`, '1h')
+//                                 retrySendQR += 1
+//                             }
 
-                            if(isCodeJadibot && !vBot.authState.creds.registered) {
-                                if(retrySendQR >= 3) {
-                                    await vBot.end()
-                                    if(authStore) await authStore._ds.destroy()
-                                    return rem.sendText(from, 'Gagal!, Kode tidak dimasukkan\n\nHarap masukkan kode terbaru yang dikirim oleh bot, dan masukkan kode dengan cepat!')
-                                }
-                                const codeJadibot = await vBot.requestPairingCode(numberJadibot)
-                                console.log(codeJadibot, numberJadibot)
-                                rem.sendText(from, `*Jadibot Code:*\n\n_${codeJadibot.slice(0, 4) + "-" + codeJadibot.slice(4)}_\n\n*Masukkan kode ini ke nomer yang mau di jadibot*\n*Cara lihat di gambar pesan sebelumnya*`)
-                                retrySendQR += 1
-                            }
-                        }
-                    })
+//                             if(isCodeJadibot && !vBot.authState.creds.registered) {
+//                                 if(retrySendQR >= 3) {
+//                                     await vBot.end()
+//                                     if(authStore) await authStore._ds.destroy()
+//                                     return rem.sendText(from, 'Gagal!, Kode tidak dimasukkan\n\nHarap masukkan kode terbaru yang dikirim oleh bot, dan masukkan kode dengan cepat!')
+//                                 }
+//                                 const codeJadibot = await vBot.requestPairingCode(numberJadibot)
+//                                 console.log(codeJadibot, numberJadibot)
+//                                 rem.sendText(from, `*Jadibot Code:*\n\n_${codeJadibot.slice(0, 4) + "-" + codeJadibot.slice(4)}_\n\n*Masukkan kode ini ke nomer yang mau di jadibot*\n*Cara lihat di gambar pesan sebelumnya*`)
+//                                 retrySendQR += 1
+//                             }
+//                         }
+//                     })
     
-                    if(isAuthState) {
-                        await sleep(5000)
-                        await vBot.end()
-                        if(isV2Db) {
-                            storeBottle = undefined
-                            authStore = undefined
-                        }
-                        await sleep(3000)
+//                     if(isAuthState) {
+//                         await sleep(5000)
+//                         await vBot.end()
+//                         if(isV2Db) {
+//                             storeBottle = undefined
+//                             authStore = undefined
+//                         }
+//                         await sleep(3000)
 
-                        let response = {}
-                        response = await axios.post(`http://localhost:${listJadibotServer[availableJadibotSpace - 1]}/start`, { id: idVirtualBot, sender, dbVer: isV2Db ? '2.0' : '1.0' })
+//                         let response = {}
+//                         response = await axios.post(`http://localhost:${listJadibotServer[availableJadibotSpace - 1]}/start`, { id: idVirtualBot, sender, dbVer: isV2Db ? '2.0' : '1.0' })
                             
-                        console.log(response.data)
-                        if(!response.status) return reply(from, `Error!, Report to Owner\n*${prefix}owner*`)
+//                         console.log(response.data)
+//                         if(!response.status) return reply(from, `Error!, Report to Owner\n*${prefix}owner*`)
                         
-                        await sleep(5000)
-                        rem.sendText(from, `*Success,* Connected Server ${availableJadibotSpace}\nUntuk berhenti *_${prefix}stopjadibot_*`)
-                        rem.sendText(from, 'Jika bot tidak merespon silahkan menunggu sekitar 10 detik')
-                        rem.sendText(from, `*PERINGATAN KERAS*\n*JANGAN JADIBOT LAGI DENGAN NOMER BOT YANG SAMA (${botNumber?.split('@')[0]?.split(':')[0]})*\n*JIKA DILANGGAR SANKSI BERUPA BAN*`)
+//                         await sleep(5000)
+//                         rem.sendText(from, `*Success,* Connected Server ${availableJadibotSpace}\nUntuk berhenti *_${prefix}stopjadibot_*`)
+//                         rem.sendText(from, 'Jika bot tidak merespon silahkan menunggu sekitar 10 detik')
+//                         rem.sendText(from, `*PERINGATAN KERAS*\n*JANGAN JADIBOT LAGI DENGAN NOMER BOT YANG SAMA (${botNumber?.split('@')[0]?.split(':')[0]})*\n*JIKA DILANGGAR SANKSI BERUPA BAN*`)
 
-                        await getAllJadibotFromAPI()
-                    }
-                } catch (err) {
-                    console.error(`[ ${idVirtualBot} ] `, err)
-                    // rem.sendText(numberReportError, `Err Jadibot\n\n${util.format(err)}`)
-                    rem.sendText(from, `Error!, Report to Owner\n*${prefix}owner*`)
-                    return { err: true }
-                }
-            }
+//                         await getAllJadibotFromAPI()
+//                     }
+//                 } catch (err) {
+//                     console.error(`[ ${idVirtualBot} ] `, err)
+//                     // rem.sendText(numberReportError, `Err Jadibot\n\n${util.format(err)}`)
+//                     rem.sendText(from, `Error!, Report to Owner\n*${prefix}owner*`)
+//                     return { err: true }
+//                 }
+//             }
 
-            mainStartVirtualBot(false)
-            break
-        case prefix+'set_jadibot2':
+//             mainStartVirtualBot(false)
+//             break
+        case prefix+'set_jadibot':
             // if(isVirtualBot) return reply(from, `Silahkan command _${prefix}set_jadibot_ di wa.me/${global?.coreBotNumber?.replace('@s.whatsapp.net', '')}`)
             if (isGroupMsg) return reply(from, 'Perintah ini hanya bisa di gunakan di Private Chat!', id)
 
@@ -25448,9 +25448,9 @@ Contoh : *_${prefix}rbuy 1 12_*
             }
             reply(from, textListJadibot2)
         break
-        case prefix+'jadibot2':
-            const keyEnterJadibot2 = 'EMUACHRAPIDLOVLOVV'
-            if(allArgs[1] != keyEnterJadibot2) return reply(from, 'Invalid!')
+        case prefix+'jadibot':
+            // const keyEnterJadibot2 = 'EMUACHRAPIDLOVLOVV'
+            // if(allArgs[1] != keyEnterJadibot2) return reply(from, 'Invalid!')
             const editMessageJadibot2 = await rem.sendText(from, '_Syncing data..._')
             await getAllJadibotNewFromAPI()
             rem.sendEditMessage(from, editMessageJadibot2.key, '_Syncing data: Success | 200_')
@@ -25528,7 +25528,7 @@ Memerlukan 1 Device/Hp`, [{ id: `${prefix}jadibot2 ${keyEnterJadibot2} grantedAc
             await axios.delete(`${process.env.CLIENT_GOLANG_URL}/admin/users/${responseAddUser.data.id}`, { validateStatus: false })
         }
         break
-        case prefix+'stopjadibot2':
+        case prefix+'stopjadibot':
             const editMessageStopJadibot2 = await rem.sendText(from, '_Syncing data..._')
             await getAllJadibotNewFromAPI()
             rem.sendEditMessage(from, editMessageStopJadibot2.key, '_Syncing data: Success | 200_')
