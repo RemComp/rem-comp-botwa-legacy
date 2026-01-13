@@ -11762,7 +11762,7 @@ Hubungan : 💔 *${getUserPasanganPd.hubungan}/${limitHubunganMax}*\n\n_Coba unt
                     await replaceUserRoleplayValue_pasangan(selectedButtonIdBeUSetPd[3], 'img', `./media/user/imgpd/${selectedButtonIdBeUSetPd[3]}.${selectedButtonIdBeUSetPd[7]}`)
                     await rem.sendText(from, 'Success!')
 
-                    console.log(await sendRequestRandomJadibot('sendText', [selectedButtonIdBeUSetPd[3], `*SetPd pp, telah diganti*\n_Request Id: *#${selectedButtonIdBeUSetPd[8].toUpperCase()}*_`]))
+                    console.log(await sendRequestRandomJadibotNew('sendText', [selectedButtonIdBeUSetPd[3], `*SetPd pp, telah diganti*\n_Request Id: *#${selectedButtonIdBeUSetPd[8].toUpperCase()}*_`]))
                 } else if(selectedButtonIdBeUSetPd[2] == 'rk') {
                     if(selectedButtonIdBeUSetPd[3] == undefined || selectedButtonIdBeUSetPd[4] == undefined || selectedButtonIdBeUSetPd[5] == undefined) return reply(from, 'Invalid!\ninvalid_params')
                     if(selectedButtonIdBeUSetPd[3] != sender) return reply(from, 'Invalid!\ninvalid_params.sender')
@@ -11799,7 +11799,7 @@ Hubungan : 💔 *${getUserPasanganPd.hubungan}/${limitHubunganMax}*\n\n_Coba unt
                     await fs.unlinkSync(`./media/user/imgpd/temp_${selectedButtonIdBeUSetPd[3]}.${selectedButtonIdBeUSetPd[7]}`)
                     await rem.sendText(from, 'Success!')
 
-                    console.log(await sendRequestRandomJadibot('sendText', [selectedButtonIdBeUSetPd[3], `*Permintaan SetPd pp ditolak*\nAlasan: _${reasonGetSetPdPpNo}_\n\n_Request Id: *#${selectedButtonIdBeUSetPd[8].toUpperCase()}*_`]))
+                    console.log(await sendRequestRandomJadibotNew('sendText', [selectedButtonIdBeUSetPd[3], `*Permintaan SetPd pp ditolak*\nAlasan: _${reasonGetSetPdPpNo}_\n\n_Request Id: *#${selectedButtonIdBeUSetPd[8].toUpperCase()}*_`]))
                 }
             }
 
@@ -23193,8 +23193,8 @@ Gedruk by die Verenigde Nasies, Genève`
 
             // const result = await rem.query(sample)
             for(let i = 0; i < Number(args[2]); i++) {
-                const result = await sendRequestRandomJadibot('query', [sample])
-                const result2 = await sendRequestRandomJadibot('query', [sample2])
+                const result = await sendRequestRandomJadibotNew('query', [sample])
+                const result2 = await sendRequestRandomJadibotNew('query', [sample2])
                 console.log(result.data.result.data)
                 reply(from, `Success\nresult1 ${util.format(result.data.result.data)}\n\nresult2 ${util.format(result2.data.result.data)}`)
             }
