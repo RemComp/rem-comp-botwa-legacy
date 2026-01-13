@@ -24347,7 +24347,7 @@ Pengirim Saran : wa.me/${allArgs[1].replace('@s.whatsapp.net', '')}
                 try {
                     picRequestedProfile = await rem.profilePictureUrl(idRequestedProfile, 'image')
                 } catch (err) {
-                    console.error(err)
+                    // console.error(err)
                     picRequestedProfile = './media/img/images_pp_blank.png'
                 }
             }
@@ -24472,6 +24472,7 @@ Pengirim Saran : wa.me/${allArgs[1].replace('@s.whatsapp.net', '')}
                     const getDataListTitle = findDbNeeded.find(object => object.iId == 'title')
                     const sortDataListTitle = getDataListTitle.data.sort((a, b) => (a.priority > b.priority) ? 1 : -1)
                     for(let i = 0; i < sortDataListTitle.length; i++) {
+                        console.log('Evaluating condition:', sortDataListTitle[i].condition)
                         const isTrueCondition = eval(sortDataListTitle[i].condition)
                         if(isTrueCondition) {
                             nameTitle = sortDataListTitle[i].name
