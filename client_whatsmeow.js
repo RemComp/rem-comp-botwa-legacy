@@ -23914,8 +23914,8 @@ Pengirim Saran : wa.me/${allArgs[1].replace('@s.whatsapp.net', '')}
             if(isVideoButton) message.type = video
             const isMediaRplyres = (isImageButton || isVideoButton) ? await message.getMedia() : false
 
-            let methodRplyres = 'sendMessage'
-            let bodySendRplyres = [allArgs[1], { text: sendTextRplyRes, mentions: [sender] }]
+            let methodRplyres = 'sendTextWithMentions'
+            let bodySendRplyres = [allArgs[1], sendTextRplyRes]
             if(isMediaRplyres) {
                 methodRplyres = 'sendFileAuto'
                 bodySendRplyres = [allArgs[1], isMediaRplyres.toString('base64'), 'image.png', sendTextRplyRes, '', { mentions: [sender] }]
