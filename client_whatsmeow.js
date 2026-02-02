@@ -13025,11 +13025,11 @@ Contoh : *${prefix}jual iron 12*`
             let itemInvId = undefined
 
             let getDataCoinPrice = undefined
-            if(!isOwner && (nomerBarang_invest == '4' || nomerBarang_invest.toLowerCase() == 'naocoin' || nomerBarang_invest.toLowerCase() == 'nc') ||
+            if((nomerBarang_invest == '4' || nomerBarang_invest.toLowerCase() == 'naocoin' || nomerBarang_invest.toLowerCase() == 'nc') ||
             (nomerBarang_invest == '5' || nomerBarang_invest.toLowerCase() == 'elacoin' || nomerBarang_invest.toLowerCase() == 'ela') ||
             (nomerBarang_invest == '6' || nomerBarang_invest.toLowerCase() == 'recoin' || nomerBarang_invest.toLowerCase() == 're' || nomerBarang_invest.toLowerCase() == 'rem' || nomerBarang_invest.toLowerCase() == 'rc')) {
                 // if(!isVirtualAccount) { date now 1726920000000
-                if(Date.now() < 1777654800000) {
+                if(!isOwner && Date.now() < 1777654800000) {
                     const timeConvertInvestCoinBuy = timeConvert(1777654800000)
                     return reply(from, `Untuk pembelian koin ini sedang dalam perbaikan!\nAkan dibuka pada\n${timeConvertInvestCoinBuy.hour} Jam : ${timeConvertInvestCoinBuy.minute} Menit : ${timeConvertInvestCoinBuy.second} Detik`)
                 }
@@ -13187,10 +13187,10 @@ Contoh : *${prefix}jual iron 12*`
             //     getDataCoinPrice = await _mongo_CommandSchema.findOne({ cId: 'invest_price' })
             // }
             let getDataCoinPriceSell = undefined
-            if(!isOwner && (nomerBarang_invest_jual == '4' || nomerBarang_invest_jual.toLowerCase() == 'naocoin' || nomerBarang_invest_jual.toLowerCase() == 'coin') ||
+            if((nomerBarang_invest_jual == '4' || nomerBarang_invest_jual.toLowerCase() == 'naocoin' || nomerBarang_invest_jual.toLowerCase() == 'coin') ||
             (nomerBarang_invest_jual == '5' || nomerBarang_invest_jual.toLowerCase() == 'elacoin' || nomerBarang_invest_jual.toLowerCase() == 'ela') ||
             (nomerBarang_invest_jual == '6' || nomerBarang_invest_jual.toLowerCase() == 'recoin' || nomerBarang_invest_jual.toLowerCase() == 're' || nomerBarang_invest_jual.toLowerCase() == 'rem' || nomerBarang_invest_jual.toLowerCase() == 'rc')) {
-                if(Date.now() < 1777654800000) {
+                if(!isOwner && Date.now() < 1777654800000) {
                     const timeConvertInvestCoinSell = timeConvert(1777654800000)
                     return reply(from, `Untuk pembelian koin ini sedang dalam perbaikan!\nAkan dibuka pada\n${timeConvertInvestCoinSell.hour} Jam : ${timeConvertInvestCoinSell.minute} Menit : ${timeConvertInvestCoinSell.second} Detik`)
                 }
