@@ -43,9 +43,9 @@ class CryptoMarketSimulator {
         console.log('start', this.coin, this.minutePriceUpdate.toString())
         const { type, content } = transaction;
         let impactRatio = new Big(content).div(this.circulatingSupply);
-        // if(impactRatio.lt(0.01)) {
-        //     impactRatio = new Big(0.01);
-        // }
+        if(impactRatio.lt(0.01)) {
+            impactRatio = new Big(0.01);
+        }
         console.log('impactRatio', this.coin, content, this.circulatingSupply.toString(), impactRatio.toString())
     
         const priceChange = this.currentPrice.times(this.adjustmentRatio).times(impactRatio);
