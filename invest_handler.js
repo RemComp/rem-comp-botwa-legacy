@@ -97,15 +97,15 @@ class CryptoMarketSimulator {
         if(transaction.type === 'buy') {
             this.circulatingSupply = this.circulatingSupply.plus(transaction.content);
             // Check for infinity by comparing string representation
-            if(this.circulatingSupply.toString().includes('e+') && 
-               new Big(this.circulatingSupply.toString()).gte(infinityNumber)) {
-                this.circulatingSupply = new Big(infinityNumber);
-            }
+            // if(this.circulatingSupply.toString().includes('e+') && 
+            //    new Big(this.circulatingSupply.toString()).gte(infinityNumber)) {
+            //     this.circulatingSupply = new Big(infinityNumber);
+            // }
         } else if(transaction.type === 'sell') {
             this.circulatingSupply = this.circulatingSupply.minus(transaction.content);
-            if(this.circulatingSupply.lt(0)) {
-                this.circulatingSupply = new Big(this.initialSupply || 0);
-            }
+            // if(this.circulatingSupply.lt(0)) {
+            //     this.circulatingSupply = new Big(this.initialSupply || 0);
+            // }
         }
         // this.marketCap = this.currentPrice * this.circulatingSupply;
         this.totalVolume = this.totalVolume.plus(transaction.content);
