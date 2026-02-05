@@ -7126,8 +7126,8 @@ Negative Prompt : _${negativePromptDiff}_`, messageRaw, image)
                 });
 
                 // 5. Stretch to Big Canvas (The Blur)
-                ctx.imageSmoothingEnabled = true;
-                ctx.drawImage(smallCanvas, 0, 0, blurSizeCanvasTextBrat, blurSizeCanvasTextBrat, 0, 0, widthCanvasBaseBrat, heightCanvasBaseBrat);
+                ctxBrat.imageSmoothingEnabled = true;
+                ctxBrat.drawImage(smallCanvas, 0, 0, blurSizeCanvasTextBrat, blurSizeCanvasTextBrat, 0, 0, widthCanvasBaseBrat, heightCanvasBaseBrat);
 
                 const bufferBrat = canvasBrat.toBuffer('image/png');
                 await rem.sendFile(from, bufferBrat, 'brat.png', '', messageRaw, image)
