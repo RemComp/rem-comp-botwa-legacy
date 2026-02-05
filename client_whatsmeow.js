@@ -7043,8 +7043,6 @@ Negative Prompt : _${negativePromptDiff}_`, messageRaw, image)
                 const heightCanvasBaseBrat = 500
                 const blurSizeCanvasTextBrat = 125
 
-                cnvs.registerFont('./media/font/Arial.ttf', { family: 'BratFont' });
-
                 const canvasBrat = cnvs.createCanvas(widthCanvasBaseBrat, heightCanvasBaseBrat);
                 const ctxBrat = canvasBrat.getContext('2d');
                 ctxBrat.fillStyle = selectedBackgroundBrat === 'white' ? '#FFFFFF' : selectedBackgroundBrat === 'green' ? '#8acf00' : selectedBackgroundBrat === 'blue' ? '#0000f5' : selectedBackgroundBrat === 'red' ? '#ea3323' : '#FFFFFF'
@@ -7062,7 +7060,7 @@ Negative Prompt : _${negativePromptDiff}_`, messageRaw, image)
 
                 // decrease font size until the wrapped text fits vertically
                 while (fontSize > 1) {
-                    smallCtx.font = `${fontSize}px "BratFont"`;
+                    smallCtx.font = `${fontSize}px Arial`;
                     lineHeight = fontSize * 1.1; // 1.1 line spacing
 
                     lines = getLinesFitImageCanvas(smallCtx, textBratImage, maxWidthBrat);
