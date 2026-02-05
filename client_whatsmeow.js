@@ -7056,7 +7056,7 @@ Negative Prompt : _${negativePromptDiff}_`, messageRaw, image)
                 const maxWidthBrat = blurSizeCanvasTextBrat - (marginBrat * 2);  // 90% width margin
                 const maxHeightBrat = blurSizeCanvasTextBrat - (marginBrat * 2); // 90% height margin
                 
-                let fontSize = 60;
+                let fontSize = 80;
                 let lines = [];
                 let lineHeight = 0;
 
@@ -7069,10 +7069,12 @@ Negative Prompt : _${negativePromptDiff}_`, messageRaw, image)
 
                     // calculate total block height
                     const totalHeight = lines.length * lineHeight;
+                    const fitsHeight = totalHeight <= maxHeight;
+                    const fitsWidth = lines.every(line => smallCtx.measureText(line).width <= maxWidthBrat);
 
-                    // stop if it fits vertically
-                    if (totalHeight <= maxHeightBrat) {
-                        break; 
+                    // stop if it fits
+                    if (fitsHeight && fitsWidth) {
+                        break; // Everything fits! Stop shrinking.
                     }
 
                     fontSize--;
@@ -7099,7 +7101,6 @@ Negative Prompt : _${negativePromptDiff}_`, messageRaw, image)
                         smallCtx.textAlign = 'left';
                         smallCtx.fillText(line, marginBrat, y);
                     }  else if (selectedTextAlign === 'justify') {
-                        // Standard typography rule: Don't justify the last line
                         if (i === lines.length - 1) {
                             smallCtx.textAlign = 'left';
                             smallCtx.fillText(line, marginBrat, y);
