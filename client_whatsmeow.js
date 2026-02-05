@@ -7043,6 +7043,8 @@ Negative Prompt : _${negativePromptDiff}_`, messageRaw, image)
                 const heightCanvasBaseBrat = 500
                 const blurSizeCanvasTextBrat = 125
 
+                cnvs.registerFont('./media/font/Arial.ttf', { family: 'BratFont' });
+
                 const canvasBrat = cnvs.createCanvas(widthCanvasBaseBrat, heightCanvasBaseBrat);
                 const ctxBrat = canvasBrat.getContext('2d');
                 ctxBrat.fillStyle = selectedBackgroundBrat === 'white' ? '#FFFFFF' : selectedBackgroundBrat === 'green' ? '#8acf00' : selectedBackgroundBrat === 'blue' ? '#0000f5' : selectedBackgroundBrat === 'red' ? '#ea3323' : '#FFFFFF'
@@ -7060,7 +7062,7 @@ Negative Prompt : _${negativePromptDiff}_`, messageRaw, image)
 
                 // decrease font size until the wrapped text fits vertically
                 while (fontSize > 1) {
-                    smallCtx.font = `${fontSize}px Arial`;
+                    smallCtx.font = `${fontSize}px "BratFont"`;
                     lineHeight = fontSize * 1.1; // 1.1 line spacing
 
                     lines = getLinesFitImageCanvas(smallCtx, textBratImage, maxWidthBrat);
@@ -7100,6 +7102,21 @@ Negative Prompt : _${negativePromptDiff}_`, messageRaw, image)
 
                 ctxBrat.imageSmoothingEnabled = true;
                 ctxBrat.drawImage(smallCanvas, 0, 0, blurSizeCanvasTextBrat, blurSizeCanvasTextBrat, 0, 0, widthCanvasBaseBrat, heightCanvasBaseBrat);
+                // smallCtx.fillStyle = 'black';
+                // smallCtx.textAlign = 'center';
+                // smallCtx.textBaseline = 'middle';
+                
+                // // Calculate vertical centering
+                // const totalBlockHeight = lines.length * lineHeight;
+                // let startY = (blurSizeCanvasTextBrat - totalBlockHeight) / 2 + (lineHeight / 2);
+
+                // lines.forEach((line, i) => {
+                //     smallCtx.fillText(line, blurSizeCanvasTextBrat / 2, startY + (i * lineHeight));
+                // });
+
+                // // 5. Stretch to Big Canvas (The Blur)
+                // ctxBrat.imageSmoothingEnabled = true;
+                // ctxBrat.drawImage(smallCanvas, 0, 0, blurSizeCanvasTextBrat, blurSizeCanvasTextBrat, 0, 0, widthCanvasBaseBrat, heightCanvasBaseBrat);
 
                 const bufferBrat = canvasBrat.toBuffer('image/png');
                 await rem.sendFile(from, bufferBrat, 'brat.png', '', messageRaw, image)
