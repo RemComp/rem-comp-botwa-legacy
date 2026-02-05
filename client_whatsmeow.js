@@ -7104,7 +7104,7 @@ Negative Prompt : _${negativePromptDiff}_`, messageRaw, image)
                             smallCtx.textAlign = 'left';
                             smallCtx.fillText(line, marginBrat, y);
                         } else {
-                            drawJustifiedLine(smallCtx, line, marginBrat, y, maxWidthBrat);
+                            drawJustifiedLineImageCanvas(smallCtx, line, marginBrat, y, maxWidthBrat);
                         }
                     }
                 });
