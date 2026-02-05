@@ -7029,61 +7029,93 @@ Negative Prompt : _${negativePromptDiff}_`, messageRaw, image)
             }
             break
           case prefix+'brat':
-            if (args.length === 1) return reply(from, 'Kirim perintah *'+prefix+'brat [teks]*, contoh: *'+prefix+'brat i want a cookie*', id)
+            if (allArgs.length === 0) return reply(from, 'Kirim perintah *'+prefix+'brat [teks]*, contoh: *'+prefix+'brat i want a cookie*', id)
+
+            if(!['white', 'green', 'blue', 'red'].includes(allArgs[1])) return rem.sendButtons(from, 'Pilih warna Background Brat:', [{ id: `${prefix}brat white ${allArgs.slice(2).join(' ')}`, text: 'White' }, { id: `${prefix}brat green ${allArgs.slice(2).join(' ')}`, text: 'Green' }, { id: `${prefix}brat blue ${allArgs.slice(2).join(' ')}`, text: 'Blue' }, { id: `${prefix}brat red ${allArgs.slice(2).join(' ')}`, text: 'Red' }])
+            if(!['left', 'center', 'right', 'justify'].includes(allArgs[2])) return rem.sendButtons(from, 'Pilih style Text Brat:', [{ id: `${prefix}brat ${allArgs[1]} left ${allArgs.slice(3).join(' ')}`, text: 'Left' }, { id: `${prefix}brat ${allArgs[1]} center ${allArgs.slice(3).join(' ')}`, text: 'Center' }, { id: `${prefix}brat ${allArgs[1]} right ${allArgs.slice(3).join(' ')}`, text: 'Right' }])
             
+            const selectedBackgroundBrat = allArgs[1]
+            const selectedTextAlign = allArgs[2]
+            const textBratImage = allArgs.slice(3).join(' ')
             try {
-                const bratText = body.slice(command.length + 1)
-                await reply(from, mess.wait, id)
+                const widthCanvasBaseBrat = 500
+                const heightCanvasBaseBrat = 500
+                const blurSizeCanvasTextBrat = 125
+
+                const canvasBrat = cnvs.createCanvas(widthCanvasBaseBrat, heightCanvasBaseBrat);
+                const ctxBrat = canvasBrat.getContext('2d');
+                ctxBrat.fillStyle = selectedBackgroundBrat === 'white' ? '#FFFFFF' : selectedBackgroundBrat === 'green' ? '#8acf00' : selectedBackgroundBrat === 'blue' ? '#0000f5' : selectedBackgroundBrat === 'red' ? '#ea3323' : '#FFFFFF'
+                ctxBrat.fillRect(0, 0, widthCanvasBaseBrat, heightCanvasBaseBrat);
+
+                const smallCanvas = cnvs.createCanvas(blurSizeCanvasTextBrat, blurSizeCanvasTextBrat);
+                const smallCtx = smallCanvas.getContext('2d');
+
+                const maxWidthBrat = blurSizeCanvasTextBrat * 0.90;  // 90% width margin
+                const maxHeightBrat = blurSizeCanvasTextBrat * 0.90; // 90% height margin
                 
-                // Encode text untuk URL yang aman
-                const encodedText = encodeURIComponent(bratText)
-                
-                // Membuat script puppeteer untuk mendapatkan gambar dari website
-                const bratScript = `
-                    module.exports = async (browser, res, req) => {
-                        const page = await browser.newPage();
-                        await page.goto('https://www.bratgenerator.com/', { waitUntil: 'networkidle0' });
-                        
-                        // Input teks ke form
-                        await page.type('#edit-text', '${bratText.replace(/'/g, "\\'")}');
-                        
-                        // Klik tombol generate
-                        await page.click('#edit-submit');
-                        
-                        // Tunggu sampai gambar muncul
-                        await page.waitForSelector('#memeImage', { visible: true, timeout: 30000 });
-                        
-                        // Ambil URL gambar
-                        const imageUrl = await page.evaluate(() => {
-                            const img = document.querySelector('#memeImage');
-                            return img ? img.src : null;
-                        });
-                        
-                        return imageUrl;
+                let fontSize = 60;
+                let lines = [];
+                let lineHeight = 0;
+
+                // decrease font size until the wrapped text fits vertically
+                while (fontSize > 1) {
+                    smallCtx.font = `${fontSize}px Arial`;
+                    lineHeight = fontSize * 1.1; // 1.1 line spacing
+
+                    const words = textBratImage.split(" ");
+                    const lines = [];
+                    let currentLine = words[0];
+
+                    for (let i = 1; i < words.length; i++) {
+                        const word = words[i];
+                        const width = smallCtx.measureText(currentLine + " " + word).width;
+                        if (width < maxWidthBrat) {
+                            currentLine += " " + word;
+                        } else {
+                            lines.push(currentLine);
+                            currentLine = word;
+                        }
                     }
-                `;
+                    lines.push(currentLine);
+
+                    // calculate total block height
+                    const totalHeight = lines.length * lineHeight;
+
+                    // stop if it fits vertically
+                    if (totalHeight <= maxHeightBrat) {
+                        break; 
+                    }
+
+                    fontSize--;
+                }
+
+                smallCtx.fillStyle = 'black';
+                smallCtx.textAlign = selectedTextAlign;
+                smallCtx.textBaseline = 'middle';
                 
-                // Eksekusi script puppeteer
-                const result = await requestPuppeteer(bratScript)
-                if (!result.result || result.error) return reply(from, 'Gagal mengambil gambar brat, coba lagi nanti!', id)
-                
-                const imageUrl = result.result
-                
-                // Download gambar dari URL
-                const response = await axios.get(imageUrl, { responseType: 'arraybuffer' })
-                const imageBuffer = Buffer.from(response.data)
-                
-                // Convert ke sticker
-                const stickerBuffer = await createSticker(imageBuffer, {
-                    author: packWm,
-                    pack: `Brat: ${bratText.substring(0, 20)}${bratText.length > 20 ? '...' : ''}`,
-                    type: StickerTypes.FULL,
-                    categories: ['🤍'],
-                    quality: 70
-                })
-                
-                await rem.sendFile(from, stickerBuffer, 'brat.webp', '', message, sticker)
-                
+                // calculate vertical centering
+                const totalBlockHeight = lines.length * lineHeight;
+                let startY = (blurSizeCanvasTextBrat - totalBlockHeight) / 2 + (lineHeight / 2);
+
+                // determine X position based on text alignment
+                let xPosition;
+                if (selectedTextAlign === 'left') {
+                    xPosition = maxWidthBrat * 0.05; // 5% margin from left
+                } else if (selectedTextAlign === 'right') {
+                    xPosition = blurSizeCanvasTextBrat - (maxWidthBrat * 0.05); // 5% margin from right
+                } else { // center or justify
+                    xPosition = blurSizeCanvasTextBrat / 2;
+                }
+
+                lines.forEach((line, i) => {
+                    smallCtx.fillText(line, xPosition, startY + (i * lineHeight));
+                });
+
+                ctxBrat.imageSmoothingEnabled = true;
+                ctxBrat.drawImage(smallCanvas, 0, 0, blurSizeCanvasTextBrat, blurSizeCanvasTextBrat, 0, 0, widthCanvasBaseBrat, heightCanvasBaseBrat);
+
+                const bufferBrat = canvas.toBuffer('image/png');
+                await rem.sendFile(from, bufferBrat, 'brat.png', '', messageRaw, image)
             } catch (error) {
                 console.error('ERROR BRAT:', error)
                 reply(from, 'Error membuat sticker brat! Coba dengan teks yang lebih singkat atau coba lagi nanti.', id);
