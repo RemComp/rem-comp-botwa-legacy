@@ -941,7 +941,8 @@ const {
     checkConnectClientJadibot,
     getRandomMood,
     downloadWithCobalt,
-    getLinesFitImageCanvas
+    getLinesFitImageCanvas,
+    drawJustifiedLineImageCanvas
 } = require('./lib/functions')(isVirtualAccount, message.sender)
 const kerjajob = require('./lib/job')(isVirtualAccount)
 
@@ -7051,15 +7052,16 @@ Negative Prompt : _${negativePromptDiff}_`, messageRaw, image)
                 const smallCanvas = cnvs.createCanvas(blurSizeCanvasTextBrat, blurSizeCanvasTextBrat);
                 const smallCtx = smallCanvas.getContext('2d');
 
-                const maxWidthBrat = blurSizeCanvasTextBrat * 0.90;  // 90% width margin
-                const maxHeightBrat = blurSizeCanvasTextBrat * 0.90; // 90% height margin
+                const marginBrat = blurSizeCanvasTextBrat * 0.05; // margins (5% on each side)
+                const maxWidthBrat = blurSizeCanvasTextBrat - (margin * 2);  // 90% width margin
+                const maxHeightBrat = blurSizeCanvasTextBrat - (margin * 2); // 90% height margin
                 
                 let fontSize = 60;
                 let lines = [];
                 let lineHeight = 0;
 
                 // decrease font size until the wrapped text fits vertically
-                while (fontSize > 1) {
+                while (fontSize > 5) {
                     smallCtx.font = `${fontSize}px Arial`;
                     lineHeight = fontSize * 1.1; // 1.1 line spacing
 
@@ -7077,25 +7079,34 @@ Negative Prompt : _${negativePromptDiff}_`, messageRaw, image)
                 }
 
                 smallCtx.fillStyle = 'black';
-                smallCtx.textAlign = selectedTextAlign;
                 smallCtx.textBaseline = 'middle';
                 
                 // calculate vertical centering
                 const totalBlockHeight = lines.length * lineHeight;
                 let startY = (blurSizeCanvasTextBrat - totalBlockHeight) / 2 + (lineHeight / 2);
 
-                // determine X position based on text alignment
-                let xPosition;
-                if (selectedTextAlign === 'left') {
-                    xPosition = maxWidthBrat * 0.05; // 5% margin from left
-                } else if (selectedTextAlign === 'right') {
-                    xPosition = blurSizeCanvasTextBrat - (maxWidthBrat * 0.05); // 5% margin from right
-                } else { // center or justify
-                    xPosition = blurSizeCanvasTextBrat / 2;
-                }
-
                 lines.forEach((line, i) => {
-                    smallCtx.fillText(line, xPosition, startY + (i * lineHeight));
+                    const y = startY + (i * lineHeight);
+        
+                    // Handle Alignment
+                    if (selectedTextAlign === 'center') {
+                        smallCtx.textAlign = 'center';
+                        smallCtx.fillText(line, blurSizeCanvasTextBrat / 2, y);
+                    } else if (selectedTextAlign === 'right') {
+                        smallCtx.textAlign = 'right';
+                        smallCtx.fillText(line, blurSizeCanvasTextBrat - marginBrat, y);
+                    } else if (selectedTextAlign === 'left') {
+                        smallCtx.textAlign = 'left';
+                        smallCtx.fillText(line, marginBrat, y);
+                    }  else if (selectedTextAlign === 'justify') {
+                        // Standard typography rule: Don't justify the last line
+                        if (i === lines.length - 1) {
+                            smallCtx.textAlign = 'left';
+                            smallCtx.fillText(line, marginBrat, y);
+                        } else {
+                            drawJustifiedLine(smallCtx, line, marginBrat, y, maxWidthBrat);
+                        }
+                    }
                 });
 
                 ctxBrat.imageSmoothingEnabled = true;
