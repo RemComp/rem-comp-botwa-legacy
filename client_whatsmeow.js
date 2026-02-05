@@ -7076,45 +7076,45 @@ Negative Prompt : _${negativePromptDiff}_`, messageRaw, image)
                     fontSize--;
                 }
 
-                // smallCtx.fillStyle = 'black';
-                // smallCtx.textAlign = selectedTextAlign;
-                // smallCtx.textBaseline = 'middle';
-                
-                // // calculate vertical centering
-                // const totalBlockHeight = lines.length * lineHeight;
-                // let startY = (blurSizeCanvasTextBrat - totalBlockHeight) / 2 + (lineHeight / 2);
-
-                // // determine X position based on text alignment
-                // let xPosition;
-                // if (selectedTextAlign === 'left') {
-                //     xPosition = maxWidthBrat * 0.05; // 5% margin from left
-                // } else if (selectedTextAlign === 'right') {
-                //     xPosition = blurSizeCanvasTextBrat - (maxWidthBrat * 0.05); // 5% margin from right
-                // } else { // center or justify
-                //     xPosition = blurSizeCanvasTextBrat / 2;
-                // }
-
-                // lines.forEach((line, i) => {
-                //     smallCtx.fillText(line, xPosition, startY + (i * lineHeight));
-                // });
-
-                // ctxBrat.imageSmoothingEnabled = true;
-                // ctxBrat.drawImage(smallCanvas, 0, 0, blurSizeCanvasTextBrat, blurSizeCanvasTextBrat, 0, 0, widthCanvasBaseBrat, heightCanvasBaseBrat);
                 smallCtx.fillStyle = 'black';
-                smallCtx.textAlign = 'center';
+                smallCtx.textAlign = selectedTextAlign;
                 smallCtx.textBaseline = 'middle';
                 
-                // Calculate vertical centering
+                // calculate vertical centering
                 const totalBlockHeight = lines.length * lineHeight;
                 let startY = (blurSizeCanvasTextBrat - totalBlockHeight) / 2 + (lineHeight / 2);
 
+                // determine X position based on text alignment
+                let xPosition;
+                if (selectedTextAlign === 'left') {
+                    xPosition = maxWidthBrat * 0.05; // 5% margin from left
+                } else if (selectedTextAlign === 'right') {
+                    xPosition = blurSizeCanvasTextBrat - (maxWidthBrat * 0.05); // 5% margin from right
+                } else { // center or justify
+                    xPosition = blurSizeCanvasTextBrat / 2;
+                }
+
                 lines.forEach((line, i) => {
-                    smallCtx.fillText(line, blurSizeCanvasTextBrat / 2, startY + (i * lineHeight));
+                    smallCtx.fillText(line, xPosition, startY + (i * lineHeight));
                 });
 
-                // 5. Stretch to Big Canvas (The Blur)
                 ctxBrat.imageSmoothingEnabled = true;
                 ctxBrat.drawImage(smallCanvas, 0, 0, blurSizeCanvasTextBrat, blurSizeCanvasTextBrat, 0, 0, widthCanvasBaseBrat, heightCanvasBaseBrat);
+                // smallCtx.fillStyle = 'black';
+                // smallCtx.textAlign = 'center';
+                // smallCtx.textBaseline = 'middle';
+                
+                // // Calculate vertical centering
+                // const totalBlockHeight = lines.length * lineHeight;
+                // let startY = (blurSizeCanvasTextBrat - totalBlockHeight) / 2 + (lineHeight / 2);
+
+                // lines.forEach((line, i) => {
+                //     smallCtx.fillText(line, blurSizeCanvasTextBrat / 2, startY + (i * lineHeight));
+                // });
+
+                // // 5. Stretch to Big Canvas (The Blur)
+                // ctxBrat.imageSmoothingEnabled = true;
+                // ctxBrat.drawImage(smallCanvas, 0, 0, blurSizeCanvasTextBrat, blurSizeCanvasTextBrat, 0, 0, widthCanvasBaseBrat, heightCanvasBaseBrat);
 
                 const bufferBrat = canvasBrat.toBuffer('image/png');
                 await rem.sendFile(from, bufferBrat, 'brat.png', '', messageRaw, image)
