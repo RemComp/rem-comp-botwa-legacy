@@ -7053,8 +7053,8 @@ Negative Prompt : _${negativePromptDiff}_`, messageRaw, image)
                 const smallCtx = smallCanvas.getContext('2d');
 
                 const marginBrat = blurSizeCanvasTextBrat * 0.05; // margins (5% on each side)
-                const maxWidthBrat = blurSizeCanvasTextBrat - (margin * 2);  // 90% width margin
-                const maxHeightBrat = blurSizeCanvasTextBrat - (margin * 2); // 90% height margin
+                const maxWidthBrat = blurSizeCanvasTextBrat - (marginBrat * 2);  // 90% width margin
+                const maxHeightBrat = blurSizeCanvasTextBrat - (marginBrat * 2); // 90% height margin
                 
                 let fontSize = 60;
                 let lines = [];
