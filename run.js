@@ -1282,16 +1282,17 @@ pm2.connect(async (error) => {
             pingVits('jwt-cookie=eyJhbGciOiJFZERTQSJ9.eyJzdWIiOiJtaXp1a2lkZXN1dS92aXRzLW1vZGVscyIsImV4cCI6MTY4MTI4ODc0MiwiaXNzIjoiaHVnZ2luZ2ZhY2UtbW9vbiJ9.MzqPydx0L3sjIq8zy-zZcCG_IKhTkfoz9wZ1RiDH_IWI-75F-dpn4FYBVVgdzytVzNNvD6zyQx23A_eAqd5iBQ; Path=/; HttpOnly; Secure; SameSite=None', 'vits-models')
             pingVits('jwt-cookie=eyJhbGciOiJFZERTQSJ9.eyJzdWIiOiJtaXp1a2lkZXN1dS92aXRzLW1vZGVscy1nZW5zaGluLWJoMyIsImV4cCI6MTY4MTI4ODUzOSwiaXNzIjoiaHVnZ2luZ2ZhY2UtbW9vbiJ9.9tt-kwBxuKI2ZuxPy9_mRY5zHHtEk9bEpbzUKAfVHIxUb7PFRL1HC9Zq0T6mIflaiF5ifGHbp-qHe3-bGoZyCA; Path=/; HttpOnly; Secure; SameSite=None', 'vits-models-genshin-bh3')
             
-            // const clientRemoveBg = import('./lib/esm/exports.mjs')
-            // const resultRemoveBg = new Promise(async (resolve) => {
-            //     clientRemoveBg.then(async (all) => resolve(await all.removeBgGradio(imageReadBuffer)))
-            // })
-            // const resultRemoveAnimeBg = new Promise(async (resolve) => {
+            const imageReadBuffer = await fs.readFileSync('./media/img/bg.png')
+            const clientRemoveBg = import('./lib/esm/exports.mjs')
+            const resultRemoveBg = new Promise(async (resolve) => {
+                clientRemoveBg.then(async (all) => resolve(await all.removeBgGradio(imageReadBuffer)))
+            })
+            // const resultRemoveAnimeBg = new Promise(async (resolve) => { // using public instance
             //     clientRemoveBg.then(async (all) => resolve(await all.removeAnimeBgGradio(imageReadBuffer)))
             // })
-            // Promise.all([resultRemoveBg, resultRemoveAnimeBg]).then(async ([resultRemoveBg, resultRemoveAnimeBg]) => { 
-            //     console.log('success removebg')
-            // })
+            Promise.all([resultRemoveBg]).then(async ([resultRemoveBg]) => { 
+                console.log('success removebg')
+            })
 
             // const imageReadBuffer = await fs.readFileSync('./media/img/bg.png')
             // checkImageNsfw(imageReadBuffer)
