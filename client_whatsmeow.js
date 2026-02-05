@@ -2408,7 +2408,7 @@ if(config.isDebug) console.log(`${Date.now() - dateNowProccessIs}ms - Loaded DB 
                 } else {
                     reply(from, 'SLAH')
                 }
-            } else if(!_quizgame[positionQuizGame_player].isDone && _quizgame[positionQuizGame_player].game == 'tebakbendera') { // tebaklbendera
+            } else if(!_quizgame[positionQuizGame_player].isDone && (_quizgame[positionQuizGame_player].game == 'tebakbendera') || (_quizgame[positionQuizGame_player].game == 'asahotak')) { // tebaklbendera
                 if(config.isDebug) console.log(`${Date.now() - dateNowProccessIs}ms - check is Quiz [1]`)
                 //console.log('haha')
                 const jawabanQuizGame_answer = _quizgame[positionQuizGame_player].jawaban.replace(/\s/g, '').toLowerCase()
