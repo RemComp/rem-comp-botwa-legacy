@@ -7069,7 +7069,7 @@ Negative Prompt : _${negativePromptDiff}_`, messageRaw, image)
 
                     // calculate total block height
                     const totalHeight = lines.length * lineHeight;
-                    const fitsHeight = totalHeight <= maxHeight;
+                    const fitsHeight = totalHeight <= maxHeightBrat;
                     const fitsWidth = lines.every(line => smallCtx.measureText(line).width <= maxWidthBrat);
 
                     // stop if it fits
