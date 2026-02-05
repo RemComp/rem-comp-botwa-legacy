@@ -7033,7 +7033,7 @@ Negative Prompt : _${negativePromptDiff}_`, messageRaw, image)
             if (allArgs.length === 0) return reply(from, 'Kirim perintah *'+prefix+'brat [teks]*, contoh: *'+prefix+'brat i want a cookie*', id)
 
             if(!['white', 'green', 'blue', 'red'].includes(allArgs[1])) return rem.sendButtons(from, 'Pilih warna Background Brat:', [{ id: `${prefix}brat white ${allArgs.slice(1).join(' ')}`, text: 'White' }, { id: `${prefix}brat green ${allArgs.slice(1).join(' ')}`, text: 'Green' }, { id: `${prefix}brat blue ${allArgs.slice(1).join(' ')}`, text: 'Blue' }, { id: `${prefix}brat red ${allArgs.slice(1).join(' ')}`, text: 'Red' }])
-            if(!['left', 'center', 'right', 'justify'].includes(allArgs[2])) return rem.sendButtons(from, 'Pilih style Text Brat:', [{ id: `${prefix}brat ${allArgs[1]} left ${allArgs.slice(3).join(' ')}`, text: 'Left' }, { id: `${prefix}brat ${allArgs[1]} center ${allArgs.slice(3).join(' ')}`, text: 'Center' }, { id: `${prefix}brat ${allArgs[1]} right ${allArgs.slice(3).join(' ')}`, text: 'Right' }, { id: `${prefix}brat ${allArgs[1]} justify ${allArgs.slice(3).join(' ')}`, text: 'Justify' }])
+            if(!['left', 'center', 'right', 'justify'].includes(allArgs[2])) return rem.sendButtons(from, 'Pilih style Text Brat:', [{ id: `${prefix}brat ${allArgs[1]} left ${allArgs.slice(2).join(' ')}`, text: 'Left' }, { id: `${prefix}brat ${allArgs[1]} center ${allArgs.slice(2).join(' ')}`, text: 'Center' }, { id: `${prefix}brat ${allArgs[1]} right ${allArgs.slice(2).join(' ')}`, text: 'Right' }, { id: `${prefix}brat ${allArgs[1]} justify ${allArgs.slice(2).join(' ')}`, text: 'Justify' }])
             
             const selectedBackgroundBrat = allArgs[1]
             const selectedTextAlign = allArgs[2]
