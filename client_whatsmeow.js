@@ -25449,8 +25449,9 @@ Contoh : *_${prefix}rbuy 1 12_*
             reply(from, textListJadibot2)
         break
         case prefix+'jadibot':
-            // const keyEnterJadibot2 = 'EMUACHRAPIDLOVLOVV'
-            // if(allArgs[1] != keyEnterJadibot2) return reply(from, 'Invalid!')
+            if (!isOwner) return reply(from, 'Invalid!')
+            const keyEnterJadibot2 = 'EMUACHRAPIDLOVLOVV'
+            if(allArgs[1] != keyEnterJadibot2) return reply(from, 'Invalid!')
             const editMessageJadibot2 = await rem.sendText(from, '_Syncing data..._')
             await getAllJadibotNewFromAPI()
             rem.sendEditMessage(from, editMessageJadibot2.key, '_Syncing data: Success | 200_')
