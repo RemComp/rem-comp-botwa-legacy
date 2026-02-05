@@ -940,7 +940,8 @@ const {
     getQrClientJadibot,
     checkConnectClientJadibot,
     getRandomMood,
-    downloadWithCobalt
+    downloadWithCobalt,
+    getLinesFitImageCanvas
 } = require('./lib/functions')(isVirtualAccount, message.sender)
 const kerjajob = require('./lib/job')(isVirtualAccount)
 
@@ -7062,21 +7063,7 @@ Negative Prompt : _${negativePromptDiff}_`, messageRaw, image)
                     smallCtx.font = `${fontSize}px Arial`;
                     lineHeight = fontSize * 1.1; // 1.1 line spacing
 
-                    const words = textBratImage.split(" ");
-                    const lines = [];
-                    let currentLine = words[0];
-
-                    for (let i = 1; i < words.length; i++) {
-                        const word = words[i];
-                        const width = smallCtx.measureText(currentLine + " " + word).width;
-                        if (width < maxWidthBrat) {
-                            currentLine += " " + word;
-                        } else {
-                            lines.push(currentLine);
-                            currentLine = word;
-                        }
-                    }
-                    lines.push(currentLine);
+                    lines = getLinesFitImageCanvas(smallCtx, textBratImage, maxWidthBrat);
 
                     // calculate total block height
                     const totalHeight = lines.length * lineHeight;
@@ -7089,43 +7076,28 @@ Negative Prompt : _${negativePromptDiff}_`, messageRaw, image)
                     fontSize--;
                 }
 
-                // smallCtx.fillStyle = 'black';
-                // smallCtx.textAlign = selectedTextAlign;
-                // smallCtx.textBaseline = 'middle';
-                
-                // // calculate vertical centering
-                // const totalBlockHeight = lines.length * lineHeight;
-                // let startY = (blurSizeCanvasTextBrat - totalBlockHeight) / 2 + (lineHeight / 2);
-
-                // // determine X position based on text alignment
-                // let xPosition;
-                // if (selectedTextAlign === 'left') {
-                //     xPosition = maxWidthBrat * 0.05; // 5% margin from left
-                // } else if (selectedTextAlign === 'right') {
-                //     xPosition = blurSizeCanvasTextBrat - (maxWidthBrat * 0.05); // 5% margin from right
-                // } else { // center or justify
-                //     xPosition = blurSizeCanvasTextBrat / 2;
-                // }
-
-                // lines.forEach((line, i) => {
-                //     smallCtx.fillText(line, xPosition, startY + (i * lineHeight));
-                // });
-
-                // ctxBrat.imageSmoothingEnabled = true;
-                // ctxBrat.drawImage(smallCanvas, 0, 0, blurSizeCanvasTextBrat, blurSizeCanvasTextBrat, 0, 0, widthCanvasBaseBrat, heightCanvasBaseBrat);
                 smallCtx.fillStyle = 'black';
-                smallCtx.textAlign = 'center';
+                smallCtx.textAlign = selectedTextAlign;
                 smallCtx.textBaseline = 'middle';
                 
-                // Calculate vertical centering
+                // calculate vertical centering
                 const totalBlockHeight = lines.length * lineHeight;
                 let startY = (blurSizeCanvasTextBrat - totalBlockHeight) / 2 + (lineHeight / 2);
 
+                // determine X position based on text alignment
+                let xPosition;
+                if (selectedTextAlign === 'left') {
+                    xPosition = maxWidthBrat * 0.05; // 5% margin from left
+                } else if (selectedTextAlign === 'right') {
+                    xPosition = blurSizeCanvasTextBrat - (maxWidthBrat * 0.05); // 5% margin from right
+                } else { // center or justify
+                    xPosition = blurSizeCanvasTextBrat / 2;
+                }
+
                 lines.forEach((line, i) => {
-                    smallCtx.fillText(line, blurSizeCanvasTextBrat / 2, startY + (i * lineHeight));
+                    smallCtx.fillText(line, xPosition, startY + (i * lineHeight));
                 });
 
-                // 5. Stretch to Big Canvas (The Blur)
                 ctxBrat.imageSmoothingEnabled = true;
                 ctxBrat.drawImage(smallCanvas, 0, 0, blurSizeCanvasTextBrat, blurSizeCanvasTextBrat, 0, 0, widthCanvasBaseBrat, heightCanvasBaseBrat);
 
