@@ -7035,21 +7035,15 @@ Negative Prompt : _${negativePromptDiff}_`, messageRaw, image)
             if(quotedMsg?.body) allArgs = [`${allArgs[0]}`, quotedMsg.body]
             if (allArgs.length === 0) return reply(from, 'Kirim perintah *'+prefix+'brat [teks]*, contoh: *'+prefix+'brat i want a cookie*', id)
 
-            let selectedBackgroundBrat = undefined
-            let selectedTextAlign = undefined
-            let textBratImage = undefined
-            if(allArgs[0] === `${prefix}brat`) {
-                const textInputBrat = allArgs.slice(1).join(' ')
-                selectedBackgroundBrat = 'white'
-                selectedTextAlign = 'white'
-                textBratImage = textInputBrat
+            if(allArgs[0] === `${prefix}brat`) { // default value
+                allArgs = [`${allArgs[0]}`, 'white', 'left', allArgs.slice(1).join(' ')]
             }
             if(!['white', 'green', 'blue', 'red'].includes(allArgs[1])) return rem.sendButtons(from, 'Pilih warna Background Brat:', [{ id: `${prefix}brato white ${allArgs.slice(1).join(' ')}`, text: 'White' }, { id: `${prefix}brato green ${allArgs.slice(1).join(' ')}`, text: 'Green' }, { id: `${prefix}brato blue ${allArgs.slice(1).join(' ')}`, text: 'Blue' }, { id: `${prefix}brato red ${allArgs.slice(1).join(' ')}`, text: 'Red' }])
             if(!['left', 'center', 'right', 'justify'].includes(allArgs[2])) return rem.sendButtons(from, 'Pilih style Text Brat:', [{ id: `${prefix}brato ${allArgs[1]} left ${allArgs.slice(2).join(' ')}`, text: 'Left' }, { id: `${prefix}brato ${allArgs[1]} center ${allArgs.slice(2).join(' ')}`, text: 'Center' }, { id: `${prefix}brato ${allArgs[1]} right ${allArgs.slice(2).join(' ')}`, text: 'Right' }, { id: `${prefix}brato ${allArgs[1]} justify ${allArgs.slice(2).join(' ')}`, text: 'Justify' }])
             
-            selectedBackgroundBrat = allArgs[1]
-            selectedTextAlign = allArgs[2]
-            textBratImage = allArgs.slice(3).join(' ')
+            const selectedBackgroundBrat = allArgs[1]
+            const selectedTextAlign = allArgs[2]
+            const textBratImage = allArgs.slice(3).join(' ')
             try {
                 const widthCanvasBaseBrat = 500
                 const heightCanvasBaseBrat = 500
