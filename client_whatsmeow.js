@@ -7032,7 +7032,7 @@ Negative Prompt : _${negativePromptDiff}_`, messageRaw, image)
             break
         case prefix+'brat':
         case prefix+'brato':
-            if(quotedMsg?.body) allArgs = [`${allArgs[0]}`, quotedMsg.body]
+            if (quotedMsg?.body && !message.selectedButtonId) allArgs = [`${allArgs[0]}`, quotedMsg.body]
             if (allArgs.length === 0) return reply(from, 'Kirim perintah *'+prefix+'brat [teks]*, contoh: *'+prefix+'brat i want a cookie*', id)
 
             if(allArgs[0] === `${prefix}brat`) { // default value
