@@ -7030,15 +7030,25 @@ Negative Prompt : _${negativePromptDiff}_`, messageRaw, image)
                 return reply(from, `Maaf, Server sedang Error\nMohon lapor ke owner\n\nErr:${err.message}`)
             }
             break
-          case prefix+'brat':
+        case prefix+'brat':
+        case prefix+'brato':
             if (allArgs.length === 0) return reply(from, 'Kirim perintah *'+prefix+'brat [teks]*, contoh: *'+prefix+'brat i want a cookie*', id)
 
-            if(!['white', 'green', 'blue', 'red'].includes(allArgs[1])) return rem.sendButtons(from, 'Pilih warna Background Brat:', [{ id: `${prefix}brat white ${allArgs.slice(1).join(' ')}`, text: 'White' }, { id: `${prefix}brat green ${allArgs.slice(1).join(' ')}`, text: 'Green' }, { id: `${prefix}brat blue ${allArgs.slice(1).join(' ')}`, text: 'Blue' }, { id: `${prefix}brat red ${allArgs.slice(1).join(' ')}`, text: 'Red' }])
-            if(!['left', 'center', 'right', 'justify'].includes(allArgs[2])) return rem.sendButtons(from, 'Pilih style Text Brat:', [{ id: `${prefix}brat ${allArgs[1]} left ${allArgs.slice(2).join(' ')}`, text: 'Left' }, { id: `${prefix}brat ${allArgs[1]} center ${allArgs.slice(2).join(' ')}`, text: 'Center' }, { id: `${prefix}brat ${allArgs[1]} right ${allArgs.slice(2).join(' ')}`, text: 'Right' }, { id: `${prefix}brat ${allArgs[1]} justify ${allArgs.slice(2).join(' ')}`, text: 'Justify' }])
+            let selectedBackgroundBrat = undefined
+            let selectedTextAlign = undefined
+            let textBratImage = undefined
+            if(allArgs[0] === `${prefix}brat`) {
+                const textInputBrat = allArgs.slice(1).join(' ')
+                selectedBackgroundBrat = 'white'
+                selectedTextAlign = 'white'
+                textBratImage = textInputBrat
+            }
+            if(!['white', 'green', 'blue', 'red'].includes(allArgs[1])) return rem.sendButtons(from, 'Pilih warna Background Brat:', [{ id: `${prefix}brato white ${allArgs.slice(1).join(' ')}`, text: 'White' }, { id: `${prefix}brato green ${allArgs.slice(1).join(' ')}`, text: 'Green' }, { id: `${prefix}brato blue ${allArgs.slice(1).join(' ')}`, text: 'Blue' }, { id: `${prefix}brato red ${allArgs.slice(1).join(' ')}`, text: 'Red' }])
+            if(!['left', 'center', 'right', 'justify'].includes(allArgs[2])) return rem.sendButtons(from, 'Pilih style Text Brat:', [{ id: `${prefix}brato ${allArgs[1]} left ${allArgs.slice(2).join(' ')}`, text: 'Left' }, { id: `${prefix}brato ${allArgs[1]} center ${allArgs.slice(2).join(' ')}`, text: 'Center' }, { id: `${prefix}brato ${allArgs[1]} right ${allArgs.slice(2).join(' ')}`, text: 'Right' }, { id: `${prefix}brato ${allArgs[1]} justify ${allArgs.slice(2).join(' ')}`, text: 'Justify' }])
             
-            const selectedBackgroundBrat = allArgs[1]
-            const selectedTextAlign = allArgs[2]
-            const textBratImage = allArgs.slice(3).join(' ')
+            selectedBackgroundBrat = allArgs[1]
+            selectedTextAlign = allArgs[2]
+            textBratImage = allArgs.slice(3).join(' ')
             try {
                 const widthCanvasBaseBrat = 500
                 const heightCanvasBaseBrat = 500
@@ -7074,7 +7084,7 @@ Negative Prompt : _${negativePromptDiff}_`, messageRaw, image)
 
                     // stop if it fits
                     if (fitsHeight && fitsWidth) {
-                        break; // Everything fits! Stop shrinking.
+                        break;
                     }
 
                     fontSize--;
@@ -7129,7 +7139,15 @@ Negative Prompt : _${negativePromptDiff}_`, messageRaw, image)
                 // ctxBrat.drawImage(smallCanvas, 0, 0, blurSizeCanvasTextBrat, blurSizeCanvasTextBrat, 0, 0, widthCanvasBaseBrat, heightCanvasBaseBrat);
 
                 const bufferBrat = canvasBrat.toBuffer('image/png');
-                await rem.sendFile(from, bufferBrat, 'brat.png', '', messageRaw, image)
+                const stickerOptionsBrat = {
+                    pack: packWm, // The pack name
+                    author: authorWm, // The author name
+                    type: StickerTypes.FULL, // The sticker type
+                    quality: 10, // The quality of the output file
+                }
+                const generateStickerBrat = await createSticker(bufferBrat, stickerOptionsBrat)
+
+                await rem.sendFile(from, generateStickerBrat, '', '', messageRaw, sticker)
             } catch (error) {
                 console.error('ERROR BRAT:', error)
                 reply(from, 'Error membuat sticker brat! Coba dengan teks yang lebih singkat atau coba lagi nanti.', id);
