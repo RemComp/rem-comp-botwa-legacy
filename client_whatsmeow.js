@@ -23912,9 +23912,9 @@ _${speedTestBotStat.result.url}_`
             const isImageSaran = isImage ? await message.getMedia() : isQuotedImage ? await quotedMsg.getMedia() : false
 
             // const sendBodySaran = { id: '6281358181668-1621640771@g.us', key: 'OIAHOIFBAPW790709ba', method: 'sendMessage', content: ['6281358181668-1621640771@g.us', { text: textSendSaran }, { quoted: messageRaw }] }
-            let sendbodySaran = { method: 'sendButtons', number: '6281358181668-1621640771@g.us', data: textSendSaran, options: [{ id: `${prefix}rplyres ${sender} saran ${saran}`, text: 'Balas' }], options1: '', options2: '', options3: {}, options4: {}, options5: false, options6: false }
-            let sendBodySaran2 = { method: 'sendButtons', number: '120363417108683279@g.us', data: textSendSaran, options: [{ id: `${prefix}rplyres ${sender} saran ${saran}`, text: 'Balas' }], options1: '', options2: '', options3: {}, options4: {}, options5: false, options6: false }
-            let sendBodySaran3 = { method: 'sendButtons', number: '120363159869866611@g.us', data: textSendSaran, options: [{ id: `${prefix}rplyres ${sender} saran ${saran}`, text: 'Balas' }], options1: '', options2: '', options3: {}, options4: {}, options5: false, options6: false }
+            let sendbodySaran = { method: 'sendButtons', number: '6281358181668-1621640771@g.us', data: textSendSaran, options: [{ id: `.rplyres ${sender} saran ${saran}`, text: 'Balas' }], options1: '', options2: '', options3: {}, options4: {}, options5: false, options6: false }
+            let sendBodySaran2 = { method: 'sendButtons', number: '120363417108683279@g.us', data: textSendSaran, options: [{ id: `.rplyres ${sender} saran ${saran}`, text: 'Balas' }], options1: '', options2: '', options3: {}, options4: {}, options5: false, options6: false }
+            let sendBodySaran3 = { method: 'sendButtons', number: '120363159869866611@g.us', data: textSendSaran, options: [{ id: `.rplyres ${sender} saran ${saran}`, text: 'Balas' }], options1: '', options2: '', options3: {}, options4: {}, options5: false, options6: false }
             if(isImageSaran) {
                 const buttonOptions = sendbodySaran.options
                 sendbodySaran.method = 'sendButtonsImage'
