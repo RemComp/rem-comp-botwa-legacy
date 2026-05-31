@@ -24415,8 +24415,11 @@ Pengirim Saran : wa.me/${allArgs[1].replace('@s.whatsapp.net', '')}
             if(nameRequestedProfile == undefined) {
                 const contactDb = await _mongo_ContactSchema.findOne({ iId: idRequestedProfile })
                 nameRequestedProfile = rem.contacts(idRequestedProfile, contactDb)
-            }
-            
+			}
+				
+	        if (picRequestedProfile.startsWith("https://via.placeholder.com")) {
+                picRequestedProfile = './media/img/images_pp_blank.png' // biang kerok errornya pas fetch https://via.placeholder.com/500 pada profilePictureUrl
+			}
 
             const levelRequestedProfile = getLevelingLevel(_userDbRequestedProfile)
             let nameTagRequestedProfile = getNameTag(_userDbRequestedProfile)
